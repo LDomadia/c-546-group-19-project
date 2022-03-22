@@ -1,0 +1,19 @@
+{
+  "name": "c-546-group-19-project",
+  "version": "1.0.0",
+  "description": "clothing project",
+  "main": "index.js",
+  "scripts": {
+    "test": "node app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LDomadia/c-546-group-19-project.git"
+  },
+  "author": "our group lol",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/LDomadia/c-546-group-19-project/issues"
+  },
+  "homepage": "https://github.com/LDomadia/c-546-group-19-project#readme"
+}
