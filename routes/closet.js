@@ -5,7 +5,7 @@ const router = express.Router();
 router.get('/', async (req, res) => {
     try {
   
-      res.render('closet/index', {title: "Digital Closet"});
+      res.render('pages/single/index', {title: "Digital Closet"});
     } catch (e) {
       res.sendStatus(500);
     }

@@ -6,7 +6,7 @@ const constructorMethod = (app) => {
 app.use('', closetRoutes);
 
 app.use('*', (req, res) => {
-  res.render('closet/error404', {error: "Page not found",
+  res.render('pages/error/error404', {error: "Page not found",
     id: 1,
     title: "Error 404"});
 });
