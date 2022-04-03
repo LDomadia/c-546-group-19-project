@@ -1,10 +1,11 @@
 const express = require('express');
 const router = express.Router();
+const data = require('../data');
+const closetData = data.closet;
 
 // GET /
 router.get('/', async (req, res) => {
     try {
-  
       res.render('pages/single/index', {title: "Digital Closet"});
     } catch (e) {
       res.sendStatus(500);

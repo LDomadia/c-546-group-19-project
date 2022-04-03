@@ -4,7 +4,8 @@
   "description": "clothing project",
   "main": "index.js",
   "scripts": {
-    "test": "node app.js"
+    "test": "node app.js",
+    "seed": "node tasks/seed.js"
   },
   "repository": {
     "type": "git",
