@@ -2,9 +2,9 @@
   "name": "c-546-group-19-project",
   "version": "1.0.0",
   "description": "clothing project",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
-    "test": "node app.js",
+    "start": "node app.js",
     "seed": "node tasks/seed.js"
   },
   "repository": {
