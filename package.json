@@ -2,9 +2,10 @@
   "name": "c-546-group-19-project",
   "version": "1.0.0",
   "description": "clothing project",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
-    "test": "node app.js"
+    "start": "node app.js",
+    "seed": "node tasks/seed.js"
   },
   "repository": {
     "type": "git",
@@ -15,5 +16,10 @@
   "bugs": {
     "url": "https://github.com/LDomadia/c-546-group-19-project/issues"
   },
-  "homepage": "https://github.com/LDomadia/c-546-group-19-project#readme"
+  "homepage": "https://github.com/LDomadia/c-546-group-19-project#readme",
+  "dependencies": {
+    "express": "^4.17.3",
+    "express-handlebars": "^6.0.3",
+    "mongodb": "^4.4.1"
+  }
 }

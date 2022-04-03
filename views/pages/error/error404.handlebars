@@ -1,0 +1,10 @@
+<article class="error-not-found">
+    <h1>Error 404</h1>
+    <p>
+        {{#if id}}
+        {{error}}. User with id "{{id}}" not found!
+        {{else}}
+        {{error}}.
+        {{/if}}
+    </p>
+</article>
