@@ -3,7 +3,7 @@ body{
     font-family: "Courier New";
     padding: 1em;
 
-    background-image: url("https://imgs.search.brave.com/kftuFWv3Xohq15R4roo7n2z7FxZSuFUYfaWnfzIfMxo/rs:fit:1200:1200:1/g:ce/aHR0cHM6Ly93d3cu/cHVibGljZG9tYWlu/cGljdHVyZXMubmV0/L3BpY3R1cmVzLzMw/MDAwMC92ZWxrYS9n/cmFkaWVudC1iYWNr/Z3JvdW5kLTE1NTYz/ODM0MDRQWm0uanBn");
+    background-color: #f5eef5;
   
     /* Full height */
     height: 100%;
@@ -17,17 +17,17 @@ body{
 
 h1{
     font-family: "Helvetica";
+    transform: translate(10px, 5px);
 }
+
+.left {
+    float: left;
+    padding: 10px;
+  }
 
 h2{
     font-family: "Helvetica";
     font-style: italic;
-}
-
-p{
-    border: 1px solid;
-    padding: 10px;
-    box-shadow: 5px 10px;
 }
 
 form{
@@ -42,3 +42,38 @@ footer{
     text-align: right;
     color: #d813b7;
 }
+
+/*ref: https://www.w3schools.com/howto/howto_js_topnav.asp*/
+
+.topnav {
+    background-color: #333;
+    overflow: hidden;
+
+    /* fill top part of screen*/
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+  }
+  
+  /* nav link styles */
+  .topnav a {
+    float: left;
+    color: #f2f2f2;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    font-size: 17px;
+  }
+  
+  /* hovering style */
+  .topnav a:hover {
+    background-color: #ddd;
+    color: black;
+  }
+  
+  /* active page style */
+  .topnav a.active {
+    background-color: #31a2db;
+    color: white;
+  }
