@@ -8,8 +8,8 @@ router.get("/", async (req, res) => {
   try {
     res.render("pages/single/index", {
       title: "Digital Closet",
-      signed_in: true,
-      home_not_signed_in: false,
+      signed_in: false,
+      home_not_signed_in: true /*Just for initial testing */,
     });
   } catch (e) {
     res.sendStatus(500);
