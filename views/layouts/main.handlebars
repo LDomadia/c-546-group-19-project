@@ -8,19 +8,33 @@
 <body>
     <header>
         <div class="topnav">
-            <a class="active" href="/">Home</a>
-            {{#if signed_in}}
-            <a href="/clothes">My Clothes</a>
-            <a href="/">My Outfits</a>
-            <a href="/">Statistics</a>
-            <a href="/">Profile</a>
+            {{#if homePage}}
+            <a class="active" href="/home">Home</a>
+            {{else}}
+            <a href="/home">Home</a>
             {{/if}}
-            {{#if home_not_signed_in}}
-            <a href="/">Login/Signup</a>
+            {{#if clothesPage}}
+            <a class="active" href="/clothes">My Clothes</a>
+            {{else}}
+            <a href="/clothes">My Clothes</a>
+            {{/if}}
+            {{#if outfitsPage}}
+            <a class="active" href="/">My Outfits</a>
+            {{else}}
+            <a href="/">My Outfits</a>
+            {{/if}}
+            {{#if statsPage}}
+            <a class="active" href="/">Statistics</a>
+            {{else}}
+            <a href="/">Statistics</a>
+            {{/if}}
+            {{#if profPage}}
+            <a class="active" href="/">Profile</a>
+            {{else}}
+            <a href="/">Profile</a>
             {{/if}}
         </div>
     </header>
-    
     <main>
     {{{body}}}
     </main>
