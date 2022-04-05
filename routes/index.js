@@ -1,9 +1,9 @@
 // update to whatever routes we need
-const closetRoutes = require('./closet');
+const homeRoutes = require('./home');
 
 const constructorMethod = (app) => {
 
-app.use('', closetRoutes);
+app.use('/home', homeRoutes);
 
 app.use('*', (req, res) => {
   res.render('pages/error/error404', {error: "Page not found",
