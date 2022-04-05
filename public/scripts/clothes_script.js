@@ -2,7 +2,9 @@ const image = document.getElementById('placeholder-img');
 const imageBtn = document.getElementById('img-btn');
 
 if (imageBtn) {
-    imageBtn.addEventListener("change", changeImage);
+    imageBtn.addEventListener("change", function() {
+        changeImage(this);
+    });
 }
 
 function changeImage(input) {
