@@ -2,41 +2,43 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <link rel="stylesheet" href="/public/main_styles.css">
+    <link rel="stylesheet" href="/public/styles/main_styles.css">
+    <link rel="stylesheet" href="{{stylesheet}}">
     <title>{{title}}</title>
 </head>
 <body>
     <header>
         <div class="topnav">
             {{#if homePage}}
-            <a class="active" href="/home">Home</a>
+                <a class="active" href="/home">Home</a>
             {{else}}
-            <a href="/home">Home</a>
+                <a href="/home">Home</a>
             {{/if}}
             {{#if clothesPage}}
-            <a class="active" href="/clothes">My Clothes</a>
+                <a class="active" href="/clothes">My Clothes</a>
             {{else}}
-            <a href="/clothes">My Clothes</a>
+                <a href="/clothes">My Clothes</a>
             {{/if}}
             {{#if outfitsPage}}
-            <a class="active" href="/">My Outfits</a>
+                <a class="active" href="/">My Outfits</a>
             {{else}}
-            <a href="/">My Outfits</a>
+                <a href="/">My Outfits</a>
             {{/if}}
             {{#if statsPage}}
-            <a class="active" href="/">Statistics</a>
+                <a class="active" href="/">Statistics</a>
             {{else}}
-            <a href="/">Statistics</a>
+                <a href="/">Statistics</a>
             {{/if}}
             {{#if profPage}}
-            <a class="active" href="/">Profile</a>
+                <a class="active" href="/">Profile</a>
             {{else}}
-            <a href="/">Profile</a>
+                <a href="/">Profile</a>
             {{/if}}
         </div>
     </header>
     <main>
     {{{body}}}
     </main>
+    <script src="{{script}}"></script>
 </body>
 </html>

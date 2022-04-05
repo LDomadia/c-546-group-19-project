@@ -1,1 +1,27 @@
 <h1>Add New Clothing Item</h1>
+<form>
+    <img id="placeholder-img" alt="Clothing Item" src="/public/images/placeholder.jpg">
+    <label>Image<input type="file" accept="image/png, image/jpeg"></label><br>
+    <label>Clothing Name<input type="text"></label><br>
+    <label>Type
+        <select>
+            <option value="1">Top</option>
+            <option value="2">Bottom</option>
+            <option value="3">Dress</option>
+            <option value="4">Shoes</option>
+            <option value="5">Accessory</option>
+            <option value="6">Outerwear</option>
+            <option value="7">Socks</option>
+        </select>
+    </label><br>
+    <fieldset>
+        <legend>Season</legend>
+        <input type="checkbox" name="winter" value="Winter">Winter<br>
+        <input type="checkbox" name="spring" value="Spring">Spring<br>
+        <input type="checkbox" name="summer" value="Summer">Summer<br>
+        <input type="checkbox" name="fall" value="Fall">Fall<br>
+    </fieldset><br>
+    <label>Size<input type="text"></label><br>
+    <label>Brand<input type="text"></label><br>
+    <button type="submit">Save</button>
+</form>
