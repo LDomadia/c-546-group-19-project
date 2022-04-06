@@ -1,27 +1,31 @@
 <h1>Add New Clothing Item</h1>
 <form method="POST">
     <img id="placeholder-img" alt="Clothing Item" src="/public/images/placeholder.jpg">
-    <label>Image<input id="img-btn" type="file" accept="image/png, image/jpeg"></label><br>
-    <label>Clothing Name<input id="name" type="text"></label><br>
-    <label id="type">Type
-        <select>
-            <option value="1">Top</option>
-            <option value="2">Bottom</option>
-            <option value="3">Dress</option>
-            <option value="4">Shoes</option>
-            <option value="5">Accessory</option>
-            <option value="6">Outerwear</option>
-            <option value="7">Socks</option>
+    <label>Image<input id="img-btn" name="img" type="file" accept="image/png, image/jpeg"></label><br>
+    <label>Clothing Name<input id="name-input" name="name" type="text"></label><br>
+    <label>Type
+        <select id="type-input" name="type">
+            <option value="top">Top</option>
+            <option value="bottom">Bottom</option>
+            <option value="dress">Dress</option>
+            <option value="shoes">Shoes</option>
+            <option value="accessory">Accessory</option>
+            <option value="outerwear">Outerwear</option>
+            <option value="socks">Socks</option>
         </select>
     </label><br>
-    <fieldset>
+    <label>Size<input id="size-input" name="size" type="text"></label><br>
+    <ul id="colors-patterns-list"></ul>
+    <label>Colors/Patterns<input id="colors-patterns-input" name="colors-patterns" type="text">
+        <button id="colors-patterns-btn" type="button">Add</button>
+    </label>
+    <fieldset id="season-inputs" name="season">
         <legend>Season</legend>
         <input type="checkbox" name="winter" value="Winter">Winter<br>
         <input type="checkbox" name="spring" value="Spring">Spring<br>
         <input type="checkbox" name="summer" value="Summer">Summer<br>
         <input type="checkbox" name="fall" value="Fall">Fall<br>
     </fieldset><br>
-    <label>Size<input id="size" type="text"></label><br>
-    <label>Brand<input id="brand" type="text"></label><br>
+    <label>Brand<input id="brand-input" name="brand" type="text"></label><br>
     <button type="submit">Save</button>
 </form>
