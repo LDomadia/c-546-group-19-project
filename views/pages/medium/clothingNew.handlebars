@@ -1,24 +1,28 @@
 <h1>Add New Clothing Item</h1>
 <form method="POST">
     <img id="placeholder-img" alt="Clothing Item" src="/public/images/placeholder.jpg">
-    <label>Image<input id="img-btn" name="img" type="file" accept="image/png, image/jpeg"></label><br>
-    <label>Clothing Name<input id="name-input" name="name" type="text"></label><br>
-    <label>Type
-        <select id="type-input" name="type">
-            <option value="top">Top</option>
-            <option value="bottom">Bottom</option>
-            <option value="dress">Dress</option>
-            <option value="shoes">Shoes</option>
-            <option value="accessory">Accessory</option>
-            <option value="outerwear">Outerwear</option>
-            <option value="socks">Socks</option>
-        </select>
-    </label><br>
-    <label>Size<input id="size-input" name="size" type="text"></label><br>
+    <span id="img-label">
+    <label for="img-btn">Add Image</label>
+    </span>
+    <input id="img-btn" name="img" type="file" accept="image/png, image/jpeg"><br>
+    <label for="name-input">Clothing Name</label><br>
+    <input id="name-input" name="name" type="text"><br>
+    <label for="type-input">Type</label><br>
+    <select id="type-input" name="type">
+        <option value="top">Top</option>
+        <option value="bottom">Bottom</option>
+        <option value="dress">Dress</option>
+        <option value="shoes">Shoes</option>
+        <option value="accessory">Accessory</option>
+        <option value="outerwear">Outerwear</option>
+        <option value="socks">Socks</option>
+    </select><br>
+    <label for="size-input">Size</label><br>
+    <input id="size-input" name="size" type="text"><br>
+    <label for="colors-patterns-input">Colors/Patterns</label><br>
     <ul id="colors-patterns-list"></ul>
-    <label>Colors/Patterns<input id="colors-patterns-input" name="colors-patterns" type="text">
-        <button id="colors-patterns-btn" type="button">Add</button>
-    </label><br>
+    <input id="colors-patterns-input" name="colors-patterns" type="text">
+    <button id="colors-patterns-btn" class="add-btn" type="button">Add</button><br>
     <fieldset id="season-inputs" name="season">
         <legend>Season</legend>
         <input type="checkbox" name="winter" value="Winter">Winter<br>
@@ -26,10 +30,11 @@
         <input type="checkbox" name="summer" value="Summer">Summer<br>
         <input type="checkbox" name="fall" value="Fall">Fall<br>
     </fieldset><br>
+    <label for="styles-input">Styles</label><br>
     <ul id="styles-list"></ul>
-    <label>Styles<input id="styles-input" name="styles" type="text">
-        <button id="styles-btn" type="button">Add</button>
-    </label><br>
-    <label>Brand<input id="brand-input" name="brand" type="text"></label><br>
+    <input id="styles-input" name="styles" type="text">
+    <button id="styles-btn" class="add-btn" type="button">Add</button><br>
+    <label for="brand-input">Brand</label><br>
+    <input id="brand-input" name="brand" type="text"><br>
     <button type="submit">Save</button>
 </form>

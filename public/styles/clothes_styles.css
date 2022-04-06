@@ -1,4 +1,38 @@
 
+input[type=text], select {
+  width: 250px;
+  height: 30px;
+  border: 1px solid grey;
+  border-radius: 5px;
+  padding: 0px 10px;
+  -ms-box-sizing:content-box;
+  -moz-box-sizing:content-box;
+  -webkit-box-sizing:content-box; 
+  box-sizing:content-box;
+}
+
+input[type=file] {
+  display: none;
+}
+
+fieldset, legend {
+  border: none;
+  padding: 0;
+  margin: 0;
+}
+
+.add-btn, #img-label {
+  display: inline-block;
+  padding: 6px 30px;
+  border-radius: 5px;
+  background-color: #333;
+  color: white;
+  border: none;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-size: 14px;
+  cursor: pointer;
+}
+
 #placeholder-img {
   height: 300px;
   width: 300px;
