@@ -1,4 +1,3 @@
-
 input[type=text], select {
   width: 250px;
   height: 30px;
@@ -39,7 +38,7 @@ li {
   border-radius: 30px;
   color: #333;
   padding: 4px 10px;
-  margin: 0 10px;
+  margin: 0 4px;
 }
 
 .form-div {

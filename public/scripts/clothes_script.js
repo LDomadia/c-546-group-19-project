@@ -39,6 +39,9 @@ function changeImage(input) {
 function addToList(input, list, listName) {
     let inputValue = input.value.trim();
     // check if input is valid
+    let btn = document.createElement('button');
+    btn.innerHTML = 'X';
+    btn.setAttribute('type', 'button');
     let liItem = document.createElement('li')
     liItem.innerHTML = inputValue;
     let hiddenInput = document.createElement('input');
@@ -46,6 +49,7 @@ function addToList(input, list, listName) {
     hiddenInput.setAttribute('name', listName);
     hiddenInput.setAttribute('value', inputValue);
     liItem.appendChild(hiddenInput);
+    liItem.appendChild(btn);
     list.appendChild(liItem);
     input.value = "";
     input.focus();
