@@ -5,10 +5,9 @@ input[type=text], select {
   border: 1px solid grey;
   border-radius: 5px;
   padding: 0px 10px;
-  -ms-box-sizing:content-box;
-  -moz-box-sizing:content-box;
-  -webkit-box-sizing:content-box; 
-  box-sizing:content-box;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 fieldset, legend {
@@ -28,8 +27,24 @@ form {
   display: table;
 }
 
+ul {
+  margin: 0;
+  padding: 0;
+}
+
+li {
+  list-style: none;
+  display: inline-flex;
+  border: 1px solid #333;
+  border-radius: 30px;
+  color: #333;
+  padding: 4px 10px;
+  margin: 0 10px;
+}
+
 .form-div {
   display: inline-block;
+  vertical-align: top;
   padding: 50px;
   margin: 10px;
   border-radius: 10px;
