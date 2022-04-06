@@ -3,6 +3,9 @@ const imageBtn = document.getElementById('img-btn');
 const colorPatternList = document.getElementById('colors-patterns-list');
 const colorPatternInput = document.getElementById('colors-patterns-input');
 const colorPatternBtn = document.getElementById('colors-patterns-btn');
+const stylesList = document.getElementById('styles-list');
+const stylesInput = document.getElementById('styles-input');
+const stylesBtn = document.getElementById('styles-btn');
 
 if (imageBtn) {
     imageBtn.addEventListener("change", function() {
@@ -14,6 +17,12 @@ if (colorPatternBtn) {
     colorPatternBtn.addEventListener("click", function() {
         addToList(colorPatternInput, colorPatternList, 'colors-patterns[]');
     });
+}
+
+if (stylesBtn) {
+    stylesBtn.addEventListener("click", function() {
+        addToList(stylesInput, stylesList, 'styles[]');
+    })
 }
 
 function changeImage(input) {
@@ -38,4 +47,6 @@ function addToList(input, list, listName) {
     hiddenInput.setAttribute('value', inputValue);
     liItem.appendChild(hiddenInput);
     list.appendChild(liItem);
+    input.value = "";
+    input.focus();
 }
