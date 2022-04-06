@@ -17,16 +17,23 @@ fieldset, legend {
   margin: 0;
 }
 
-label {
+label, legend {
   display: inline-block;
   width: 150px;
+  font-weight: bold;
+}
+
+form {
+  margin: 0 auto;
+  display: table;
 }
 
 .form-div {
   display: inline-block;
   padding: 50px;
+  margin: 10px;
   border-radius: 10px;
-  background-color: aliceblue;
+  background-color: #00000015;
 }
 
 .add-btn {
