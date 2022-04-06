@@ -15,12 +15,6 @@ fieldset, legend {
   margin: 0;
 }
 
-label, legend {
-  display: inline-block;
-  width: 150px;
-  font-weight: bold;
-}
-
 form {
   margin: 0 auto;
   display: table;
@@ -44,6 +38,12 @@ li {
 i {
   color: #333;
   font-size: 16px;
+}
+
+.input-label {
+  display: inline-block;
+  width: 150px;
+  font-weight: bold;
 }
 
 .chip-btn {

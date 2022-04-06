@@ -2,17 +2,17 @@
 <form method="POST">
     <div class="form-div">
         <img id="placeholder-img" alt="Clothing Item" src="/public/images/placeholder.jpg"><br>
-        <label for="img-btn">Add Image</label>
+        <label class="input-label" for="img-btn">Add Image</label>
         <input id="img-btn" name="img" type="file" accept="image/png, image/jpeg"><br>
     </div>
     <div class="form-div">
         <div>
-            <label for="name-input">Clothing Name</label>
+            <label class="input-label" for="name-input">Clothing Name</label>
             <input id="name-input" name="name" type="text">
         </div>
         <br>
         <div>
-            <label for="type-input">Type</label>
+            <label class="input-label" for="type-input">Type</label>
             <select id="type-input" name="type">
                 <option value="top">Top</option>
                 <option value="bottom">Bottom</option>
@@ -25,36 +25,38 @@
         </div>
         <br>
         <div>
-            <label for="size-input">Size</label>
+            <label class="input-label" for="size-input">Size</label>
             <input id="size-input" name="size" type="text">
         </div>
         <br>
         <div>
-            <label for="colors-patterns-input">Colors/Patterns</label>
+            <label class="input-label" for="colors-patterns-input">Colors/Patterns</label>
             <input id="colors-patterns-input" name="colors-patterns" type="text">
             <button id="colors-patterns-btn" class="add-btn" type="button">Add</button><br>
             <ul id="colors-patterns-list"></ul>
         </div>
         <br>
         <div>
-            <fieldset id="season-inputs" name="season">
-                <legend>Season</legend>
-                <input type="checkbox" name="winter" value="Winter">Winter<br>
-                <input type="checkbox" name="spring" value="Spring">Spring<br>
-                <input type="checkbox" name="summer" value="Summer">Summer<br>
-                <input type="checkbox" name="fall" value="Fall">Fall<br>
-            </fieldset>
+            <label class="input-label">Seasons</label>
+            <input id="winter-input" type="checkbox" name="season[]" value="Winter">
+            <label for="winter-input">Winter</label>
+            <input id="spring-input" type="checkbox" name="season[]" value="Spring">
+            <label for="spring-input">Spring</label>
+            <input id="summer-input" type="checkbox" name="season[]" value="Summer">
+            <label for="summer-input">Summer</label>
+            <input id="fall-input" type="checkbox" name="season[]" value="Fall">
+            <label for="fall-input">Fall</label>
         </div>
         <br>
         <div>
-            <label for="styles-input">Styles</label>
+            <label class="input-label" for="styles-input">Styles</label>
             <input id="styles-input" name="styles" type="text">
             <button id="styles-btn" class="add-btn" type="button">Add</button><br>
             <ul id="styles-list"></ul>
         </div>
         <br>
         <div>
-            <label for="brand-input">Brand</label>
+            <label class="input-label" for="brand-input">Brand</label>
             <input id="brand-input" name="brand" type="text">
         </div>
         <br>
