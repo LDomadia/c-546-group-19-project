@@ -41,6 +41,19 @@ li {
   margin: 0 4px;
 }
 
+i {
+  color: #333;
+  font-size: 16px;
+}
+
+.chip-btn {
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+  vertical-align: middle;
+  padding-right: 0;
+}
+
 .form-div {
   display: inline-block;
   vertical-align: top;
