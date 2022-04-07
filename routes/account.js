@@ -35,7 +35,7 @@ router.post("/signup", async (req, res) => {
     userPsw = userPsw.trim();
     pswRepeat = pswRepeat.trim();
 
-    if (userPsw.length < 2)
+    if (userPsw.length < 8)
       throw "Error: password must have at least eight characters";
     if (userPsw.localeCompare(pswRepeat) !== 0)
       throw "Error: password and confirm password fields must match";
