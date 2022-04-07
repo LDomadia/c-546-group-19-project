@@ -15,6 +15,7 @@
             {{else}}
                 <a href="/home">Home</a>
             {{/if}}
+            
             {{#if clothesPage}}
                 <a class="active" href="/clothes">My Clothes</a>
             {{else}}
@@ -35,6 +36,11 @@
             {{else}}
                 <a href="/">Profile</a>
             {{/if}}
+
+            {{#unless home_not_signed_in}}
+            <a href="/signup">Signup</a>
+            <a href="/login">Login</a>
+            {{/unless}}
         </div>
     </header>
     <main>

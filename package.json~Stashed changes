@@ -5,8 +5,7 @@
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
-    "seed": "node tasks/seed.js",
-    "get_deps": "npm install"
+    "seed": "node tasks/seed.js"
   },
   "repository": {
     "type": "git",
