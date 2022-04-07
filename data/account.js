@@ -16,17 +16,20 @@ module.exports = {
     if (typeof password !== "string")
       throw "Error: password should be a string";
 
+    if (username.indexOf(" ") >= 0)
+      throw "Error: username should not have any spaces";
+    if (password.indexOf(" ") >= 0)
+      throw "Error: password should not have any spaces";
     username = username.trim();
     password = password.trim();
-
     if (username.length < 2)
       throw "Error: username must have at least two characters";
-
     if (password.length < 2)
       throw "Error: password must have at least two characters";
-
     const userCollection = await users();
-    const existingUser = await userCollection.findOne({ username: username });
+    const existingUser = await userCollection.findOne({
+      username: { $regex: "^" + username + "$", $options: "i" },
+    });
     if (existingUser != null) throw "Error: username is already taken";
     let hashedPassword = await bcrypt.hash(password, 10);
     let newUser = {
