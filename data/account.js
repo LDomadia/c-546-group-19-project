@@ -24,8 +24,8 @@ module.exports = {
     password = password.trim();
     if (username.length < 2)
       throw "Error: username must have at least two characters";
-    if (password.length < 2)
-      throw "Error: password must have at least two characters";
+    if (password.length < 8)
+      throw "Error: password must have at least eight characters";
     const userCollection = await users();
     const existingUser = await userCollection.findOne({
       username: { $regex: "^" + username + "$", $options: "i" },
@@ -49,7 +49,7 @@ module.exports = {
           outerwear: 0,
           socks: 0,
         },
-        colors: {},
+        "colors-patterns": {},
         brands: {},
       },
       calendar: {},
