@@ -2,27 +2,51 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <link rel="stylesheet" href="/public/main_styles.css">
+    <link rel="stylesheet" href="/public/styles/main_styles.css">
+    <link rel="stylesheet" href="{{stylesheet}}">
+    <link rel="icon" type="image/x-icon" href="/public/images/favicon.ico">
     <title>{{title}}</title>
 </head>
 <body>
     <header>
         <div class="topnav">
-            <a class="active" href="/">Home</a>
-            {{#if signed_in}}
-            <a href="/">My Clothes</a>
-            <a href="/">My Outfits</a>
-            <a href="/">Statistics</a>
-            <a href="/">Profile</a>
+            {{#if homePage}}
+                <a class="active" href="/home">Home</a>
+            {{else}}
+                <a href="/home">Home</a>
             {{/if}}
-            {{#if home_not_signed_in}}
-            <a href="/signup">Login/Signup</a>
+            
+            {{#if clothesPage}}
+                <a class="active" href="/clothes">My Clothes</a>
+            {{else}}
+                <a href="/clothes">My Clothes</a>
             {{/if}}
+            {{#if outfitsPage}}
+                <a class="active" href="/">My Outfits</a>
+            {{else}}
+                <a href="/">My Outfits</a>
+            {{/if}}
+            {{#if statsPage}}
+                <a class="active" href="/">Statistics</a>
+            {{else}}
+                <a href="/">Statistics</a>
+            {{/if}}
+            {{#if profPage}}
+                <a class="active" href="/">Profile</a>
+            {{else}}
+                <a href="/">Profile</a>
+            {{/if}}
+
+            {{#unless home_not_signed_in}}
+            <a href="/signup">Signup</a>
+            <a href="/login">Login</a>
+            {{/unless}}
         </div>
     </header>
-    
     <main>
     {{{body}}}
     </main>
+    <script src="{{script}}"></script>
+    <script src="https://kit.fontawesome.com/288bd44038.js" crossorigin="anonymous"></script>
 </body>
 </html>
