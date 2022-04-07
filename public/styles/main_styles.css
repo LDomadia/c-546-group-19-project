@@ -1,4 +1,4 @@
-body{
+body {
     width: auto;
     font-family: "Courier New";
     padding: 1em;
@@ -15,7 +15,7 @@ body{
 
 }
 
-h1{
+h1 {
     font-family: "Helvetica";
     transform: translate(10px, 5px);
 }
@@ -25,20 +25,16 @@ h1{
     padding: 10px;
   }
 
-h2{
+h2 {
     font-family: "Helvetica";
     font-style: italic;
 }
 
-form{
-    text-align: center;
-}
-
-header{
+header {
     color: #b80659;
 }
 
-footer{
+footer {
     text-align: right;
     color: #d813b7;
 }

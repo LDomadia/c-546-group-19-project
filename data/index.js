@@ -1,7 +1,5 @@
-//update to whatever functions we need
-const closetData = require('./closet');
+const clothesData = require('./clothes');
 
 module.exports = {
-//export list
-  closet: closetData,
+  clothes: clothesData
 };
