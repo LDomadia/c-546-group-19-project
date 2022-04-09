@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang = "en">
+<head>
+    <meta charset="utf-8">
+    <title>{{title}}</title>
+</head>
+<body>
+    <article>
+        <form action="/account/signup" method="POST" class="user-sign-up">
+        <div id="signup-form" class="myform">
+            <h1>Sign Up</h1>
+            <p>Please fill in this form to create an account.</p>
+            <hr>
+            {{#if dbErr}}
+                <p>{{error}}</p>
+            {{/if}}
+            {{#if usernameErr}}
+                <p>{{error}}</p>
+            {{/if}}
+            <label for="username"><b>Username</b></label>
+            <input type="text" placeholder="Enter username (must have at least 2 characters)" value="{{username}}" name="username" required minlength="2">
+            
+            {{#if pswErr}}
+                <p>{{error}}</p>
+            {{/if}}
+            <label for="psw"><b>Password</b></label>
+            <input type="password" placeholder="Enter Password (must have at least 8 characters)" name="psw" required minlength="8">
+            
+            <label for="psw-repeat"><b>Confirm Password</b></label>
+            <input type="password" placeholder="Confirm Password" name="pswRepeat" required minlength="8">
+            
+            <div>
+            <button type="submit" class="signupbtn">Sign Up</button>
+            </div>
+        </div>
+        </form>
+    </article>
+</body>
+</html>
