@@ -73,6 +73,7 @@ module.exports = {
     if (typeof password !== "string")
         throw "Error: password should be a string";
 
+        //comment 
     if (username.indexOf(" ") >= 0)
         throw "Error: username should not have any spaces";
     if (password.indexOf(" ") >= 0)
