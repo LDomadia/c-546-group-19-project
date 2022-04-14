@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang = "en">
+<head>
+    <meta charset="utf-8">
+    <title>Log In</title>
+</head>
+<body>
+    <article>
+        <form action="/account/login" method="POST" class="user-log-in">
+        <div id="login-form" class="myform">
+            <h1>Log In</h1>
+            <p>Please fill in this form to log into your account.</p>
+            <hr>
+            {{#if dbErr}}
+                <p>{{error}}</p>
+            {{/if}}
+            {{#if usernameErr}}
+                <p>{{error}}</p>
+            {{/if}}
+            <label for="username"><b>Username</b></label>
+            <input type="text" placeholder="Enter username (must have at least 2 characters)" value="{{username}}" name="username" required minlength="2">
+            
+            {{#if pswErr}}
+                <p>{{error}}</p>
+            {{/if}}
+            <label for="psw"><b>Password</b></label>
+            <input type="password" placeholder="Enter Password (must have at least 8 characters)" value = "{{password}}" name="psw" required minlength="8">
+          
+            <div>
+            <button type="submit" >Log In</button>
+            </div>
+        </div>
+        </form>
+    </article>
+</body>
+</html>

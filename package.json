@@ -21,7 +21,7 @@
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "express": "^4.17.3",
-    "express-handlebars": "^6.0.3",
+    "express-handlebars": "^6.0.4",
     "mongodb": "^4.4.1"
   }
 }

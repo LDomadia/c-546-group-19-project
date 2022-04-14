@@ -100,4 +100,33 @@ footer {
 #signup-form p {
   margin-top: 30px;
   margin-left: 10px;
+<<<<<<< HEAD
 }
+
+/*copied from signup **/
+#login-form input{
+  display: block;
+  font-size:11px;
+  padding:4px 2px;
+  width:250px;
+  margin:2px 0 20px 10px;
+  text-align: left;
+}
+
+#login-form label, button{
+  margin:2px 0 20px 10px;
+  text-align: left;
+}
+
+#login-form h1{
+  text-align: left;
+  margin-top: 50px;
+}
+
+#login-form p {
+  margin-top: 30px;
+  margin-left: 10px;
+}
+=======
+}
+>>>>>>> eb1b7772b65807f5ea7fc0a7b73ad7e9729ecc2a

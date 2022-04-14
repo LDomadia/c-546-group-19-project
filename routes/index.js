@@ -18,6 +18,15 @@ const constructorMethod = (app) => {
     }
   });
 
+  app.use("/login", async (req, res) => {
+    try {
+      res.render("pages/medium/login", { title: "Log In" });
+    } catch (e) {
+      res.sendStatus(500);
+    }
+  });
+
+
   app.use("*", (req, res) => {
     res.render("pages/error/error404", {
       error: "Page not found",
