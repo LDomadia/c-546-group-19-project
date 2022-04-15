@@ -14,7 +14,10 @@ router.use("/", (req, res, next) => {
 // Signup - GET /
 router.get("/signup", async (req, res) => {
   try {
-    res.render("pages/medium/signup", { title: "Sign Up" });
+    res.render("pages/medium/signup", {
+      title: "Sign Up",
+      not_logged_in: true,
+    });
   } catch (e) {
     res.sendStatus(500);
   }
@@ -82,7 +85,7 @@ router.post("/signup", async (req, res) => {
 
 router.get("/login", async (req, res) => {
   try {
-    res.render("pages/medium/login", { title: "Log In" });
+    res.render("pages/medium/login", { title: "Log In", not_logged_in: true });
   } catch (e) {
     res.sendStatus(500);
   }

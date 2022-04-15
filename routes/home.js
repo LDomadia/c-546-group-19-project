@@ -16,9 +16,13 @@ router.use("/", (req, res, next) => {
 // GET /
 router.get("/", async (req, res) => {
   try {
+    let logged_in = false;
+
+    if (req.session.user) logged_in = true;
     res.render("pages/single/index", {
       title: "Digital Closet",
       homePage: true,
+      not_logged_in: !logged_in,
     });
   } catch (e) {
     res.sendStatus(500);

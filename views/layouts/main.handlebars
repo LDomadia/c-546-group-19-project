@@ -37,10 +37,10 @@
                 <a href="/">Profile</a>
             {{/if}}
 
-            {{#unless logged_in}}
+            {{#if not_logged_in}}
             <a href="/account/signup">Signup</a>
             <a href="/account/login">Login</a>
-            {{/unless}}
+            {{/if}}
         </div>
     </header>
     <main>
