@@ -3,7 +3,9 @@ const router = express.Router();
 const data = require("../data");
 const accountData = data.account;
 
-// GET /
+//Middleware
+
+// Signup - GET /
 router.get("/signup", async (req, res) => {
   try {
     res.render("pages/medium/signup", { title: "Sign Up" });
@@ -11,7 +13,7 @@ router.get("/signup", async (req, res) => {
     res.sendStatus(500);
   }
 });
-// POST /
+// Signup - POST /
 router.post("/signup", async (req, res) => {
   //Todo - check if user is already logged in, need to handle redirection
   let userInfo = req.body;
@@ -67,7 +69,7 @@ router.post("/signup", async (req, res) => {
 
   try {
     //res.redirect("/signup");
-    res.status(200).render("pages/single/index", { title: "Digital Closet" });
+    res.status(200).render("pages/medium/login", { title: "Digital Closet" });
   } catch (e) {
     res.sendStatus(500);
   }
