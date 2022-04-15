@@ -77,7 +77,12 @@ router.post("/signup", async (req, res) => {
   }
 
   try {
-    res.status(200).render("pages/medium/login", { title: "Digital Closet" });
+    res
+      .status(200)
+      .render("pages/medium/login", {
+        title: "Digital Closet",
+        not_logged_in: true,
+      });
   } catch (e) {
     res.status(500);
   }
