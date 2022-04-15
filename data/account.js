@@ -4,6 +4,7 @@ const { ObjectId } = require("mongodb");
 //const { use } = require("../routes/account");
 const bcrypt = require("bcryptjs");
 const saltRounds = 16;
+const isAlphanumeric = require("is-alphanumeric");
 
 //const validation = require("../validation");
 
@@ -23,6 +24,8 @@ module.exports = {
       throw "Error: password should not have any spaces";
     username = username.trim();
     password = password.trim();
+    if (!isAlphanumeric(username))
+      throw "Error: username should only have alphanumberic characters";
     if (username.length < 2)
       throw "Error: username must have at least two characters";
     if (password.length < 8)
@@ -89,17 +92,8 @@ module.exports = {
     //check for alphnumeric
     //https://stackoverflow.com/questions/4434076/best-way-to-alphanumeric-check-in-javascript
 
-    for (let i = 0; i < username.length; i++) {
-      let code = username.charCodeAt(i);
-      if (
-        !(code > 47 && code < 58) && // numeric (0-9)
-        !(code > 64 && code < 91) && // upper alpha (A-Z)
-        !(code > 96 && code < 123)
-      ) {
-        // lower alpha (a-z)
-        throw "username must have only alphanumeric characters";
-      }
-    }
+    if (!isAlphanumeric(username))
+      throw "Error: username should only have alphanumberic characters";
 
     username = username.toLowerCase();
 
