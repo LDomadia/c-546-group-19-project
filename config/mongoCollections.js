@@ -17,4 +17,5 @@ module.exports = {
   users: getCollectionFn("users"),
   clothes: getCollectionFn("clothes"),
   outfits: getCollectionFn("outfits"),
+  comments: getCollectionFn("comments"),
 };
