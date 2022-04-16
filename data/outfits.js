@@ -1,5 +1,5 @@
 const mongoCollections = require("../config/mongoCollections");
-const clothes = mongoCollections.clothes;
+const outfits = mongoCollections.outfits;
 const { ObjectId } = require("mongodb");
 
 const errors_string = function(str, name){
@@ -9,7 +9,7 @@ const errors_string = function(str, name){
   }
 
   if(typeof(str) !== "string"){
-      throw `${name} should be a string`
+      throw `${name} must be type string`
   }
 
   str = str.trim()
@@ -35,45 +35,41 @@ const errors_strlist = function(lst, name){
 }
 
 module.exports = {
-  async addNewClothes(name, image, type, color, season, style, brand) {
+  async addNewOutfits(creator, status, outfitName, season, style) {
     let err = function(str){return `Error: ${str} was not provided`}
-    let arg_names = ["name", "image", "type", "color", "season", "style", "brand"]
+    let arg_names = ["creator", "status", "outfitName", "season", "style"]
     for(let i = 0; i < arg_names.length; i++){
       if(!arguments[i]){
         throw err(arg_names[i])
       }
     }
 
-    name = errors_string(name, "name")
-    type = errors_string(type, "name")
+    creator = errors_string(creator, "creator")
+    status = errors_string(status, "status")
+    outfitName = errors_string(outfitName, "outfitName")
 
-    if (typeof image !== "object")
-      throw "Error: image should be an object";
-
-    color = errors_strlist(color, "color");
     season = errors_strlist(season, "season");
     style = errors_strlist(style, "style");
 
-    brand = errors_string(brand, "brand")
-
-    const clothesCollection = await clothes();
-    const existingClothes = await clothesCollection.findOne({
-      name: { $regex: "^" + name + "$", $options: "i" },
+    const outfitsCollection = await outfits();
+    const existingOutfits = await outfitsCollection.findOne({
+      outfitName: { $regex: "^" + outfitName + "$", $options: "i" },
     });
-    if (existingClothes != null) throw "Error: name is already taken";
+    if (existingOutfits != null) throw "Error: name is already taken";
 
-    let newClothes = {
-      image: {"invalid": "not implemented"},
-      name: name,
-      type: type,
-      color: color,
-      season: season,
-      style: style,
-      brand: brand
+    let newOutfits = {
+        creator: creator,
+        likes: 0,
+        status: status,
+        outfitName: outfitName,
+        season: season,
+        style: style,
+        clothes: [],
+        comments: []
     };
-    const insertInfo = await clothesCollection.insertOne(newClothes);
+    const insertInfo = await outfitsCollection.insertOne(newOutfits);
     if (!insertInfo.acknowledged || !insertInfo.insertedId)
-      throw "Could not add clothes";
+      throw "Could not add outfit";
 
     const newId = insertInfo.insertedId.toString();
     return newId;
