@@ -58,7 +58,7 @@ module.exports = {
     };
     const insertInfo = await userCollection.insertOne(newUser);
     if (!insertInfo.acknowledged || !insertInfo.insertedId)
-      throw "Could not add band";
+      throw "Could not add account";
 
     const newId = insertInfo.insertedId.toString();
     return newId;
