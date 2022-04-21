@@ -3,7 +3,26 @@ const router = express.Router();
 const data = require("../data");
 const accountData = data.account;
 
-// POST /
+//Middleware
+router.use("/", (req, res, next) => {
+  if (req.session.user) {
+    return res.redirect("/home");
+  }
+  next();
+});
+
+// Signup - GET /
+router.get("/signup", async (req, res) => {
+  try {
+    res.render("pages/medium/signup", {
+      title: "Sign Up",
+      not_logged_in: true,
+    });
+  } catch (e) {
+    res.sendStatus(500);
+  }
+});
+// Signup - POST /
 router.post("/signup", async (req, res) => {
   //Todo - check if user is already logged in, need to handle redirection
   let userInfo = req.body;
@@ -58,20 +77,31 @@ router.post("/signup", async (req, res) => {
   }
 
   try {
-    //res.redirect("/signup");
-    res.status(200).render("pages/single/index", { title: "Digital Closet" });
+    res
+      .status(200)
+      .render("pages/medium/login", {
+        title: "Digital Closet",
+        not_logged_in: true,
+      });
+  } catch (e) {
+    res.status(500);
+  }
+});
+
+router.get("/login", async (req, res) => {
+  try {
+    res.render("pages/medium/login", { title: "Log In", not_logged_in: true });
   } catch (e) {
     res.sendStatus(500);
   }
 });
 
 router.post("/login", async (req, res) => {
-
   let userInfo = req.body;
   let username = userInfo.username;
   let userPsw = userInfo.psw;
 
-//error checking
+  //error checking
   try {
     if (!username) throw "Error: username was not provided";
     if (typeof username !== "string")
@@ -82,9 +112,8 @@ router.post("/login", async (req, res) => {
   } catch (e) {
     return res
       .status(400)
-      .render("pages/medium/login", { error: e, usernameErr: true});
+      .render("pages/medium/login", { error: e, usernameErr: true });
   }
-
 
   try {
     if (!userPsw) throw "Error: password was not provided";
@@ -94,25 +123,26 @@ router.post("/login", async (req, res) => {
 
     if (userPsw.length < 8)
       throw "Error: Password must be at least eight characters";
-
   } catch (e) {
     return res.status(400).render("pages/medium/login", {
       error: e,
       pswErr: true,
       username: username,
-      password: userPsw
+      password: userPsw,
     });
   }
 
   try {
-    await accountData.login(username, userPsw);
-
+    let existingUser = await accountData.login(username, userPsw);
+    if (existingUser) {
+      req.session.user = { username: username };
+      return res.redirect("/home");
+    }
   } catch (e) {
-    return res.status(500).render("pages/medium/login", {
+    return res.status(400).render("pages/medium/login", {
       error: e,
       dbErr: true,
       username: username,
-      password:userPsw
     });
   }
 
@@ -121,11 +151,6 @@ router.post("/login", async (req, res) => {
   } catch (e) {
     res.sendStatus(500);
   }
-
-
-
 });
-
-
 
 module.exports = router;

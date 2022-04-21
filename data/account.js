@@ -4,7 +4,7 @@ const { ObjectId } = require("mongodb");
 //const { use } = require("../routes/account");
 const bcrypt = require("bcryptjs");
 const saltRounds = 16;
-
+const isAlphanumeric = require("is-alphanumeric");
 
 //const validation = require("../validation");
 
@@ -24,6 +24,8 @@ module.exports = {
       throw "Error: password should not have any spaces";
     username = username.trim();
     password = password.trim();
+    if (!isAlphanumeric(username))
+      throw "Error: username should only have alphanumberic characters";
     if (username.length < 2)
       throw "Error: username must have at least two characters";
     if (password.length < 8)
@@ -65,56 +67,52 @@ module.exports = {
   },
 
   async login(username, password) {
-    if (!username) throw "must provide username"
-    if (!password) throw "must provide password"
+    if (!username) throw "must provide username";
+    if (!password) throw "must provide password";
 
     if (typeof username !== "string")
-        throw "Error: username should be a string";
+      throw "Error: username should be a string";
     if (typeof password !== "string")
-        throw "Error: password should be a string";
+      throw "Error: password should be a string";
 
-        //comment 
+    //comment
     if (username.indexOf(" ") >= 0)
-        throw "Error: username should not have any spaces";
+      throw "Error: username should not have any spaces";
     if (password.indexOf(" ") >= 0)
-        throw "Error: password should not have any spaces";
-
+      throw "Error: password should not have any spaces";
 
     username = username.trim();
     password = password.trim();
 
     if (username.length < 2)
-        throw "Error: username must have at least two characters";
-    if (password.length < 6)
-        throw "Error: password must have at least eight characters";
+      throw "Error: username must have at least two characters";
+    if (password.length < 8)
+      throw "Error: password must have at least eight characters";
 
-        
-    //check for alphnumeric 
+    //check for alphnumeric
     //https://stackoverflow.com/questions/4434076/best-way-to-alphanumeric-check-in-javascript
 
-    for (let i = 0; i < username.length; i++) {
-        let code = username.charCodeAt(i);
-        if (!(code > 47 && code < 58) && // numeric (0-9)
-            !(code > 64 && code < 91) && // upper alpha (A-Z)
-            !(code > 96 && code < 123)) { // lower alpha (a-z)
-            throw "username must have only alphanumeric characters"
-        }
-    }
+    if (!isAlphanumeric(username))
+      throw "Error: username should only have alphanumberic characters";
 
     username = username.toLowerCase();
 
     const userCollection = await users();
-    const user = await userCollection.findOne({ username: username });
-    if (user == null) throw "Either the username or password is invalid";
+    const user = await userCollection.findOne({
+      username: { $regex: "^" + username + "$", $options: "i" },
+    });
+    if (!user) throw "Either the username or password is invalid";
 
-    const hash = await bcrypt.hash(password,saltRounds);
     let compare = false;
-    compare = await bcrypt.compare(user.password ,hash);
 
-    if(compare){
-        return {authenticated:true};
+    try {
+      compare = await bcrypt.compare(password, user.hashedPassword);
+    } catch (e) {
+      throw "Error: in comparing hashed password and inputted password";
     }
-    else throw "Either the username or password is invalid"
 
-}
+    if (compare) {
+      return { authenticated: true };
+    } else throw "Either the username or password is invalid";
+  },
 };
