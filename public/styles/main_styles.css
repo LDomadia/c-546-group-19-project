@@ -14,7 +14,9 @@ body {
     background-size: cover;
 
 }
-
+dt {
+    font-weight: bold ;
+}
 h1 {
     font-family: "Helvetica";
     transform: translate(10px, 5px);
