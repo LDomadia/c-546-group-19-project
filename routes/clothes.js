@@ -28,6 +28,8 @@ router.route("/new").get(async (req, res) => {
     stylesheet: "/public/styles/clothes_styles.css",
     script: "/public/scripts/clothes_script.js",
   });
+}).post(async (req, res) => {
+  console.log(req.body);
 });
 
 module.exports = router;

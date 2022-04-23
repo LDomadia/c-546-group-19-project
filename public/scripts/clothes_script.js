@@ -34,43 +34,46 @@ if (stylesBtn) {
 
 if (form) {
     form.addEventListener("submit", (event) => {
-        event.preventDefault();
-        nameInput.classList.remove('error-input');
-        typeInput.classList.remove('error-input');
-        imageBtn.classList.remove('error-input');
+        // event.preventDefault();
+        try {
+            nameInput.classList.remove('error-input');
+            typeInput.classList.remove('error-input');
+            imageBtn.classList.remove('error-input');
 
-        let errors = document.getElementsByClassName('error-message');
-        console.log(errors);
-        while (errors.length > 0) {
-            errors[0].remove();
-        }
+            let errors = document.getElementsByClassName('error-message');
+            while (errors.length > 0) {
+                errors[0].remove();
+            }
 
-        let nameValue = nameInput.value;
-        if (!nameValue) {
-            let error = document.createElement('p');
-            error.classList.add('error-message');
-            error.innerHTML = 'Clothing Name is Required';
-            nameInput.classList.add('error-input');
-            nameDiv.append(error);
-        }
+            let nameValue = nameInput.value;
+            if (!nameValue) {
+                let error = document.createElement('p');
+                error.classList.add('error-message');
+                error.innerHTML = 'Clothing Name is Required';
+                nameInput.classList.add('error-input');
+                nameDiv.append(error);
+            }
 
-        let imageValue = imageBtn.value;
-        if (!imageValue) {
-            let error = document.createElement('p');
-            error.classList.add('error-message');
-            error.innerHTML = 'Image is Required';
-            imageBtn.classList.add('error-input');
-            imageDiv.append(error);
-        }
-        
-        let typeValue = typeInput.value;
-        console.log(typeValue);
-        if (typeValue == 'null') {
-            let error = document.createElement('p');
-            error.classList.add('error-message');
-            error.innerHTML = 'Type is Required';
-            typeInput.classList.add('error-input');
-            typeDiv.append(error);
+            let imageValue = imageBtn.value;
+            if (!imageValue) {
+                let error = document.createElement('p');
+                error.classList.add('error-message');
+                error.innerHTML = 'Image is Required';
+                imageBtn.classList.add('error-input');
+                imageDiv.append(error);
+            }
+            
+            let typeValue = typeInput.value;
+            if (typeValue == 'null') {
+                let error = document.createElement('p');
+                error.classList.add('error-message');
+                error.innerHTML = 'Type is Required';
+                typeInput.classList.add('error-input');
+                typeDiv.append(error);
+            }
+            if (document.getElementsByClassName('error-message').length > 0) throw 'Error';
+        } catch (e) {
+            event.preventDefault();
         }
     });
 }
