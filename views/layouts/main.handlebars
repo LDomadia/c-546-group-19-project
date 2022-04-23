@@ -41,6 +41,10 @@
             <a href="/account/signup">Signup</a>
             <a href="/account/login">Login</a>
             {{/if}}
+
+            {{#unless not_logged_in}}
+            <a href="/account/logout">Logout</a>
+            {{/unless}}
         </div>
     </header>
     <main>

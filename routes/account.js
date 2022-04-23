@@ -4,8 +4,22 @@ const data = require("../data");
 const accountData = data.account;
 
 //Middleware
-router.use("/", (req, res, next) => {
+router.use("/signup", (req, res, next) => {
   if (req.session.user) {
+    return res.redirect("/home");
+  }
+  next();
+});
+
+router.use("/login", (req, res, next) => {
+  if (req.session.user) {
+    return res.redirect("/home");
+  }
+  next();
+});
+
+router.use("/logout", (req, res, next) => {
+  if (!req.session.user) {
     return res.redirect("/home");
   }
   next();
@@ -22,9 +36,9 @@ router.get("/signup", async (req, res) => {
     res.sendStatus(500);
   }
 });
+
 // Signup - POST /
 router.post("/signup", async (req, res) => {
-  //Todo - check if user is already logged in, need to handle redirection
   let userInfo = req.body;
   let username = userInfo.username;
   let userPsw = userInfo.psw;
@@ -77,12 +91,10 @@ router.post("/signup", async (req, res) => {
   }
 
   try {
-    res
-      .status(200)
-      .render("pages/medium/login", {
-        title: "Digital Closet",
-        not_logged_in: true,
-      });
+    res.status(200).render("pages/medium/login", {
+      title: "Digital Closet",
+      not_logged_in: true,
+    });
   } catch (e) {
     res.status(500);
   }
@@ -151,6 +163,13 @@ router.post("/login", async (req, res) => {
   } catch (e) {
     res.sendStatus(500);
   }
+});
+
+// Logout - GET /
+
+router.get("/logout", async (req, res) => {
+  req.session.destroy();
+  return res.redirect("/home");
 });
 
 module.exports = router;
