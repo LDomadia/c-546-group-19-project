@@ -75,6 +75,14 @@ i {
   cursor: pointer;
 }
 
+.error-message {
+  color: red;
+}
+
+.error-input {
+  border: 1px solid red !important;
+}
+
 #submit-btn {
   padding: 6px 30px;
   border-radius: 5px;

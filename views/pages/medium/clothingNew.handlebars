@@ -1,18 +1,18 @@
 <h1>Add New Clothing Item</h1>
-<form method="POST">
-    <div class="form-div">
+<form id="new-clothing-form" method="POST">
+    <div id="img-div" class="form-div">
         <img id="placeholder-img" alt="Clothing Item" src="/public/images/placeholder.jpg"><br>
-        <label class="input-label" for="img-btn">Add Image</label>
-        <input id="img-btn" name="img" type="file" accept="image/png, image/jpeg"><br>
+        <label class="input-label" for="img-btn">Add Image *</label>
+        <input id="img-btn" name="img" type="file" accept="image/png, image/jpeg" required>
     </div>
     <div class="form-div">
-        <div>
-            <label class="input-label" for="name-input">Clothing Name</label>
-            <input id="name-input" name="name" type="text">
+        <div id="name-div">
+            <label class="input-label" for="name-input">Clothing Name *</label>
+            <input id="name-input" name="name" type="text" required>
         </div>
         <br>
         <div>
-            <label class="input-label" for="type-input">Type</label>
+            <label class="input-label" for="type-input">Type *</label>
             <select id="type-input" name="type">
                 <option value="top">Top</option>
                 <option value="bottom">Bottom</option>

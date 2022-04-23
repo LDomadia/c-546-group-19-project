@@ -1,11 +1,16 @@
 const image = document.getElementById('placeholder-img');
+const imageDiv = document.getElementById('img-div')
 const imageBtn = document.getElementById('img-btn');
+const nameDiv = document.getElementById('name-div')
+const nameInput = document.getElementById('name-input');
 const colorPatternList = document.getElementById('colors-patterns-list');
 const colorPatternInput = document.getElementById('colors-patterns-input');
 const colorPatternBtn = document.getElementById('colors-patterns-btn');
 const stylesList = document.getElementById('styles-list');
 const stylesInput = document.getElementById('styles-input');
 const stylesBtn = document.getElementById('styles-btn');
+const submitBtn = document.getElementById('submit-btn');
+const form = document.getElementById('new-clothing-form');
 
 if (imageBtn) {
     imageBtn.addEventListener("change", function() {
@@ -22,7 +27,40 @@ if (colorPatternBtn) {
 if (stylesBtn) {
     stylesBtn.addEventListener("click", function() {
         addToList(stylesInput, stylesList, 'styles[]');
-    })
+    });
+}
+
+if (form) {
+    form.addEventListener("submit", (event) => {
+        event.preventDefault();
+        nameInput.classList.remove('error-input');
+        imageBtn.classList.remove('error-input');
+
+        let errors = document.getElementsByClassName('error-message');
+        console.log(errors);
+        while (errors.length > 0) {
+            errors[0].remove();
+        }
+
+        let nameValue = nameInput.value;
+        if (!nameValue) {
+            let error = document.createElement('p');
+            error.classList.add('error-message');
+            error.innerHTML = 'Clothing Name is Required';
+            nameInput.classList.add('error-input');
+            nameDiv.append(error);
+        }
+
+        let imageValue = imageBtn.value;
+        // console.log(imageValue)
+        if (!imageValue) {
+            let error = document.createElement('p');
+            error.classList.add('error-message');
+            error.innerHTML = 'Image is Required';
+            imageBtn.classList.add('error-input');
+            imageDiv.append(error);
+        }
+    });
 }
 
 function changeImage(input) {
