@@ -1,5 +1,7 @@
 const express = require("express");
 const router = express.Router();
+const clothesData = require('../data/clothes');
+
 //Middleware
 router.use("/", (req, res, next) => {
   if (!req.session.user) {
@@ -30,6 +32,41 @@ router.route("/new").get(async (req, res) => {
   });
 }).post(async (req, res) => {
   console.log(req.body);
+  let data = req.body
+  
+  try {
+    if (!data.img.trim()) {
+      throw 'Image is Required';
+    }
+    if (!data.name.trim()) {
+      throw 'Clothing Name is Required';
+    }
+    if (!data.type.trim() || data.type.trim() == 'null') {
+      throw 'Type is Required';
+    }
+  } catch (e) {
+    return res.status(400).render('pages/medium/clothingNew', {
+      title: "Add New Clothing",
+      clothesPage: true,
+      stylesheet: "/public/styles/clothes_styles.css",
+      script: "/public/scripts/clothes_script.js",
+      error: e
+    })
+  }
+
+  try {
+    let result = clothesData.addNewClothes(
+      data.name,
+      data.img,
+      data.type,
+      data.colorspatterns,
+      data.season,
+      data.styles,
+      data.brand
+    )
+  } catch (e) {
+
+  }
 });
 
 module.exports = router;

@@ -22,7 +22,7 @@ if (imageBtn) {
 
 if (colorPatternBtn) {
     colorPatternBtn.addEventListener("click", function() {
-        addToList(colorPatternInput, colorPatternList, 'colors-patterns[]');
+        addToList(colorPatternInput, colorPatternList, 'colorspatterns[]');
     });
 }
 
@@ -45,7 +45,7 @@ if (form) {
                 errors[0].remove();
             }
 
-            let nameValue = nameInput.value;
+            let nameValue = nameInput.value.trim();
             if (!nameValue) {
                 let error = document.createElement('p');
                 error.classList.add('error-message');
@@ -54,7 +54,7 @@ if (form) {
                 nameDiv.append(error);
             }
 
-            let imageValue = imageBtn.value;
+            let imageValue = imageBtn.value.trim();
             if (!imageValue) {
                 let error = document.createElement('p');
                 error.classList.add('error-message');
@@ -63,8 +63,8 @@ if (form) {
                 imageDiv.append(error);
             }
             
-            let typeValue = typeInput.value;
-            if (typeValue == 'null') {
+            let typeValue = typeInput.value.trim();
+            if (!typeValue || typeValue == 'null') {
                 let error = document.createElement('p');
                 error.classList.add('error-message');
                 error.innerHTML = 'Type is Required';

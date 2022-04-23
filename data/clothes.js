@@ -60,7 +60,7 @@ module.exports = {
     const existingClothes = await clothesCollection.findOne({
       name: { $regex: "^" + name + "$", $options: "i" },
     });
-    if (existingClothes != null) throw "Error: name is already taken";
+    if (existingClothes != null) throw "Error: Clothing Name is already exists in your closet";
 
     let newClothes = {
       image: {"invalid": "not implemented"},
