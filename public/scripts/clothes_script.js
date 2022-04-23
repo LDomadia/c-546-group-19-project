@@ -3,6 +3,8 @@ const imageDiv = document.getElementById('img-div')
 const imageBtn = document.getElementById('img-btn');
 const nameDiv = document.getElementById('name-div')
 const nameInput = document.getElementById('name-input');
+const typeDiv = document.getElementById('type-div');
+const typeInput = document.getElementById('type-input');
 const colorPatternList = document.getElementById('colors-patterns-list');
 const colorPatternInput = document.getElementById('colors-patterns-input');
 const colorPatternBtn = document.getElementById('colors-patterns-btn');
@@ -34,6 +36,7 @@ if (form) {
     form.addEventListener("submit", (event) => {
         event.preventDefault();
         nameInput.classList.remove('error-input');
+        typeInput.classList.remove('error-input');
         imageBtn.classList.remove('error-input');
 
         let errors = document.getElementsByClassName('error-message');
@@ -52,13 +55,22 @@ if (form) {
         }
 
         let imageValue = imageBtn.value;
-        // console.log(imageValue)
         if (!imageValue) {
             let error = document.createElement('p');
             error.classList.add('error-message');
             error.innerHTML = 'Image is Required';
             imageBtn.classList.add('error-input');
             imageDiv.append(error);
+        }
+        
+        let typeValue = typeInput.value;
+        console.log(typeValue);
+        if (typeValue == 'null') {
+            let error = document.createElement('p');
+            error.classList.add('error-message');
+            error.innerHTML = 'Type is Required';
+            typeInput.classList.add('error-input');
+            typeDiv.append(error);
         }
     });
 }
