@@ -36,7 +36,7 @@ const errors_strlist = function(lst, name){
 }
 
 module.exports = {
-  async addNewClothes(name, image, type, color, season, style, brand, user) {
+  async addNewClothes(name, image, type, colorPatterns, season, style, brand, user) {
     // let err = function(str){return `Error: ${str} was not provided`}
     // let arg_names = ["name", "image", "type", "color", "season", "style", "brand"]
     // for(let i = 0; i < arg_names.length; i++){
@@ -62,16 +62,16 @@ module.exports = {
     if (!type.trim() || type.trim() == 'null') throw 'Error: Type is required';
 
     const clothesCollection = await clothes();
-    const existingClothes = await clothesCollection.findOne({
-      name: { $regex: "^" + name + "$", $options: "i" },
-    });
-    if (existingClothes != null) throw "Error: Clothing Name is already exists in your closet";
+    // const existingClothes = await clothesCollection.findOne({
+    //   name: { $regex: "^" + name + "$", $options: "i" },
+    // });
+    // if (existingClothes != null) throw "Error: Clothing Name is already exists in your closet";
 
     let newClothes = {
-      image: {"invalid": "not implemented"},
+      image: image,
       name: name,
       type: type,
-      color: color,
+      "colors-patterns": colorPatterns,
       season: season,
       style: style,
       brand: brand
@@ -79,19 +79,44 @@ module.exports = {
 
     const insertInfo = await clothesCollection.insertOne(newClothes);
     if (!insertInfo.acknowledged || !insertInfo.insertedId)
-      throw "Could not add clothes";
+      throw "Error: Failed to add new Clothing Item";
 
     // const newId = insertInfo.insertedId.toString(); 
 
     const usersCollection = await users();
-    let userDocument = await usersCollection.updateOne({username: user}, {
+    const userDocument = await usersCollection.findOne({username: user});
+    let stats = userDocument.statistics;
+
+    if (type == 'Top') stats.type.tops += 1;
+    else if (type == 'Bottom') stats.type.bottoms += 1;
+    else if (type == 'Dress') stats.type.dresses += 1;
+    else if (type == 'Shoes') stats.type.shoes += 1;
+    else if (type == 'Accessory') stats.type.accessories += 1;
+    else if (type == 'Outerwear') stats.type.outerwear += 1;
+    else if (type == 'Socks') stats.type.socks += 1;
+
+    colorPatterns.forEach(element => {
+      if (stats['colors-patterns'][element]) stats['colors-patterns'][element] += 1;
+      else stats['colors-patterns'][element] = 1
+    });
+
+    if (stats['brands'][brand]) stats['brands'][brand] += 1;
+    else stats['brands'][brand] = 1;
+
+    const updateInfo = await usersCollection.updateOne({username: user}, {
       $push: {
         userClothes: insertInfo.insertedId
       },
       // update stats
+      $set: {
+        statistics: stats
+      }
     });
+
+    if (updateInfo.matchedCount == 0 || updateInfo.modifiedCount == 0) 
+      throw 'Error: Failed to update user';
     
-    console.log(userDocument);
+    // console.log(userDocument);
     return;
   }
 };

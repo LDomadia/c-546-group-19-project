@@ -31,7 +31,6 @@ router.route("/new").get(async (req, res) => {
     script: "/public/scripts/clothes_script.js",
   });
 }).post(async (req, res) => {
-  console.log(req.body);
   let data = req.body
 
   try {
@@ -54,7 +53,7 @@ router.route("/new").get(async (req, res) => {
       data.name,
       data.img,
       data.type,
-      data.colorspatterns,
+      data['colors-patterns'],
       data.season,
       data.styles,
       data.brand,
