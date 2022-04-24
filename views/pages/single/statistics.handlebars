@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang = "en">
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="/public/styles/stat_styles.css">
+    <title>{{title}}</title>
+</head>
+<body>
+    <main>
+    <h1 class = "stats-title">{{title}}</h1>
+    
+    <section class ="stats-sect">
+        <figure>
+            <figcaption class="stats-caption">Types</figcaption>
+            <ul>
+                {{#each types}}
+                <li class="stats-list">
+                    {{@key}}: {{this}}
+                </li>
+                {{/each}}
+            </ul>
+        </figure>
+        <figure>
+            <figcaption class="stats-caption">Colors/Patterns</figcaption>
+            <ul>
+                {{#each colors-patterns}}
+                <li class="stats-list">
+                    {{@key}}: {{this}}
+                </li>
+                {{/each}}
+            </ul>
+        </figure>
+
+        <figure>
+            <figcaption class="stats-caption">Brands</figcaption>
+            <ul>
+                {{#each brands}}
+                <li class="stats-list">
+                    {{@key}}: {{this}}
+                </li>
+                {{/each}}
+            </ul>
+        </figure>
+
+        <a class="refresh" href="/stats">Refresh</a>
+    </section>
+    </main>
+</body>
+</html>
