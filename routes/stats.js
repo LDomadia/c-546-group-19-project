@@ -13,7 +13,17 @@ router.use("/", (req, res, next) => {
 });
 
 router.route("/").get(async (req, res) => {
-  sendStatus(200);
+  try {
+    const statistics = await accountData.getStats(req.session.user.username);
+    return res.status(200).render("pages/single/statistics", {
+      title: req.session.user.username + " Statistics",
+      brands: statistics.brands,
+      types: statistics.type,
+      "colors-patterns": statistics["colors-patterns"],
+    });
+  } catch (e) {
+    return res.status(500).json(e);
+  }
 });
 
 module.exports = router;
