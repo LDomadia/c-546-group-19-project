@@ -2,28 +2,29 @@
 <html lang = "en">
 <head>
     <meta charset="utf-8">
+    <link rel="stylesheet" href="/public/styles/stat_styles.css">
     <title>{{title}}</title>
 </head>
 <body>
     <main>
-    <h1>{{title}}</h1>
+    <h1 class = "stats-title">{{title}}</h1>
     
-    <section>
+    <section class ="stats-sect">
         <figure>
-            <figcaption>Types</figcaption>
+            <figcaption class="stats-caption">Types</figcaption>
             <ul>
                 {{#each types}}
-                <li class="stats">
+                <li class="stats-list">
                     {{@key}}: {{this}}
                 </li>
                 {{/each}}
             </ul>
         </figure>
         <figure>
-            <figcaption>Colors/Patterns</figcaption>
+            <figcaption class="stats-caption">Colors/Patterns</figcaption>
             <ul>
                 {{#each colors-patterns}}
-                <li class="stats">
+                <li class="stats-list">
                     {{@key}}: {{this}}
                 </li>
                 {{/each}}
@@ -31,10 +32,10 @@
         </figure>
 
         <figure>
-            <figcaption>Brands</figcaption>
+            <figcaption class="stats-caption">Brands</figcaption>
             <ul>
                 {{#each brands}}
-                <li class="stats">
+                <li class="stats-list">
                     {{@key}}: {{this}}
                 </li>
                 {{/each}}
