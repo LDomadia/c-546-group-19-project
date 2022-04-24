@@ -26,9 +26,27 @@ if (colorPatternBtn) {
     });
 }
 
+if (colorPatternInput) {
+    colorPatternInput.addEventListener('keydown', (event) => {
+        if (event.key == 'Enter') {
+            event.preventDefault();
+            addToList(colorPatternInput, colorPatternList, 'colors-patterns[]');
+        }
+    });
+}
+
 if (stylesBtn) {
     stylesBtn.addEventListener("click", function() {
         addToList(stylesInput, stylesList, 'styles[]');
+    });
+}
+
+if (stylesInput) {
+    stylesInput.addEventListener('keydown', (event) => {
+        if (event.key == 'Enter') {
+            event.preventDefault();
+            addToList(stylesInput, stylesList, 'styles[]');
+        }
     });
 }
 
