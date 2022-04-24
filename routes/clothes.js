@@ -17,10 +17,22 @@ router.route("/").get(async (req, res) => {
       clothesPage: true,
       not_logged_in: true,
     });
-  res.render("pages/results/clothings", {
-    title: "My Clothes",
-    clothesPage: true,
-  });
+  
+  try {
+    let clothingItems = await clothesData.getClothingItems(req.session.user.username);
+    res.render("pages/results/clothings", {
+      title: "My Clothes",
+      clothesPage: true,
+      clothingItems: clothingItems,
+      stylesheet: "/public/styles/clothes_styles.css"
+    });
+  } catch (e) {
+    res.status(500).render('pages/results/clothings', {
+      title: 'My Clothes',
+      clothesPage: true,
+      error: e
+    })
+  }
 });
 
 router.route("/new").get(async (req, res) => {

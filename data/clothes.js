@@ -74,5 +74,18 @@ module.exports = {
       throw 'Error: Failed to update user';
     
     return 'success';
+  },
+  async getClothingItems(user) {
+    let clothingItems = [];
+    const usersCollection = await users();
+    const userDocument = await usersCollection.findOne({username: user});
+    if (userDocument) {
+      const clothesCollection = await clothes();
+      for (let id of userDocument.userClothes) {
+        let clothesDocument = await clothesCollection.findOne({_id: id});
+        if (clothesDocument) clothingItems.push(clothesDocument);
+      }
+    }
+    return clothingItems;
   }
 };
