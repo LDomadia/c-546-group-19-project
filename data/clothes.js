@@ -55,7 +55,7 @@ module.exports = {
     // style = errors_strlist(style, "style");
 
     // brand = errors_string(brand, "brand")
-    // throw "Error: This feature is currently unavailable";
+    throw "Error: This feature is currently unavailable";
     if (!name.trim()) throw 'Error: Clothing Name is required';
     if (!image.trim()) throw 'Error: Image is required';
     if (!type.trim() || type.trim() == 'null') throw 'Error: Type is required';
