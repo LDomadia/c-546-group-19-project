@@ -1,39 +1,6 @@
 const mongoCollections = require("../config/mongoCollections");
 const clothes = mongoCollections.clothes;
 const users = mongoCollections.users;
-const { ObjectId } = require("mongodb");
-
-const errors_string = function(str, name){
-
-  if(!str){
-      throw `${name} is not initialized`
-  }
-
-  if(typeof(str) !== "string"){
-      throw `${name} should be a string`
-  }
-
-  str = str.trim()
-
-  if(str.length < 1){
-      throw `${name} cannot be an empty string`
-  }
-
-  return str
-  
-}
-
-const errors_strlist = function(lst, name){
-  if(!lst){
-      throw `${name} is not initialized`
-  }
-
-  if(lst.length < 1){
-      throw `${name} cannot be empty list`
-  }
-
-  return lst.map(a => errors_string(a))
-}
 
 module.exports = {
   async addNewClothes(name, image, type, colorPatterns, season, style, brand, user) {
