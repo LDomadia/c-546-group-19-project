@@ -1,5 +1,7 @@
 const express = require("express");
 const router = express.Router();
+const clothesData = require('../data/clothes');
+
 //Middleware
 router.use("/", (req, res, next) => {
   if (!req.session.user) {
@@ -28,6 +30,50 @@ router.route("/new").get(async (req, res) => {
     stylesheet: "/public/styles/clothes_styles.css",
     script: "/public/scripts/clothes_script.js",
   });
+}).post(async (req, res) => {
+  let data = req.body
+
+  try {
+    if (!data.img.trim()) throw 'Error: Image is Required';
+    if (!data.name.trim()) throw 'Error: Clothing Name is Required';
+    if (!data.type.trim() || data.type.trim() == 'null') throw 'Error: Type is Required';
+    
+  } catch (e) {
+    return res.status(400).render('pages/medium/clothingNew', {
+      title: "Add New Clothing",
+      clothesPage: true,
+      stylesheet: "/public/styles/clothes_styles.css",
+      script: "/public/scripts/clothes_script.js",
+      error: e
+    });
+  }
+
+  try {
+    let result = await clothesData.addNewClothes(
+      data.name,
+      data.img,
+      data.type,
+      data['colors-patterns'],
+      data.season,
+      data.styles,
+      data.brand,
+      req.session.user.username
+    )
+    if (result == 'success') {
+      res.status(200).redirect('/clothes');
+    }
+    else {
+      throw 'Error: Failed to add Clothing Item';
+    }
+  } catch (e) {
+    return res.status(500).render('pages/medium/clothingNew', {
+      title: "Add New Clothing",
+      clothesPage: true,
+      stylesheet: "/public/styles/clothes_styles.css",
+      script: "/public/scripts/clothes_script.js",
+      error: e
+    });
+  }
 });
 
 module.exports = router;
