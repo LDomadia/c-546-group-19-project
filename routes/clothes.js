@@ -59,6 +59,12 @@ router.route("/new").get(async (req, res) => {
       data.brand,
       req.session.user.username
     )
+    if (result == 'success') {
+      res.status(200).redirect('/clothes');
+    }
+    else {
+      throw 'Error: Failed to add Clothing Item';
+    }
   } catch (e) {
     return res.status(500).render('pages/medium/clothingNew', {
       title: "Add New Clothing",
