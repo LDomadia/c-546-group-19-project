@@ -1,5 +1,6 @@
 const mongoCollections = require("../config/mongoCollections");
 const clothes = mongoCollections.clothes;
+const users = mongoCollections.users;
 const { ObjectId } = require("mongodb");
 
 const errors_string = function(str, name){
@@ -35,7 +36,7 @@ const errors_strlist = function(lst, name){
 }
 
 module.exports = {
-  async addNewClothes(name, image, type, color, season, style, brand) {
+  async addNewClothes(name, image, type, color, season, style, brand, user) {
     // let err = function(str){return `Error: ${str} was not provided`}
     // let arg_names = ["name", "image", "type", "color", "season", "style", "brand"]
     // for(let i = 0; i < arg_names.length; i++){
@@ -55,7 +56,7 @@ module.exports = {
     // style = errors_strlist(style, "style");
 
     // brand = errors_string(brand, "brand")
-    throw "Error: This feature is currently unavailable";
+    // throw "Error: This feature is currently unavailable";
     if (!name.trim()) throw 'Error: Clothing Name is required';
     if (!image.trim()) throw 'Error: Image is required';
     if (!type.trim() || type.trim() == 'null') throw 'Error: Type is required';
@@ -75,11 +76,22 @@ module.exports = {
       style: style,
       brand: brand
     };
+
     const insertInfo = await clothesCollection.insertOne(newClothes);
     if (!insertInfo.acknowledged || !insertInfo.insertedId)
       throw "Could not add clothes";
 
-    const newId = insertInfo.insertedId.toString();
-    return newId;
+    // const newId = insertInfo.insertedId.toString(); 
+
+    const usersCollection = await users();
+    let userDocument = await usersCollection.updateOne({username: user}, {
+      $push: {
+        userClothes: insertInfo.insertedId
+      },
+      // update stats
+    });
+    
+    console.log(userDocument);
+    return;
   }
 };

@@ -57,7 +57,8 @@ router.route("/new").get(async (req, res) => {
       data.colorspatterns,
       data.season,
       data.styles,
-      data.brand
+      data.brand,
+      req.session.user.username
     )
   } catch (e) {
     return res.status(500).render('pages/medium/clothingNew', {

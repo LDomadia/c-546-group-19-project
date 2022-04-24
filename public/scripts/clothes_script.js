@@ -22,7 +22,7 @@ if (imageBtn) {
 
 if (colorPatternBtn) {
     colorPatternBtn.addEventListener("click", function() {
-        addToList(colorPatternInput, colorPatternList, 'colorspatterns[]');
+        addToList(colorPatternInput, colorPatternList, 'colors-patterns[]');
     });
 }
 
