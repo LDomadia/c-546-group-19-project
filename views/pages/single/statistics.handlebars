@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang = "en">
+<head>
+    <meta charset="utf-8">
+    <title>{{title}}</title>
+</head>
+<body>
+    <main>
+    <h1>{{title}}</h1>
+    
+    <section>
+        <figure>
+            <figcaption>Types</figcaption>
+            <ul>
+                {{#each types}}
+                <li class="stats">
+                    {{@key}}: {{this}}
+                </li>
+                {{/each}}
+            </ul>
+        </figure>
+        <figure>
+            <figcaption>Colors/Patterns</figcaption>
+            <ul>
+                {{#each colors-patterns}}
+                <li class="stats">
+                    {{@key}}: {{this}}
+                </li>
+                {{/each}}
+            </ul>
+        </figure>
+
+        <figure>
+            <figcaption>Brands</figcaption>
+            <ul>
+                {{#each brands}}
+                <li class="stats">
+                    {{@key}}: {{this}}
+                </li>
+                {{/each}}
+            </ul>
+        </figure>
+
+        <a class="refresh" href="/stats">Refresh</a>
+    </section>
+    </main>
+</body>
+</html>
