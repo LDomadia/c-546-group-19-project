@@ -36,25 +36,29 @@ const errors_strlist = function(lst, name){
 
 module.exports = {
   async addNewClothes(name, image, type, color, season, style, brand) {
-    let err = function(str){return `Error: ${str} was not provided`}
-    let arg_names = ["name", "image", "type", "color", "season", "style", "brand"]
-    for(let i = 0; i < arg_names.length; i++){
-      if(!arguments[i]){
-        throw err(arg_names[i])
-      }
-    }
+    // let err = function(str){return `Error: ${str} was not provided`}
+    // let arg_names = ["name", "image", "type", "color", "season", "style", "brand"]
+    // for(let i = 0; i < arg_names.length; i++){
+    //   if(!arguments[i]){
+    //     throw err(arg_names[i])
+    //   }
+    // }
 
-    name = errors_string(name, "name")
-    type = errors_string(type, "name")
+    // name = errors_string(name, "name")
+    // type = errors_string(type, "name")
 
-    if (typeof image !== "object")
-      throw "Error: image should be an object";
+    // if (typeof image !== "object")
+    //   throw "Error: image should be an object";
 
-    color = errors_strlist(color, "color");
-    season = errors_strlist(season, "season");
-    style = errors_strlist(style, "style");
+    // color = errors_strlist(color, "color");
+    // season = errors_strlist(season, "season");
+    // style = errors_strlist(style, "style");
 
-    brand = errors_string(brand, "brand")
+    // brand = errors_string(brand, "brand")
+    // throw "Error: This feature is currently unavailable";
+    if (!name.trim()) throw 'Error: Clothing Name is required';
+    if (!image.trim()) throw 'Error: Image is required';
+    if (!type.trim() || type.trim() == 'null') throw 'Error: Type is required';
 
     const clothesCollection = await clothes();
     const existingClothes = await clothesCollection.findOne({

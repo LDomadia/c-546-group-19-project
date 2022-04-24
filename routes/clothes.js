@@ -33,17 +33,12 @@ router.route("/new").get(async (req, res) => {
 }).post(async (req, res) => {
   console.log(req.body);
   let data = req.body
-  
+
   try {
-    if (!data.img.trim()) {
-      throw 'Image is Required';
-    }
-    if (!data.name.trim()) {
-      throw 'Clothing Name is Required';
-    }
-    if (!data.type.trim() || data.type.trim() == 'null') {
-      throw 'Type is Required';
-    }
+    if (!data.img.trim()) throw 'Error: Image is Required';
+    if (!data.name.trim()) throw 'Error: Clothing Name is Required';
+    if (!data.type.trim() || data.type.trim() == 'null') throw 'Error: Type is Required';
+    
   } catch (e) {
     return res.status(400).render('pages/medium/clothingNew', {
       title: "Add New Clothing",
@@ -51,11 +46,11 @@ router.route("/new").get(async (req, res) => {
       stylesheet: "/public/styles/clothes_styles.css",
       script: "/public/scripts/clothes_script.js",
       error: e
-    })
+    });
   }
 
   try {
-    let result = clothesData.addNewClothes(
+    let result = await clothesData.addNewClothes(
       data.name,
       data.img,
       data.type,
@@ -65,7 +60,13 @@ router.route("/new").get(async (req, res) => {
       data.brand
     )
   } catch (e) {
-
+    return res.status(500).render('pages/medium/clothingNew', {
+      title: "Add New Clothing",
+      clothesPage: true,
+      stylesheet: "/public/styles/clothes_styles.css",
+      script: "/public/scripts/clothes_script.js",
+      error: e
+    });
   }
 });
 
