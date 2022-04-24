@@ -54,30 +54,30 @@ module.exports = {
     else if (type == 'Socks') stats.type.socks += 1;
 
     if (style) {
-      style.forEach(element => {
-        element = element.trim().toLowerCase();
+      style = style.map(element => {
+        return element.toLowerCase().trim();
       })
     }
 
     if (colorPatterns) {
+      colorPatterns = colorPatterns.map(element => {
+        return element.toLowerCase().trim();
+      })
       colorPatterns.forEach(element => {
-        element = element.trim().toLowerCase();
         if (stats['colors-patterns'][element]) 
           stats['colors-patterns'][element] += 1;
         else 
-          stats['colors-patterns'][element] = 1
+          stats['colors-patterns'][element] = 1;
       });
     }
-
+    
     if (brand) {
-      brand = brand.trim().toLowerCase();
+      brand = brand.toLowerCase().trim();
     if (stats['brands'][brand]) 
       stats['brands'][brand] += 1;
     else 
       stats['brands'][brand] = 1;
     }
-
-    const clothesCollection = await clothes();
 
     let newClothes = {
       image: image,
@@ -89,6 +89,7 @@ module.exports = {
       brand: brand
     };
 
+    const clothesCollection = await clothes();
     const insertInfo = await clothesCollection.insertOne(newClothes);
     if (!insertInfo.acknowledged || !insertInfo.insertedId)
       throw "Error: Failed to add new Clothing Item";
