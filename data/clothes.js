@@ -5,7 +5,6 @@ const users = mongoCollections.users;
 module.exports = {
   async addNewClothes(name, image, type, colorPatterns, season, style, brand, user) {
     if (!name.trim()) throw 'Error: Clothing Name is required';
-    if (!image.trim()) throw 'Error: Image is required';
     if (!type.trim() || type.trim() == 'null') throw 'Error: Type is required';
 
     const usersCollection = await users();
