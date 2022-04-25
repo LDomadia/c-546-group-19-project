@@ -14,9 +14,7 @@ body {
     background-size: cover;
 
 }
-dt {
-    font-weight: bold ;
-}
+
 h1 {
     font-family: "Helvetica";
     transform: translate(10px, 5px);
@@ -127,4 +125,13 @@ footer {
 #login-form p {
   margin-top: 30px;
   margin-left: 10px;
+}
+
+dt {
+  font-weight: bold ;
+}
+
+
+#edit_profile label{
+  font-weight:bold;
 }

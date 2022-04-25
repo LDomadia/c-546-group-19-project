@@ -1,14 +1,59 @@
 <h1 class="right">{{title}}</h1>
+
+
 <article class="main">
-    <dl class="left">
-        <dt>Username</dt>
-        <dd>{{username}}</dd>
-        <dt>Bio</dt>
-        <dd>{{bio}}</dd>
-        <dt>Stores</dt>
-        <dd>
-            <ul>{{bio}}</ul>
-        </dd>
-    </dl>
+    <div>
+        <h2>User Info</h2>
+        <dl>
+            <dt>Username</dt>
+            <dd>{{username}}</dd>
+            <dt>Bio</dt>
+            <dd>{{bio}}</dd>
+            <dt>Stores</dt>
+            <dd>
+                <ul>{{bio}}</ul>
+            </dd>
+        </dl>
+    </div>
+
+
+    <div id="edit_profile">
+
+
+        <h2>Edit Profile</h2>
+
+        <form id="cuser" class="cuser">
+            <label for="change_username">Change Username</label><br />
+            <input type="text" id="change_username">
+            <button type="submit">submit</button>
+        </form>
+
+        <form id="cpassword" class="cpassword">
+            <label for="change_password">Change Password</label><br />
+            <input type="text" id="change_password">
+            <button type="submit">submit</button>
+        </form>
+
+
+        <form id="bio" class="profile">
+            <label for="bio_term">Bio</label> <br />
+            <textarea id="bio_term" name="bio_term" rows="4" cols="50"> </textarea>
+            <button type="submit">submit</button>
+        </form>
+
+
+        <form id="stores" class="profile2">
+            <label for="store_term">Add A Favorite Store</label><br />
+            <input type="text" id="store_term">
+            <button type="submit">submit</button>
+        </form>
+    </div>
+
+    <div id="edit_profile">
+
+
+        <h2>Manage Account</h2>
+        <a href="/logout">Click here to log-out</a>
+        <a href="/delete">Click here to delete account</a>
 
 </article>
