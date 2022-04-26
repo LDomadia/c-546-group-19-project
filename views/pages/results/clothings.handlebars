@@ -4,10 +4,12 @@
     <a href="/clothes/new">Add +</a>
     <br>
     {{#each clothingItems}}
-        <div class="form-div clothing-item-card">
+        <div class="clothing-item-card">
             <img class="clothing-item-image" alt="{{name}}" src="/uploads/{{image}}">
-            <p>{{name}}</p>
-            <p>Type: {{type}}</p>
+            <div class="clothing-item-details">
+                <h3 class="clothing-item-title">{{name}}</h3>
+                <p>Type: {{type}}</p>
+            </div>
         </div>
     {{/each}}
 </div>
