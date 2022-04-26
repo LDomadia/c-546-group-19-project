@@ -108,13 +108,9 @@ async function generateOutfit(colorPatterns, season, style, threshold=2){
       }
     }
 
-    console.log(bestClothes)
-
     return bestClothes
 
 }
-
-generateOutfit(["white", "blue"], ["Summer", "Spring"], ["casual"])
 
 
 module.exports = {
