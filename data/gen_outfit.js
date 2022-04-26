@@ -37,6 +37,15 @@ const errors_string = function(str, name){
 
 //gets all occurances of specific cloth type in clothes db
 async function getClothType(collection, cloth_type){
+    if(!collection){
+      throw "Error: Could not get clothes database"
+    }
+    let cloth_names = ["Top", "Bottom", "Dress", "Shoes", "Accessory", "Outerwear", "Socks"]
+    cloth_type = errors_string(cloth_type, "cloth_type")
+    if(cloth_names.indexOf(cloth_type)<0){
+      throw "Error: invalid cloth type"
+    }
+
     return await collection.find({
         type: { $regex: "^" + cloth_type + "$", $options: "i" },
       }).toArray()
@@ -114,7 +123,6 @@ async function generateOutfit(colorPatterns, season, style, threshold=1.5){
     }
 
     return bestClothes
-
 }
 
 
