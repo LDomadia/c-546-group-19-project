@@ -7,8 +7,8 @@ module.exports = {
         if (username.indexOf(" ") >= 0)
             throw "Error: username should not have any spaces";
         username = username.trim();
-        if (username.length < 4)
-            throw "Error: username must have at least four characters";
+        if (username.length < 2)
+            throw "Error: username must have at least two characters";
         //check for alphnumeric 
         //https://stackoverflow.com/questions/4434076/best-way-to-alphanumeric-check-in-javascript
 
@@ -31,7 +31,7 @@ module.exports = {
         if (password.indexOf(" ") >= 0)
             throw "Error: password should not have any spaces";
         password = password.trim();
-        if (password.length < 6)
+        if (password.length < 8)
             throw "Error: password must have at least eight characters";
         return password;
     },
