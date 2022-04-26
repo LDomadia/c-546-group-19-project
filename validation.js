@@ -37,7 +37,7 @@ module.exports = {
     },
 
     checkId(id) {
-        if (!id) throw "must provide id"
+        if (!id) throw "must provide s"
         if (typeof id !== 'string') throw 'invalid string input';
         if (id.trim().length === 0)
             throw 'Id cannot be an empty string or just spaces';
@@ -49,10 +49,10 @@ module.exports = {
 
 
     checkString(string) {
-        if (!string) throw "must provide id"
+        if (!string) throw "must provide text input"
         if (typeof string !== 'string') throw 'invalid string input';
         if (string.trim().length === 0)
-            throw 'Id cannot be an empty string or just spaces';
+            throw 'string cannot be an empty string or just spaces';
         return string;
     },
 

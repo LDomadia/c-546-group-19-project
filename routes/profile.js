@@ -350,7 +350,7 @@ router.post("/", async (req, res) => {
       username: req.session.user.username,
       bio: user.bio,
       stores: user.stores,
-      storeE: true,
+      submitE: true,
       error: "Must Provide Input inside text box"
     });
   }
