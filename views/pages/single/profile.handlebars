@@ -11,8 +11,18 @@
             <dd>{{bio}}</dd>
             <dt>Stores</dt>
             <dd>
-                <ul>{{bio}}</ul>
+                {{#if stores.length}}
+                <ul> {{#each stores}}
+                    <li>    <a href="{{this.website}}"> {{this.name}} </a> </li>
+                    {{/each}}
+                </ul>
+                {{/if}}
             </dd>
+
+            {{#if err}}
+            <dd>N/A</dd>
+            {{/if}}
+
         </dl>
     </div>
 
@@ -22,59 +32,62 @@
 
         <h2>Edit Profile</h2>
 
+        
+            {{#if submitE}}
+            <p>{{error}}</p>
+            {{/if}}
+
 
         <form id="cuser" class="cuser" method="POST" action="/profile">
-        
+
             {{#if userE}}
-                <p>{{error}}</p>
+            <p>{{error}}</p>
             {{/if}}
-        
+
             <label for="change_username">Change Username</label><br />
-            <input type="text" name="username" id="change_username">
+            <input type="text" name="username" id="change_username" placeholder="Enter username">
             <button type="submit">submit</button>
         </form>
 
-        <form id="cpassword" class="cpassword"  method="POST" action="/profile">
-            
+        <form id="cpassword" class="cpassword" method="POST" action="/profile">
+
             {{#if PasswordE}}
-                <p>{{error}}</p>
+            <p>{{error}}</p>
             {{/if}}
-        
+
             <label for="change_password">Change Password</label><br />
-            <input type="password" name="password" id="change_password">
+            <input type="password" name="password" id="change_password" placeholder="Enter password">
             <button type="submit">submit</button>
         </form>
 
 
-        <form id="bio" method="PUT" action="profile">
-            
+        <form id="bio" method="POST" action="/profile">
+
             {{#if bioE}}
-                <p>{{error}}</p>
+            <p>{{error}}</p>
             {{/if}}
-        
+
             <label for="bio_term">Bio</label> <br />
-            <textarea id="bio_term" name="bio" rows="4" cols="50"> </textarea>
+            <textarea id="bio_term" name="bio" rows="4" cols="50" placeholder="Enter bio"> </textarea>
             <button type="submit">submit</button>
         </form>
 
         <h3>Add Your Favorite Stores!</h3>
 
 
-        <form id="stores" method="PUT">
-            
-            {{#if StoreE}}
-                <p>{{error}}</p>
+        <form id="stores" method="POST" action="/profile">
+
+            {{#if storeE}}
+            <p>{{error}}</p>
             {{/if}}
-        
+
             <label for="store_name">Store Name</label><br />
-            <input type="text" id="store_name" name="storename">
+            <input type="text" id="store_name" name="storename" placeholder="enter store name">
             <br />
-                        
-            {{#if StoreE2}}
-                <p>{{error}}</p>
-            {{/if}}
+
+            
             <label for="store_link">Store Link </label><br />
-            <input type="text" id="store_link" name="storelink">
+            <input type="text" id="store_link" name="storelink" placeholder ="enter store link">
             <button type="submit">submit</button>
         </form>
     </div>
@@ -85,6 +98,6 @@
         <h2>Manage Account</h2>
         <a href="/logout">Click here to log-out</a>
         <br />
-        <a href="/delete">Click here to delete account</a>
+        <a href="/profile/delete">Click here to delete account</a>
 
 </article>

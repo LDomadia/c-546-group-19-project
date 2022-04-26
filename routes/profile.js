@@ -15,24 +15,34 @@ router.use("/", (req, res, next) => {
 //get profile if signed in 
 router.get("/", async (req, res) => {
 
+  let user;
   try {
-    let user = req.session.user;
-    let username, bio, stores;
+    user = await data.get(req.session.user.username);
+  }
+  catch (e) {
+    res.status(404).render("pages/error/error", {error:e});
+    return;
+  }
 
-    if (!user.username) {
+  try {
+    let username, bio, stores;
+    let err= false;
+
+    if (!user.username || user.username == null) {
       username = "N/A";
     }
     else {
       username = user.username;
     }
-    if (!user.bio) {
+    if (!user.bio || user.bio == null) {
       bio = "N/A";
     }
     else {
       bio = user.bio;
     }
-    if (!user.stores) {
+    if (!user.stores || user.stores == null) {
       stores = "N/A";
+      err=true;
     }
     else {
       //in list
@@ -43,7 +53,8 @@ router.get("/", async (req, res) => {
       title: "Profile",
       username: username,
       bio: bio,
-      stores: stores
+      stores: stores,
+      err:err
     });
   } catch (e) {
     res.sendStatus(500);
@@ -54,31 +65,41 @@ router.get("/", async (req, res) => {
 router.post("/", async (req, res) => {
   //change username 
 
-  let user = req.session.user;
+
+  let user;
+  try {
+    user = await data.get(req.session.user.username);
+  }
+  catch (e) {
+    res.status(404).render("pages/error/error", {error:e});
+    return;
+  }
+
   let username, bio, stores;
+  let err= false;
 
   //self checks
-  if (!user.username) {
+  if (!user.username || user.username == null) {
     username = "N/A";
   }
   else {
     username = user.username;
   }
-  if (!user.bio) {
+  if (!user.bio || user.bio == null) {
     bio = "N/A";
   }
   else {
     bio = user.bio;
   }
-  if (!user.stores) {
+  if (!user.stores || user.stores == null) {
     stores = "N/A";
+    err =true;
   }
   else {
-    //in list
     stores = user.stores;
   }
 
-  if (req.body.username) {
+   if (req.body.username) {
     //change username
     try {
       username = validation.checkUsername(req.body.username);
@@ -87,10 +108,11 @@ router.post("/", async (req, res) => {
       res.render("pages/single/profile", {
         title: "Profile",
         username: req.session.user.username,
-        bio: bio,
-        stores: stores,
+        bio: user.bio,
+        stores: user.stores,
         userE: true,
-        error: e
+        error: e,
+        err:err
       });
       return;
     }
@@ -103,10 +125,11 @@ router.post("/", async (req, res) => {
       res.render("pages/single/profile", {
         title: "Profile",
         username: req.session.user.username,
-        bio: bio,
-        stores: stores,
+        bio: user.bio,
+        stores: user.stores,
         userE: true,
-        error: e
+        error: e,
+        err:err
       });
       return;
     }
@@ -117,40 +140,41 @@ router.post("/", async (req, res) => {
       res.render("pages/single/profile", {
         title: "Profile",
         username: username,
-        bio: bio,
-        stores: stores,
-        userE: false
+        bio: user.bio,
+        stores: user.stores,
+        userE: false,
+        err:err
       });
     }
     catch (e) {
       res.render("pages/single/profile", {
         title: "Profile",
         username: req.session.user.username,
-        bio: bio,
-        stores: stores,
+        bio: user.bio,
+        stores: user.stores,
         userE: true,
-        error: e
+        error: e,
+        err:err
       });
       return;
     }
   }
 
   //password
-  if (req.body.password) {
+  else if (req.body.password) {
     //change username
-
-
     try {
-     validation.checkPassword(req.body.password);
+      validation.checkPassword(req.body.password);
     }
     catch (e) {
       res.render("pages/single/profile", {
         title: "Profile",
         username: username,
-        bio: bio,
-        stores: stores,
-        PasswordE: true,
-        error: e
+        bio: user.bio,
+        stores: user.stores,
+        userE: true,
+        error: e,
+        err:err
       });
       return;
     }
@@ -163,97 +187,195 @@ router.post("/", async (req, res) => {
       res.render("pages/single/profile", {
         title: "Profile",
         username: req.session.user.username,
-        bio: bio,
-        stores: stores,
-        PasswordE: true,
-        error: e
+        bio: user.bio,
+        stores: user.stores,
+        userE: true,
+        error: e,
+        err:err
       });
       return;
     }
-    
+
     try {
       req.session.user.password = user.password;
       res.render("pages/medium/passwordchange", {});
-
     }
     catch (e) {
       res.render("pages/single/profile", {
         title: "Profile",
         username: req.session.user.username,
-        bio: bio,
-        stores: stores,
-        PasswordE: true,
-        error: e
+        bio: user.bio,
+        stores: user.stores,
+        userE: true,
+        error: e,
+        err:err
       });
       return;
     }
   }
-})
 
-//   }
+  //bio
+  else if (req.body.bio) {
+    //change username
 
-//   if (req.body.bio) {
-//     //change username
-//     bio= data.changeBio(name, req.body.bio).bio;
-//     let user = req.session.user;
-//     let username, bio, stores;
+    try {
+      bio = validation.checkString(req.body.bio);
+    }
+    catch (e) {
+      res.render("pages/single/profile", {
+        title: "Profile",
+        username: req.session.user.username,
+        bio: user.bio,
+        stores: user.stores,
+        bioE: true,
+        error: e,
+        err:err
+      });
+      return;
+    }
 
-//     if (!user.username) {
-//       username = "N/A";
-//     }
-//     else {
-//       username = user.username;
-//     }
-
-//     if (!user.stores) {
-//       stores = "N/A";
-//     }
-//     else {
-//       //in list
-//       stores = user.stores;
-//     }
-
-//     res.render("pages/single/profile", {
-//       title: "Profile",
-//       username: username,
-//       bio: bio,
-//       stores: stores
-//     });
-//   }
-
-//   if (req.body.store) {
-//     //change username
-//     stores =data.addStore(name, req.body.store).stores;
+    try {
+      //change bio
+      user = await data.changeBio(req.session.user.username, req.body.bio);
+    }
+    catch (e) {
+      res.render("pages/single/profile", {
+        title: "Profile",
+        username: req.session.user.username,
+        bio: user.bio,
+        stores: user.stores,
+        bioE: true,
+        error: e,
+        err:err
+      });
+      return;
+    }
 
 
-//     if (!user.username) {
-//       username = "N/A";
-//     }
-//     else {
-//       username = user.username;
-//     }
-//     if (!user.bio) {
-//       bio = "N/A";
-//     }
-//     else {
-//       bio = user.bio;
-//     }
+    //update page
+    try {
 
-//     res.render("pages/single/profile", {
-//       title: "Profile",
-//       username: username,
-//       bio: bio,
-//       stores: stores
-//     });
-//   }
-// }
-// catch (e) {
-//   //error page 
-//   res.sendStatus(500);
-// }
+      req.session.user.bio = user.bio;
+    
 
-//});
+      res.render("pages/single/profile", {
+        title: "Profile",
+        username: username,
+        bio: user.bio,
+        stores: user.stores,
+        bioE: false,
+        err:err
+      });
+    }
+    catch (e) {
+      res.render("pages/single/profile", {
+        title: "Profile",
+        username: req.session.user.username,
+        bio: user.bio,
+        stores: user.stores,
+        bioE: true,
+        error: e,
+        err:err
+      });
+      return;
+    }
 
+  }
+
+  else if (req.body.storename) {
+    //change username
+
+    try {
+      //validation 
+      storename = validation.checkString(req.body.storename);
+      storelink = validation.checkWebsite(req.body.storelink);
+    }
+    catch (e) {
+      res.render("pages/single/profile", {
+        title: "Profile",
+        username: req.session.user.username,
+        bio: user.bio,
+        stores: user.stores,
+        storeE: true,
+        error: e
+      });
+      return;
+    }
+
+    try {
+      //change store 
+      user = await data.changeStore(req.session.user.username, req.body.storename, req.body.storelink);
+    }
+    catch (e) {
+      res.render("pages/single/profile", {
+        title: "Profile",
+        username: req.session.user.username,
+        bio: user.bio,
+        stores: user.stores,
+        storeE: true,
+        error: e
+      });
+      return;
+    }
+
+
+    //update page
+    try {
+      req.session.user.stores = user.stores;
+
+      res.render("pages/single/profile", {
+        title: "Profile",
+        username: username,
+        bio: user.bio,
+        stores: user.stores,
+        storeE: false,
+      });
+    }
+    catch (e) {
+      res.render("pages/single/profile", {
+        title: "Profile",
+        username: req.session.user.username,
+        bio: user.bio,
+        stores: user.stores,
+        storeE: true,
+        error: e
+      });
+      return;
+    }
+
+  }
+  else{
+    res.render("pages/single/profile", {
+      title: "Profile",
+      username: req.session.user.username,
+      bio: user.bio,
+      stores: user.stores,
+      storeE: true,
+      error: "Must Provide Input inside text box"
+    });
+  }
+
+});
+
+
+//get profile if signed in 
+router.get("/delete", async (req, res) => {
+  res.render("pages/medium/delete", {});
+});
+
+router.post("/delete",async (req, res) => {
+
+    try{
+      await data.removeAccount(req.session.user.username);
+      res.render("pages/medium/login", { title: "Log In", not_logged_in: true });  }
+    catch(e){
+      res.render("pages/medium/delete", {
+        error:e,
+        deleteE:true
+      });
+    }
+  
+});
 
 
 module.exports = router;

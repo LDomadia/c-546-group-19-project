@@ -57,18 +57,18 @@ module.exports = {
     },
 
     checkWebsite(website) {
-        if (!website) throw "must provide id"
+        if (!website) throw "must provide store link"
         if (typeof website !== 'string') throw 'invalid website input';
         if (website.trim().length === 0)
             throw 'Id cannot be an empty website or just spaces';
-        if (!website.includes('http://www.')) throw 'invalid website'
+        if (!website.includes('https://www.') && !(website.includes('http://www.')) ) throw 'invalid website'
         //end
 
         if (website.slice(website.length - 4, website.length) !== '.com') throw 'invalid website'
         //middle\\
         //console.log(website.slice(website.length - 4, website.length))
         site = website.indexOf('http://www.') + 11
-        if (website.slice(site, -4).length < 5) throw 'invalid website input'
+        if (website.slice(site, -4).length < 2) throw 'invalid website input'
 
 
         return website;
