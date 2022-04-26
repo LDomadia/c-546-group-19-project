@@ -21,13 +21,14 @@ const main = async () => {
 
     //clothes
     let clothes_info = {
-        image: [{"invalid": "not implemented"},{"invalid": "not implemented"},{"invalid": "not implemented"},{"invalid": "not implemented"},{"invalid": "not implemented"},{"invalid": "not implemented"},{"invalid": "not implemented"},{"invalid": "not implemented"},{"invalid": "not implemented"},{"invalid": "not implemented"}],
+        image: ["invalid", "invalid", "invalid", "invalid", "invalid", "invalid", "invalid", "invalid", "invalid", "invalid"],
         name: ["Stripe Blazer", "GG Marmont mini top handle bag", "Nike Air Zoom Pegasus 38", "Citrus Shoes", "Polarized Sunglasses, RB2132 NEW WAYFARER", "Juniors' Ripped 90s Wide Leg Jeans", "Men's RL Fleece Hoodie", "Men's Pony Print Sleep Joggers", "Women's Printed Leggings", "Printed Tie-Front Genie-Leg Jumpsuit"],
-        type: ["Blazer", "handbag", "sneakers", "shoes", "sunglasses", "jeans", "hoodie", "joggers", "leggings", "jumpsuit"],
-        color: [["Blue/White"], ["white", "silver"], ["black", "white"], ["orange", "white"], ["black"], ["navy blue", "white"], ["light blue", "white"], ["red", "pink"], ["black", "white", "blue"], ["blue", "white"]],
-        season: [["spring"], ["winter"], ["spring", "summer", "autumn", "winter"], ["summer"], ["summer", "spring"], ["spring", "summer", "autumn", "winter"], ["winter"], ["winter", "summer", "spring", "autumn"], ["winter", "spring"], ["spring"]],
-        style: [["buisness"], ["casual"], ["sports", "casual"], ["sports"], ["casual", "travel"], ["casual"], ["casual"], ["casual"], ["casual", "sports"], ["casual", "festive"]],
-        brand: ["Tommy Hilfiger", "Gucci", "Nike", "Fruit Clothes", "Ray-Ban", "Almost Famous", "Polo Ralph Lauren", "Polo Ralph Lauren", "Reebok", "MSK"]
+        type: ["Top", "Accessory", "Shoes", "Shoes", "Outerwear", "Bottom", "Top", "Bottom", "Bottom", "Bottom"],
+        color: [["white", "blue"], ["white", "silver"], ["black", "white"], ["orange", "white"], ["black"], ["navy blue", "white"], ["light blue", "white"], ["red", "pink"], ["black", "white", "blue"], ["blue", "white"]],
+        season: [["Spring"], ["Winter"], ["Winter", "Spring", "Summer", "Fall"], ["Summer"], ["Summer", "Spring"], ["Winter", "Spring", "Summer", "Fall"], ["Winter"], ["Winter", "Spring", "Summer", "Fall"], ["Winter", "Spring"], ["Winter", "Fall"]],
+        style: [["business"], ["casual"], ["sports", "casual"], ["sports"], ["casual", "travel"], ["casual"], ["casual"], ["casual"], ["casual", "sports"], ["casual", "festive"]],
+        brand: ["Tommy Hilfiger", "Gucci", "Nike", "Fruit Clothes", "Ray-Ban", "Almost Famous", "Polo Ralph Lauren", "Polo Ralph Lauren", "Reebok", "MSK"],
+        user : ["artistconfidence","artistconfidence","ollieomit","oraclelame","ollieomit","venturetriangle","ollieomit","metalshipwreck","noisyhundred","metalshipwreck"]
     }
 
     for(let i = 0; i < 10; i++){
@@ -37,7 +38,8 @@ const main = async () => {
                                  clothes_info.color[i],
                                  clothes_info.season[i],
                                  clothes_info.style[i],
-                                 clothes_info.brand[i]); 
+                                 clothes_info.brand[i],
+                                 clothes_info.user[i]); 
     }
 
     //outfits
