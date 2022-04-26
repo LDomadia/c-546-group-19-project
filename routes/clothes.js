@@ -54,6 +54,7 @@ router.route("/new").get(async (req, res) => {
     if (!data.type) throw 'Error: Type is Required';
     if (!data.name.trim()) throw 'Error: Clothing Name is Required';
     if (!data.type.trim() || data.type.trim() == 'null') throw 'Error: Type is Required';
+    if (!req.file) throw 'Error: Image is required';
     
   } catch (e) {
     return res.status(400).render('pages/medium/clothingNew', {
