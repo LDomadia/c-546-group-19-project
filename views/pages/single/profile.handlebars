@@ -34,14 +34,14 @@
             <button type="submit">submit</button>
         </form>
 
-        <form id="cpassword" class="cpassword" method="PUT">
+        <form id="cpassword" class="cpassword"  method="POST" action="/profile">
             
-            {{#if passwordE}}
+            {{#if PasswordE}}
                 <p>{{error}}</p>
             {{/if}}
         
             <label for="change_password">Change Password</label><br />
-            <input type="text" name="password" id="change_password">
+            <input type="password" name="password" id="change_password">
             <button type="submit">submit</button>
         </form>
 

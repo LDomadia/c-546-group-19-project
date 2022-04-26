@@ -86,7 +86,7 @@ router.post("/", async (req, res) => {
     catch (e) {
       res.render("pages/single/profile", {
         title: "Profile",
-        username: username,
+        username: req.session.user.username,
         bio: bio,
         stores: stores,
         userE: true,
@@ -95,13 +95,14 @@ router.post("/", async (req, res) => {
       return;
     }
 
+
     try {
-      user = await data.changeUsername(req.session.user.username, req.body.username);
+      user = await data.changeUsername(user.username, req.body.username);
     }
     catch (e) {
       res.render("pages/single/profile", {
         title: "Profile",
-        username: username,
+        username: req.session.user.username,
         bio: bio,
         stores: stores,
         userE: true,
@@ -111,20 +112,20 @@ router.post("/", async (req, res) => {
     }
 
     try {
-
       username = user.username;
+      req.session.user.username = username;
       res.render("pages/single/profile", {
         title: "Profile",
         username: username,
         bio: bio,
         stores: stores,
-        userE:false
+        userE: false
       });
     }
     catch (e) {
       res.render("pages/single/profile", {
         title: "Profile",
-        username: username,
+        username: req.session.user.username,
         bio: bio,
         stores: stores,
         userE: true,
@@ -134,42 +135,60 @@ router.post("/", async (req, res) => {
     }
   }
 
+  //password
+  if (req.body.password) {
+    //change username
 
 
+    try {
+     validation.checkPassword(req.body.password);
+    }
+    catch (e) {
+      res.render("pages/single/profile", {
+        title: "Profile",
+        username: username,
+        bio: bio,
+        stores: stores,
+        PasswordE: true,
+        error: e
+      });
+      return;
+    }
 
-});
 
-//   if (req.body.password) {
-//     //change username
-//     data.changePassword(name, req.body.password);
+    try {
+      user = await data.changePassword(req.session.user.username, req.body.password);
+    }
+    catch (e) {
+      res.render("pages/single/profile", {
+        title: "Profile",
+        username: req.session.user.username,
+        bio: bio,
+        stores: stores,
+        PasswordE: true,
+        error: e
+      });
+      return;
+    }
+    
+    try {
+      req.session.user.password = user.password;
+      res.render("pages/medium/passwordchange", {});
 
-//     if (!user.username) {
-//       username = "N/A";
-//     }
-//     else {
-//       username = user.username;
-//     }
-//     if (!user.bio) {
-//       bio = "N/A";
-//     }
-//     else {
-//       bio = user.bio;
-//     }
-//     if (!user.stores) {
-//       stores = "N/A";
-//     }
-//     else {
-//       //in list
-//       stores = user.stores;
-//     }
-
-//     res.render("pages/single/profile", {
-//       title: "Profile",
-//       username: username,
-//       bio: bio,
-//       stores: stores
-//     });
-
+    }
+    catch (e) {
+      res.render("pages/single/profile", {
+        title: "Profile",
+        username: req.session.user.username,
+        bio: bio,
+        stores: stores,
+        PasswordE: true,
+        error: e
+      });
+      return;
+    }
+  }
+})
 
 //   }
 

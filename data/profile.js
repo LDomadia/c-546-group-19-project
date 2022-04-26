@@ -40,8 +40,8 @@ module.exports = {
             username: { $regex: "^" + username + "$", $options: "i" },
           });
 
-        if(user){
-            throw "username taken";
+        if(user2){
+            throw "Error: username taken";
         }
 
         let updateUser = {
@@ -92,7 +92,6 @@ module.exports = {
     async changePassword(username, password) {
         //check id 
         //see lab6 
-
         
         username=validation.checkUsername(username);
         password = validation.checkPassword(password);
@@ -102,8 +101,6 @@ module.exports = {
         const user = await userCollection.findOne({
             username: { $regex: "^" + username + "$", $options: "i" },
           });
-
-
 
         let hashedPassword = await bcrypt.hash(password, 10);
         if(!user){
@@ -147,13 +144,14 @@ module.exports = {
             { username: username },
             { $set: updateUser }
         );
-
+        const modifieduser = await userCollection.findOne({
+            username: { $regex: "^" + username + "$", $options: "i" },
+          });
+          
         if (updatedInfo.modifiedCount === 0) {
             throw 'could not update user successfully';
         };
-
-        const modifieduser = await this.get(id);
-        modifieduser._id = id.toString();
+        modifieduser._id = modifieduser._id.toString();
         return modifieduser;
 
     },
