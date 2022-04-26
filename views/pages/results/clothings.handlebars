@@ -1,4 +1,17 @@
 <h1>My Clothes</h1>
 <div>
+    <div>{{error}}</div>
     <a href="/clothes/new">Add +</a>
+    <br>
+    {{#each clothingItems}}
+        <div class="clothing-item-card">
+            <img class="clothing-item-image" alt="{{name}}" src="/uploads/{{image}}">
+            <div class="clothing-item-details">
+                <h3 class="clothing-item-title">{{name}}</h3>
+                <p>Type: {{type}}</p>
+                <button>Edit</button>
+                <button>Delete</button>
+            </div>
+        </div>
+    {{/each}}
 </div>

@@ -4,12 +4,15 @@ const users = mongoCollections.users;
 
 module.exports = {
   async addNewClothes(name, image, type, colorPatterns, season, style, brand, user) {
+    if (!name) throw 'Error: Clothing Name is required';
+    if (!type) throw 'Error: Type is required';
+    if (!image) throw 'Error: Image is required';
     if (!name.trim()) throw 'Error: Clothing Name is required';
-    if (!image.trim()) throw 'Error: Image is required';
     if (!type.trim() || type.trim() == 'null') throw 'Error: Type is required';
 
     const usersCollection = await users();
     const userDocument = await usersCollection.findOne({username: user});
+    if (!userDocument) throw 'Error; User does not exists';
     let stats = userDocument.statistics;
 
     if (type == 'Top') stats.type.tops += 1;
@@ -39,7 +42,12 @@ module.exports = {
     }
     
     if (brand) {
-      brand = brand.toLowerCase().trim();
+      brand = brand.trim();
+      let words = brand.split(' ');
+      words.forEach(word => {
+        word.charAt(0).toUpperCase();
+      })
+      brand = words.join(' ');
     if (stats['brands'][brand]) 
       stats['brands'][brand] += 1;
     else 
@@ -74,5 +82,18 @@ module.exports = {
       throw 'Error: Failed to update user';
     
     return 'success';
+  },
+  async getClothingItems(user) {
+    let clothingItems = [];
+    const usersCollection = await users();
+    const userDocument = await usersCollection.findOne({username: user});
+    if (userDocument) {
+      const clothesCollection = await clothes();
+      for (let id of userDocument.userClothes) {
+        let clothesDocument = await clothesCollection.findOne({_id: id});
+        if (clothesDocument) clothingItems.push(clothesDocument);
+      }
+    }
+    return clothingItems;
   }
 };

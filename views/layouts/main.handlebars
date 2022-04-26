@@ -50,7 +50,9 @@
     <main>
     {{{body}}}
     </main>
-    <script src="{{script}}"></script>
+    {{#if script}}
+        <script src="{{script}}"></script>
+    {{/if}}
     <script src="https://kit.fontawesome.com/288bd44038.js" crossorigin="anonymous"></script>
 </body>
 </html>

@@ -1,6 +1,9 @@
 const express = require("express");
 const router = express.Router();
 const clothesData = require('../data/clothes');
+const multer = require('multer');
+
+const upload = multer({dest: 'uploads/'});
 
 //Middleware
 router.use("/", (req, res, next) => {
@@ -17,10 +20,22 @@ router.route("/").get(async (req, res) => {
       clothesPage: true,
       not_logged_in: true,
     });
-  res.render("pages/results/clothings", {
-    title: "My Clothes",
-    clothesPage: true,
-  });
+  
+  try {
+    let clothingItems = await clothesData.getClothingItems(req.session.user.username);
+    res.render("pages/results/clothings", {
+      title: "My Clothes",
+      clothesPage: true,
+      clothingItems: clothingItems,
+      stylesheet: "/public/styles/clothes_styles.css"
+    });
+  } catch (e) {
+    res.status(500).render('pages/results/clothings', {
+      title: 'My Clothes',
+      clothesPage: true,
+      error: e
+    });
+  }
 });
 
 router.route("/new").get(async (req, res) => {
@@ -30,13 +45,16 @@ router.route("/new").get(async (req, res) => {
     stylesheet: "/public/styles/clothes_styles.css",
     script: "/public/scripts/clothes_script.js",
   });
-}).post(async (req, res) => {
-  let data = req.body
+}).post(upload.single('img'), async (req, res) => {
+  const data = req.body;
 
   try {
-    if (!data.img.trim()) throw 'Error: Image is Required';
+    if (!data) throw 'Error: Nothing was entered';
+    if (!data.name) throw 'Error: Clothing Name is Required';
+    if (!data.type) throw 'Error: Type is Required';
     if (!data.name.trim()) throw 'Error: Clothing Name is Required';
     if (!data.type.trim() || data.type.trim() == 'null') throw 'Error: Type is Required';
+    if (!req.file) throw 'Error: Image is required';
     
   } catch (e) {
     return res.status(400).render('pages/medium/clothingNew', {
@@ -49,9 +67,10 @@ router.route("/new").get(async (req, res) => {
   }
 
   try {
+    console.log(`image id: ${JSON.stringify(req.file)}`)
     let result = await clothesData.addNewClothes(
       data.name,
-      data.img,
+      req.file.filename,
       data.type,
       data['colors-patterns'],
       data.season,

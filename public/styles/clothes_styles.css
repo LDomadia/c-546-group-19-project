@@ -1,3 +1,5 @@
+
+/* NEW CLOTHING ITEM FORM */
 input[type=text], select {
   width: 250px;
   height: 30px;
@@ -96,4 +98,35 @@ i {
   height: 300px;
   width: 300px;
   object-fit: cover;
+}
+
+/* DISPLAY CLOTHING ITEMS */
+.clothing-item-card {
+  display: inline-block;
+  margin: 20px;
+  width: 250px;
+  border-radius: 10px;
+  background-color: #00000015;
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+}
+
+.clothing-item-card:hover {
+  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+}
+
+.clothing-item-image {
+  height: 250px;
+  width: 250px;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  object-fit: cover;
+}
+
+.clothing-item-title {
+  font-weight: bold;
+  margin: 0;
+}
+
+.clothing-item-details {
+  padding: 10px;
 }
