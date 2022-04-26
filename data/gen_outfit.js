@@ -49,10 +49,10 @@ function matchClothPreferences(prefs, cloth){
   //controls how much a tag affects the score
   let tags_control = [.9, .85, 1]
 
-  //score calculated as, ((total similarities)/(total preferences))*control
+  //score calculated as: total similarities*control
   for(let i = 0; i < tags.length; i++){
     let sim = prefs[tags[i]].sort().filter(val => cloth[tags[i]].sort().includes(val)).length;
-    score += (sim/prefs[tags[i]].length)*tags_control[i];
+    score += sim*tags_control[i];
   }
 
   return {score: score, _id: cloth._id}
@@ -63,7 +63,7 @@ function matchClothPreferences(prefs, cloth){
 //if similarites between each clothing piece match the preferences to a certain threshold, recommend the highest similarity
 //returns an object with the ID of each best matching cloth, can return nothing for a certain piece/s
 //assumption is pararmeters are all given (except optional threshold), and are valid based on the clothes db
-async function generateOutfit(colorPatterns, season, style, threshold=1.2){
+async function generateOutfit(colorPatterns, season, style, threshold=1.5){
     //error handling
     let err = function(str){return `Error: ${str} was not provided`};
     let arg_names = ["colorPatterns", "season", "style"];
