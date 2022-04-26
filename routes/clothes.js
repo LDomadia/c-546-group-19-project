@@ -2,26 +2,8 @@ const express = require("express");
 const router = express.Router();
 const clothesData = require('../data/clothes');
 const multer = require('multer');
-const { GridFsStorage } = require('multer-gridfs-storage');
-const dbConfig = require('../config/settings.json');
 
-const storage = new GridFsStorage({
-  url: dbConfig.mongoConfig.serverUrl + dbConfig.mongoConfig.database,
-  file: (req, file) => {
-    const match = ["image/png", "image/jpeg"];
-    if (match.indexOf(file.mimetype) === -1) {
-      const filename = `${Date.now()}-${file.originalname}`;
-      return filename;
-    }
-    return {
-      bucketName: dbConfig.mongoConfig.imgBucket,
-      filename: `${Date.now()}-${file.originalname}`,
-    };
-  }
-});
-
-// const upload = multer({dest: 'uploads/'});
-const upload = multer({storage: storage});
+const upload = multer({dest: 'uploads/'});
 
 //Middleware
 router.use("/", (req, res, next) => {
@@ -64,9 +46,8 @@ router.route("/new").get(async (req, res) => {
     script: "/public/scripts/clothes_script.js",
   });
 }).post(upload.single('img'), async (req, res) => {
-  const data = JSON.parse(JSON.stringify(req.body));
-  // console.log(data.name);
-  // console.log(!data.name);
+  // const data = JSON.parse(JSON.stringify(req.body));
+  const data = req.body;
 
   try {
     if (!data) throw 'Error: Nothing was entered';
@@ -89,7 +70,7 @@ router.route("/new").get(async (req, res) => {
     console.log(`image id: ${JSON.stringify(req.file)}`)
     let result = await clothesData.addNewClothes(
       data.name,
-      req.file.id,
+      req.file.filename,
       data.type,
       data['colors-patterns'],
       data.season,
