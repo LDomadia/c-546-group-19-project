@@ -2,8 +2,29 @@ const express = require("express");
 const router = express.Router();
 const clothesData = require('../data/clothes');
 const multer = require('multer');
+const { diskStorage } = require("multer");
+const path = require('path');
 
-const upload = multer({dest: 'uploads/'});
+var storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'uploads')
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.originalname + Date.now() + path.extname(file.originalname));
+  }
+})
+
+// const upload = multer({dest: 'uploads/'});
+const upload = multer({storage: storage});
+
+// const upload = multer(diskStorage({
+//   destination: function(req, file, cb) {
+//     cb(null, 'uploads/');
+//   },
+//   filename: function(req, file, cb) {
+//     cb(null, file.originalname + Date.now() + path.extname(file.originalname));
+//   }
+// }))
 
 //Middleware
 router.use("/", (req, res, next) => {
