@@ -22,29 +22,59 @@
 
         <h2>Edit Profile</h2>
 
-        <form id="cuser" class="cuser">
+
+        <form id="cuser" class="cuser" method="POST" action="/profile">
+        
+            {{#if userE}}
+                <p>{{error}}</p>
+            {{/if}}
+        
             <label for="change_username">Change Username</label><br />
-            <input type="text" id="change_username">
+            <input type="text" name="username" id="change_username">
             <button type="submit">submit</button>
         </form>
 
-        <form id="cpassword" class="cpassword">
+        <form id="cpassword" class="cpassword" method="PUT">
+            
+            {{#if passwordE}}
+                <p>{{error}}</p>
+            {{/if}}
+        
             <label for="change_password">Change Password</label><br />
-            <input type="text" id="change_password">
+            <input type="text" name="password" id="change_password">
             <button type="submit">submit</button>
         </form>
 
 
-        <form id="bio" class="profile">
+        <form id="bio" method="PUT" action="profile">
+            
+            {{#if bioE}}
+                <p>{{error}}</p>
+            {{/if}}
+        
             <label for="bio_term">Bio</label> <br />
-            <textarea id="bio_term" name="bio_term" rows="4" cols="50"> </textarea>
+            <textarea id="bio_term" name="bio" rows="4" cols="50"> </textarea>
             <button type="submit">submit</button>
         </form>
 
+        <h3>Add Your Favorite Stores!</h3>
 
-        <form id="stores" class="profile2">
-            <label for="store_term">Add A Favorite Store</label><br />
-            <input type="text" id="store_term">
+
+        <form id="stores" method="PUT">
+            
+            {{#if StoreE}}
+                <p>{{error}}</p>
+            {{/if}}
+        
+            <label for="store_name">Store Name</label><br />
+            <input type="text" id="store_name" name="storename">
+            <br />
+                        
+            {{#if StoreE2}}
+                <p>{{error}}</p>
+            {{/if}}
+            <label for="store_link">Store Link </label><br />
+            <input type="text" id="store_link" name="storelink">
             <button type="submit">submit</button>
         </form>
     </div>
@@ -54,6 +84,7 @@
 
         <h2>Manage Account</h2>
         <a href="/logout">Click here to log-out</a>
+        <br />
         <a href="/delete">Click here to delete account</a>
 
 </article>

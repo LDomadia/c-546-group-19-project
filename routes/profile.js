@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
-const data = require("../data");
-const accountData = data.account;
+const data = require("../data/profile");
+const validation = require("../validation")
 
 //Middleware
 router.use("/", (req, res, next) => {
@@ -14,40 +14,227 @@ router.use("/", (req, res, next) => {
 
 //get profile if signed in 
 router.get("/", async (req, res) => {
+
   try {
     let user = req.session.user;
-    let username,bio,stores;
+    let username, bio, stores;
 
-    if(!user.username){
+    if (!user.username) {
       username = "N/A";
     }
-    else{
+    else {
       username = user.username;
     }
-    if(!user.bio){
+    if (!user.bio) {
       bio = "N/A";
     }
-    else{
+    else {
       bio = user.bio;
     }
-    if(!user.stores){
+    if (!user.stores) {
       stores = "N/A";
     }
-    else{
+    else {
       //in list
       stores = user.stores;
     }
-  
-
 
     res.render("pages/single/profile", {
       title: "Profile",
-      username:username,
+      username: username,
       bio: bio,
-      stores:stores
+      stores: stores
     });
   } catch (e) {
     res.sendStatus(500);
   }
 });
+
+
+router.post("/", async (req, res) => {
+  //change username 
+
+  let user = req.session.user;
+  let username, bio, stores;
+
+  //self checks
+  if (!user.username) {
+    username = "N/A";
+  }
+  else {
+    username = user.username;
+  }
+  if (!user.bio) {
+    bio = "N/A";
+  }
+  else {
+    bio = user.bio;
+  }
+  if (!user.stores) {
+    stores = "N/A";
+  }
+  else {
+    //in list
+    stores = user.stores;
+  }
+
+  if (req.body.username) {
+    //change username
+    try {
+      username = validation.checkUsername(req.body.username);
+    }
+    catch (e) {
+      res.render("pages/single/profile", {
+        title: "Profile",
+        username: username,
+        bio: bio,
+        stores: stores,
+        userE: true,
+        error: e
+      });
+      return;
+    }
+
+    try {
+      user = await data.changeUsername(req.session.user.username, req.body.username);
+    }
+    catch (e) {
+      res.render("pages/single/profile", {
+        title: "Profile",
+        username: username,
+        bio: bio,
+        stores: stores,
+        userE: true,
+        error: e
+      });
+      return;
+    }
+
+    try {
+
+      username = user.username;
+      res.render("pages/single/profile", {
+        title: "Profile",
+        username: username,
+        bio: bio,
+        stores: stores,
+        userE:false
+      });
+    }
+    catch (e) {
+      res.render("pages/single/profile", {
+        title: "Profile",
+        username: username,
+        bio: bio,
+        stores: stores,
+        userE: true,
+        error: e
+      });
+      return;
+    }
+  }
+
+
+
+
+});
+
+//   if (req.body.password) {
+//     //change username
+//     data.changePassword(name, req.body.password);
+
+//     if (!user.username) {
+//       username = "N/A";
+//     }
+//     else {
+//       username = user.username;
+//     }
+//     if (!user.bio) {
+//       bio = "N/A";
+//     }
+//     else {
+//       bio = user.bio;
+//     }
+//     if (!user.stores) {
+//       stores = "N/A";
+//     }
+//     else {
+//       //in list
+//       stores = user.stores;
+//     }
+
+//     res.render("pages/single/profile", {
+//       title: "Profile",
+//       username: username,
+//       bio: bio,
+//       stores: stores
+//     });
+
+
+//   }
+
+//   if (req.body.bio) {
+//     //change username
+//     bio= data.changeBio(name, req.body.bio).bio;
+//     let user = req.session.user;
+//     let username, bio, stores;
+
+//     if (!user.username) {
+//       username = "N/A";
+//     }
+//     else {
+//       username = user.username;
+//     }
+
+//     if (!user.stores) {
+//       stores = "N/A";
+//     }
+//     else {
+//       //in list
+//       stores = user.stores;
+//     }
+
+//     res.render("pages/single/profile", {
+//       title: "Profile",
+//       username: username,
+//       bio: bio,
+//       stores: stores
+//     });
+//   }
+
+//   if (req.body.store) {
+//     //change username
+//     stores =data.addStore(name, req.body.store).stores;
+
+
+//     if (!user.username) {
+//       username = "N/A";
+//     }
+//     else {
+//       username = user.username;
+//     }
+//     if (!user.bio) {
+//       bio = "N/A";
+//     }
+//     else {
+//       bio = user.bio;
+//     }
+
+//     res.render("pages/single/profile", {
+//       title: "Profile",
+//       username: username,
+//       bio: bio,
+//       stores: stores
+//     });
+//   }
+// }
+// catch (e) {
+//   //error page 
+//   res.sendStatus(500);
+// }
+
+//});
+
+
+
 module.exports = router;
