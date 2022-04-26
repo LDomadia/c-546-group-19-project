@@ -52,7 +52,6 @@ if (stylesInput) {
 
 if (form) {
     form.addEventListener("submit", (event) => {
-        // event.preventDefault();
         try {
             nameInput.classList.remove('error-input');
             typeInput.classList.remove('error-input');

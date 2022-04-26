@@ -4,9 +4,8 @@
     <a href="/clothes/new">Add +</a>
     <br>
     {{#each clothingItems}}
-        <div class="form-div">
-            <img alt="{{name}}" src="/uploads/41FA57B6-A1F7-430F-B1E7-39B2A994CC44.png1650939900248.png">
-            <p>{{image}}</p>
+        <div class="form-div clothing-item-card">
+            <img class="clothing-item-image" alt="{{name}}" src="/uploads/{{image}}">
             <p>{{name}}</p>
             <p>Type: {{type}}</p>
         </div>

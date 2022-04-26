@@ -21,6 +21,10 @@ app.use(
     saveUninitialized: true,
   })
 );
+
+const static1 = express.static(__dirname + "/uploads");
+app.use("/uploads", static1);
+
 configRoutes(app);
 
 app.listen(3000, () => {

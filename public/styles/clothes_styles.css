@@ -1,3 +1,5 @@
+
+/* NEW CLOTHING ITEM FORM */
 input[type=text], select {
   width: 250px;
   height: 30px;
@@ -93,6 +95,18 @@ i {
 }
 
 #placeholder-img {
+  height: 300px;
+  width: 300px;
+  object-fit: cover;
+}
+
+/* DISPLAY CLOTHING ITEMS */
+.clothing-item-card {
+  height: 400px;
+  width: 300px;
+}
+
+.clothing-item-image {
   height: 300px;
   width: 300px;
   object-fit: cover;

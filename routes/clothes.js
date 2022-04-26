@@ -2,29 +2,8 @@ const express = require("express");
 const router = express.Router();
 const clothesData = require('../data/clothes');
 const multer = require('multer');
-const { diskStorage } = require("multer");
-const path = require('path');
 
-var storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, 'uploads')
-  },
-  filename: function (req, file, cb) {
-    cb(null, file.originalname + Date.now() + path.extname(file.originalname));
-  }
-})
-
-// const upload = multer({dest: 'uploads/'});
-const upload = multer({storage: storage});
-
-// const upload = multer(diskStorage({
-//   destination: function(req, file, cb) {
-//     cb(null, 'uploads/');
-//   },
-//   filename: function(req, file, cb) {
-//     cb(null, file.originalname + Date.now() + path.extname(file.originalname));
-//   }
-// }))
+const upload = multer({dest: 'uploads/'});
 
 //Middleware
 router.use("/", (req, res, next) => {
@@ -67,7 +46,6 @@ router.route("/new").get(async (req, res) => {
     script: "/public/scripts/clothes_script.js",
   });
 }).post(upload.single('img'), async (req, res) => {
-  // const data = JSON.parse(JSON.stringify(req.body));
   const data = req.body;
 
   try {
