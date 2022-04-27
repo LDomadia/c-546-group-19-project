@@ -87,6 +87,11 @@ async function generateOutfit(colorPatterns, season, style, threshold=1.5){
     if(typeof(threshold) !== "number"){
       throw "Error: threshold must be a number"
     }
+    
+    //if threshold is less than zero, default to 0
+    if(threshold<0){
+      threshold = 0;
+    }
 
     //get clothes db for each piece
     const clothesCollection = await clothes();
