@@ -367,7 +367,9 @@ router.post("/delete",async (req, res) => {
 
     try{
       await data.removeAccount(req.session.user.username);
-      res.render("pages/medium/login", { title: "Log In", not_logged_in: true });  }
+      req.session.destroy();
+      return res.redirect("/home");}
+      
     catch(e){
       res.render("pages/medium/delete", {
         error:e,
