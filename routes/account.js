@@ -4,8 +4,22 @@ const data = require("../data");
 const accountData = data.account;
 
 //Middleware
-router.use("/", (req, res, next) => {
+router.use("/signup", (req, res, next) => {
   if (req.session.user) {
+    return res.redirect("/home");
+  }
+  next();
+});
+
+router.use("/login", (req, res, next) => {
+  if (req.session.user) {
+    return res.redirect("/home");
+  }
+  next();
+});
+
+router.use("/logout", (req, res, next) => {
+  if (!req.session.user) {
     return res.redirect("/home");
   }
   next();
@@ -22,9 +36,9 @@ router.get("/signup", async (req, res) => {
     res.sendStatus(500);
   }
 });
+
 // Signup - POST /
 router.post("/signup", async (req, res) => {
-  //Todo - check if user is already logged in, need to handle redirection
   let userInfo = req.body;
   let username = userInfo.username;
   let userPsw = userInfo.psw;
@@ -38,9 +52,11 @@ router.post("/signup", async (req, res) => {
     if (username.length < 2)
       throw "Error: username must have at least two characters";
   } catch (e) {
-    return res
-      .status(400)
-      .render("pages/medium/signup", { error: e, usernameErr: true });
+    return res.status(400).render("pages/medium/signup", {
+      error: e,
+      usernameErr: true,
+      not_logged_in: true,
+    });
   }
 
   try {
@@ -63,6 +79,7 @@ router.post("/signup", async (req, res) => {
       error: e,
       pswErr: true,
       username: username,
+      not_logged_in: true,
     });
   }
 
@@ -73,16 +90,14 @@ router.post("/signup", async (req, res) => {
       error: e,
       dbErr: true,
       username: username,
+      not_logged_in: true,
     });
   }
 
   try {
-    res
-      .status(200)
-      .render("pages/medium/login", {
-        title: "Digital Closet",
-        not_logged_in: true,
-      });
+    res.status(200).render("pages/medium/login", {
+      title: "Digital Closet",
+    });
   } catch (e) {
     res.status(500);
   }
@@ -110,9 +125,11 @@ router.post("/login", async (req, res) => {
     if (username.length < 2)
       throw "Error: username must have at least two characters";
   } catch (e) {
-    return res
-      .status(400)
-      .render("pages/medium/login", { error: e, usernameErr: true });
+    return res.status(400).render("pages/medium/login", {
+      error: e,
+      usernameErr: true,
+      not_logged_in: true,
+    });
   }
 
   try {
@@ -129,6 +146,7 @@ router.post("/login", async (req, res) => {
       pswErr: true,
       username: username,
       password: userPsw,
+      not_logged_in: true,
     });
   }
 
@@ -143,14 +161,25 @@ router.post("/login", async (req, res) => {
       error: e,
       dbErr: true,
       username: username,
+      not_logged_in: true,
     });
   }
 
   try {
-    res.status(200).render("pages/single/index", { title: "Digital Closet" });
+    res.status(200).render("pages/single/index", {
+      title: "Digital Closet",
+      not_logged_in: false,
+    });
   } catch (e) {
     res.sendStatus(500);
   }
+});
+
+// Logout - GET /
+
+router.get("/logout", async (req, res) => {
+  req.session.destroy();
+  return res.redirect("/home");
 });
 
 module.exports = router;

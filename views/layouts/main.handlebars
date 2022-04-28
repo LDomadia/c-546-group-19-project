@@ -29,7 +29,7 @@
             {{#if statsPage}}
                 <a class="active" href="/">Statistics</a>
             {{else}}
-                <a href="/">Statistics</a>
+                <a href="/stats">Statistics</a>
             {{/if}}
             {{#if profPage}}
                 <a class="active" href="/profile">Profile</a>
@@ -41,12 +41,18 @@
             <a href="/account/signup">Signup</a>
             <a href="/account/login">Login</a>
             {{/if}}
+
+            {{#unless not_logged_in}}
+            <a href="/account/logout">Logout</a>
+            {{/unless}}
         </div>
     </header>
     <main>
     {{{body}}}
     </main>
-    <script src="{{script}}"></script>
+    {{#if script}}
+        <script src="{{script}}"></script>
+    {{/if}}
     <script src="https://kit.fontawesome.com/288bd44038.js" crossorigin="anonymous"></script>
 </body>
 </html>

@@ -74,11 +74,11 @@ footer {
   
   /* active page style */
   .topnav a.active {
-    background-color: #31a2db;
+    background-color: #007fb0;
     color: white;
   }
 
-#signup-form input{
+#signup-form input {
   display: block;
   font-size:11px;
   padding:4px 2px;
@@ -87,7 +87,7 @@ footer {
   text-align: left;
 }
 
-#signup-form label, button{
+#signup-form label, #signup-form button {
   margin:2px 0 20px 10px;
   text-align: left;
 }
@@ -112,7 +112,7 @@ footer {
   text-align: left;
 }
 
-#login-form label, button{
+#login-form label, #login-form button {
   margin:2px 0 20px 10px;
   text-align: left;
 }

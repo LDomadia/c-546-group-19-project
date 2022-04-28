@@ -1,0 +1,23 @@
+li.stats-sect{
+    text-align: left;
+}
+figcaption.stats-caption {
+    margin-top: 35px;
+    margin-left: -30px;
+    font-weight: 700;
+    font-size: 19px;
+}
+
+li.stats-list{
+    margin-left: -30px;
+    font-size: 16px;
+}
+
+a.refresh {
+    margin-left: 10px;
+    vertical-align: -30px;
+}
+
+h1.stats-title {
+    line-height: 75px;
+}
