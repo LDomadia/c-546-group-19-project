@@ -1,0 +1,17 @@
+<h1>Delete account</h1>
+<p>
+    Are you sure you want to delete account?
+</p>
+
+
+<form id="delete" method="POST" action="/profile/delete">
+
+    {{#if deleteE}}
+    <p>{{error}}</p>
+    {{/if}}
+    <button type="submit">confirm</button>
+</form>
+
+
+
+<a href="/profile">Go back to Profile</a>

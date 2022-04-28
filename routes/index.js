@@ -3,12 +3,14 @@ const homeRoutes = require("./home");
 const clothesRoutes = require("./clothes");
 const statsRoutes = require("./stats");
 const accountRoutes = require("./account");
+const profileRoutes = require("./profile");
 
 const constructorMethod = (app) => {
   app.use("/account", accountRoutes);
 
   app.use("/home", homeRoutes);
   app.use("/clothes", clothesRoutes);
+  app.use("/profile",profileRoutes);
   app.use("/stats", statsRoutes);
 
   app.use("*", (req, res) => {
