@@ -7,6 +7,7 @@ const stylesList = document.getElementById('styles-list');
 const stylesInput = document.getElementById('styles-input');
 const stylesBtn = document.getElementById('styles-btn');
 const submitBtn = document.getElementById('submit-btn');
+const form = document.getElementById('new-clothing-form');
 
 
 if (colorPatternBtn) {
@@ -43,7 +44,6 @@ if (form) {
     form.addEventListener("submit", (event) => {
         try {
             nameInput.classList.remove('error-input');
-            typeInput.classList.remove('error-input');
 
             let errors = document.getElementsByClassName('error-message');
             while (errors.length > 0) {
@@ -54,7 +54,7 @@ if (form) {
             if (!nameValue) {
                 let error = document.createElement('p');
                 error.classList.add('error-message');
-                error.innerHTML = 'Clothing Name is Required';
+                error.innerHTML = 'Outfit Name is Required';
                 nameInput.classList.add('error-input');
                 nameDiv.append(error);
             }
