@@ -10,8 +10,12 @@ const constructorMethod = (app) => {
 
   app.use("/home", homeRoutes);
   app.use("/clothes", clothesRoutes);
-  app.use("/profile",profileRoutes);
+  app.use("/profile", profileRoutes);
   app.use("/stats", statsRoutes);
+
+  app.use("/", (req, res) => {
+    res.redirect("/home");
+  });
 
   app.use("*", (req, res) => {
     res.render("pages/error/error404", {
