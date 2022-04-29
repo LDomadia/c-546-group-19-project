@@ -1,11 +1,6 @@
 <h1>Generate Outfit</h1>
 <div class="error-message">{{error}}</div>
-<form id="new-clothing-form" method="POST" action="/outfits/generate" enctype="multipart/form-data">
-    {{!-- <div id="img-div" class="form-div">
-        <img id="placeholder-img" alt="Clothing Item" src="/public/images/placeholder.jpg"><br>
-        <label class="input-label" for="img-btn">Add Image *</label>
-        <input id="img-btn" name="img" type="file" accept="image/png, image/jpeg" required>
-    </div> --}}
+<form id="generate-outfit-form" method="POST" action="/outfits/generate" enctype="multipart/form-data">
     <div class="form-div">
         <div id="name-div">
             <label class="input-label" for="name-input">Outfit Name *</label>

@@ -7,7 +7,7 @@ const stylesList = document.getElementById('styles-list');
 const stylesInput = document.getElementById('styles-input');
 const stylesBtn = document.getElementById('styles-btn');
 const submitBtn = document.getElementById('submit-btn');
-const form = document.getElementById('new-clothing-form');
+const form = document.getElementById('generate-outfit-form');
 
 
 if (colorPatternBtn) {
