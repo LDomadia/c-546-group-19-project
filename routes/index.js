@@ -4,6 +4,7 @@ const clothesRoutes = require("./clothes");
 const statsRoutes = require("./stats");
 const accountRoutes = require("./account");
 const profileRoutes = require("./profile");
+const outfitRoutes = require("./outfits");
 
 const constructorMethod = (app) => {
   app.use("/account", accountRoutes);
@@ -12,6 +13,7 @@ const constructorMethod = (app) => {
   app.use("/clothes", clothesRoutes);
   app.use("/profile",profileRoutes);
   app.use("/stats", statsRoutes);
+  app.use("/outfits", outfitRoutes);
 
   app.use("*", (req, res) => {
     res.render("pages/error/error404", {
