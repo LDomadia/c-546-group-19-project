@@ -4,7 +4,7 @@ const gen_outfitData = require('../data/gen_outfit');
 
 router.route("/generate").get(async (req, res) => {
     res.render("pages/medium/outfitGenerated", {
-      title: "Add New Clothing",
+      title: "Generate Outfit",
       clothesPage: true,
       stylesheet: "/public/styles/clothes_styles.css",
       script: "/public/scripts/clothes_script.js",
