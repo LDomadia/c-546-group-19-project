@@ -31,3 +31,8 @@ router.route("/").get(async (req, res) => {
     });
   }
 });
+
+router.route("/new").post(async (req, res) => {
+  res.redirect("/outfits");
+});
+module.exports = router;
