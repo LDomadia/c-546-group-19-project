@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang = "en">
+<html lang="en">
+
 <head>
     <meta charset="utf-8">
     <title>{{title}}</title>
@@ -37,16 +38,19 @@
 
     <div>
 
+
+
         <h2>Edit Profile</h2>
 
+        {{#if E}}
+        <p class="error">{{error}}</p>
+        {{/if}}
+
         <h3>Change Bio</h3>
-        
 
-        <form id="bio" method="POST" action="/profile/bio">
 
-            {{#if bioE}}
-            <p>{{error}}</p>
-            {{/if}}
+        <form id="bio" method="POST" action="/profile">
+
 
             <label for="bio_term">Change Bio</label> <br />
             <textarea id="bio_term" name="bio" rows="4" cols="50" placeholder="Enter bio"> </textarea>
@@ -55,12 +59,9 @@
 
         <h3>Add Your Favorite Stores!</h3>
 
+        {{!-- to add stores --}}
+        <form id="stores" method="POST" action="/profile">
 
-        <form id="stores" method="POST" action="/profile/stores">
-
-            {{#if storeE}}
-            <p>{{error}}</p>
-            {{/if}}
 
             <label for="store_name">Store Name</label><br />
             <input type="text" id="store_name" name="storename" placeholder="enter store name">
@@ -71,14 +72,17 @@
             <input type="text" id="store_link" name="storelink" placeholder="enter store link">
             <button type="submit">submit</button>
         </form>
+
+
+
     </div>
 
-        <h2>Manage Account</h2>
+    <h2>Manage Account</h2>
 
-        <br />
-        <a href="/profile/password">Click here to change password</a>
-        <br />
-        <a href="/profile/delete">Click here to delete account</a>
+    <br />
+    <a href="/profile/password">Click here to change password</a>
+    <br />
+    <a href="/profile/delete">Click here to delete account</a>
 
 
 </article>
