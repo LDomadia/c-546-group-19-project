@@ -8,14 +8,12 @@
     username = username.trim();
     if (username.length < 2)
       throw "Error: username must have at least two characters";
-    //check for alphnumeric
-    //https://stackoverflow.com/questions/4434076/best-way-to-alphanumeric-check-in-javascript
 
     for (let i = 0; i < username.length; i++) {
       let code = username.charCodeAt(i);
       if (
-        !(code > 47 && code < 58) && // numeric (0-9)
-        !(code > 64 && code < 91) && // upper alpha (A-Z)
+        !(code > 47 && code < 58) &&
+        !(code > 64 && code < 91) &&
         !(code > 96 && code < 123)
       ) {
         // lower alpha (a-z)
@@ -60,16 +58,29 @@
   var signupForm = $(".user-sign-up"),
     usernameInput = $(".username-input"),
     pswInput = $(".psw-input"),
-    pswConfirm = $(".psw-confirm");
+    pswConfirm = $(".psw-confirm"),
+    usrError = $(".username-err"),
+    pswError = $(".psw-err");
+
+  usrError.hide();
+  usrError.empty();
+  pswError.hide();
+  pswError.empty();
 
   signupForm.submit(function (event) {
     event.preventDefault();
+    usrError.hide();
+    usrError.empty();
+    pswError.hide();
+    pswError.empty();
     var username = usernameInput.val();
     try {
       username = checkUsername(username);
     } catch (e) {
-      alert(e);
+      //alert(e);
       usernameInput.empty();
+      usrError.text(e);
+      usrError.show();
       return;
     }
 
@@ -77,37 +88,27 @@
     try {
       password = checkPassword(password);
     } catch (e) {
-      alert(e);
+      //alert(e);
       pswInput.empty();
       pswConfirm.empty();
+      pswError.text(e);
+      pswError.show();
       return;
     }
 
     var confirmPsw = pswConfirm.val();
     try {
       confirmPsw = checkPassword(confirmPsw);
+      if (confirmPsw !== pswInput)
+        throw "Error: password and confirm password do not match";
     } catch (e) {
-      alert(e);
+      //alert(e);
       pswInput.empty();
       pswConfirm.empty();
+      pswError.text(e);
+      pswError.show();
       return;
     }
-    var requestConfig = {
-      method: "POST",
-      url: "http://localhost:3000/account/signup",
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
-      },
-      username: username,
-      psw: pswInput,
-      pswRepeat: pswConfirm,
-    };
-    $.ajax(requestConfig)
-      .then(function (responseMessage) {
-        window.location.replace("http://localhost:3000/home");
-      })
-      .fail(function (jqXHR, status, error) {
-        alert("failed");
-      });
+    event.currentTarget.submit();
   });
 })(window.jQuery);
