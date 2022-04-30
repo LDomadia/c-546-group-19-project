@@ -17,16 +17,18 @@
             {{#if usernameErr}}
                 <p>{{error}}</p>
             {{/if}}
-            <label for="username"><b>Username</b></label>
+            <p class = "username-err" hidden></p>
+            <label for="username" class = "username-label">Username</label>
             <input type="text" class="username-input"placeholder="Enter username (must have at least 2 characters)" value="{{username}}" name="username" required minlength="2">
             
             {{#if pswErr}}
                 <p>{{error}}</p>
             {{/if}}
-            <label for="psw"><b>Password</b></label>
+            <p class = "psw-err" hidden></p>
+            <label for="psw" class = "psw-label">Password</label>
             <input type="password" class="psw-input" placeholder="Enter Password (must have at least 8 characters)" name="psw" required minlength="8">
             
-            <label for="psw-repeat"><b>Confirm Password</b></label>
+            <label for="psw-repeat" class="psw-confirm-label">Confirm Password</label>
             <input type="password" class="psw-confirm" placeholder="Confirm Password" name="pswRepeat" required minlength="8">
             
             <div>
