@@ -89,12 +89,17 @@ module.exports = {
 
     //change password
 
-    async changePassword(username, password) {
+    async changePassword(username, password,password2) {
         //check id 
         //see lab6 
 
+      
         username = validation.checkUsername(username);
         password = validation.checkPassword(password);
+        password2 = validation.checkPassword(password2);
+
+        if(password!==password2) throw "passwords do not match"
+
         const userCollection = await users();
         //id=validation.checkId(id);
 
@@ -103,6 +108,8 @@ module.exports = {
         });
 
         let hashedPassword = await bcrypt.hash(password, 10);
+
+
         if (!user) {
             throw "invalid username";
         }

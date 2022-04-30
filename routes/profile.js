@@ -1,6 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const data = require("../data/profile");
+const data2 = require("../data");
+const accountData = data2.account;
 const validation = require("../validation")
 
 //Middleware
@@ -20,13 +22,13 @@ router.get("/", async (req, res) => {
     user = await data.get(req.session.user.username);
   }
   catch (e) {
-    res.status(404).render("pages/error/error", {error:e});
+    res.status(404).render("pages/error/error", { code: 404, error: e });
     return;
   }
 
   try {
     let username, bio, stores;
-    let err= false;
+    let noStore = false;
 
     if (!user.username || user.username == null) {
       username = "N/A";
@@ -42,7 +44,7 @@ router.get("/", async (req, res) => {
     }
     if (!user.stores || user.stores == null) {
       stores = "N/A";
-      err=true;
+      noStore = true;
     }
     else {
       //in list
@@ -54,7 +56,7 @@ router.get("/", async (req, res) => {
       username: username,
       bio: bio,
       stores: stores,
-      err:err
+      noStore: noStore
     });
   } catch (e) {
     res.sendStatus(500);
@@ -62,21 +64,21 @@ router.get("/", async (req, res) => {
 });
 
 
-router.post("/", async (req, res) => {
-  //change username 
-
-
+router.post("/bio", async (req, res) => {
+  //change bio
   let user;
+
   try {
     user = await data.get(req.session.user.username);
   }
   catch (e) {
-    res.status(404).render("pages/error/error", {error:e});
+    //error page
+    res.status(404).render("pages/error/error", { error: e });
     return;
   }
 
   let username, bio, stores;
-  let err= false;
+  let err = false;
 
   //self checks
   if (!user.username || user.username == null) {
@@ -93,75 +95,15 @@ router.post("/", async (req, res) => {
   }
   if (!user.stores || user.stores == null) {
     stores = "N/A";
-    err =true;
+    err = true;
   }
   else {
     stores = user.stores;
   }
 
-   if (req.body.username) {
-    //change username
-    try {
-      username = validation.checkUsername(req.body.username);
-    }
-    catch (e) {
-      res.render("pages/single/profile", {
-        title: "Profile",
-        username: req.session.user.username,
-        bio: user.bio,
-        stores: user.stores,
-        userE: true,
-        error: e,
-        err:err
-      });
-      return;
-    }
-
-
-    try {
-      user = await data.changeUsername(user.username, req.body.username);
-    }
-    catch (e) {
-      res.render("pages/single/profile", {
-        title: "Profile",
-        username: req.session.user.username,
-        bio: user.bio,
-        stores: user.stores,
-        userE: true,
-        error: e,
-        err:err
-      });
-      return;
-    }
-
-    try {
-      username = user.username;
-      req.session.user.username = username;
-      res.render("pages/single/profile", {
-        title: "Profile",
-        username: username,
-        bio: user.bio,
-        stores: user.stores,
-        userE: false,
-        err:err
-      });
-    }
-    catch (e) {
-      res.render("pages/single/profile", {
-        title: "Profile",
-        username: req.session.user.username,
-        bio: user.bio,
-        stores: user.stores,
-        userE: true,
-        error: e,
-        err:err
-      });
-      return;
-    }
-  }
 
   //password
-  else if (req.body.password) {
+  if (req.body.password) {
     //change username
     try {
       validation.checkPassword(req.body.password);
@@ -174,7 +116,7 @@ router.post("/", async (req, res) => {
         stores: user.stores,
         userE: true,
         error: e,
-        err:err
+        err: err
       });
       return;
     }
@@ -191,7 +133,7 @@ router.post("/", async (req, res) => {
         stores: user.stores,
         userE: true,
         error: e,
-        err:err
+        err: err
       });
       return;
     }
@@ -208,7 +150,7 @@ router.post("/", async (req, res) => {
         stores: user.stores,
         userE: true,
         error: e,
-        err:err
+        err: err
       });
       return;
     }
@@ -229,7 +171,7 @@ router.post("/", async (req, res) => {
         stores: user.stores,
         bioE: true,
         error: e,
-        err:err
+        err: err
       });
       return;
     }
@@ -246,7 +188,7 @@ router.post("/", async (req, res) => {
         stores: user.stores,
         bioE: true,
         error: e,
-        err:err
+        err: err
       });
       return;
     }
@@ -256,7 +198,7 @@ router.post("/", async (req, res) => {
     try {
 
       req.session.user.bio = user.bio;
-    
+
 
       res.render("pages/single/profile", {
         title: "Profile",
@@ -264,7 +206,7 @@ router.post("/", async (req, res) => {
         bio: user.bio,
         stores: user.stores,
         bioE: false,
-        err:err
+        err: err
       });
     }
     catch (e) {
@@ -275,14 +217,33 @@ router.post("/", async (req, res) => {
         stores: user.stores,
         bioE: true,
         error: e,
-        err:err
+        err: err
       });
       return;
     }
 
   }
 
-  else if (req.body.storename) {
+
+  else {
+    res.render("pages/single/profile", {
+      title: "Profile",
+      username: req.session.user.username,
+      bio: user.bio,
+      stores: user.stores,
+      submitE: true,
+      error: "Must Provide Input inside text box"
+    });
+  }
+
+});
+
+
+router.post("/stores", async (req, res) => {
+
+
+
+  if (req.body.storename) {
     //change username
 
     try {
@@ -344,15 +305,92 @@ router.post("/", async (req, res) => {
     }
 
   }
-  else{
-    res.render("pages/single/profile", {
-      title: "Profile",
-      username: req.session.user.username,
-      bio: user.bio,
-      stores: user.stores,
-      submitE: true,
-      error: "Must Provide Input inside text box"
+
+
+
+
+
+
+})
+
+
+
+//get profile if signed in 
+router.get("/password", async (req, res) => {
+
+  try {
+    return res.render("pages/single/changepassword", {});
+  }
+  catch (e) {
+    return res.status(500).render("pages/error/error", { code: 500, error: e });
+  }
+
+});
+
+//change password
+router.post("/password", async (req, res) => {
+
+  let username = req.session.user.username;
+  let password;
+
+  try {
+    password = validation.checkPassword(req.body.password);
+  }
+  catch (e) {
+    //error
+    return res.render("pages/single/changepassword", { passwordE: true, error: e })
+  }
+
+  try {
+    await accountData.login(username, password);
+  } catch (e) {
+    return res.status(500).render("pages/single/changepassword", {
+      passwordE:true,
+      error: e,
     });
+  }
+
+  try {
+    return res.render("pages/single/changepassword2", {});
+  }
+  catch (e) {
+    return res.status(500).render("pages/error/error", { code: 500, error: e });
+  }
+
+});
+
+router.post("/password2", async (req, res) => {
+
+
+  let username = req.session.user.username;
+  let password1,password2;
+
+  try {
+    //verify both passwords
+    password1 = validation.checkPassword(req.body.password);
+    password2 = validation.checkPassword(req.body.password2);
+  }
+  catch (e) {
+    //error
+    return res.render("pages/single/changepassword2", { passwordE: true, error: e })
+  }
+
+
+  try {
+      await data.changePassword(username, password1,password2);
+    
+  } catch (e) {
+    return res.status(500).render("pages/single/changepassword2", {
+      passwordE:true,
+      error: e,
+    });
+  }
+
+  try {
+    return res.render("pages/single/changepassword3", {});
+  }
+  catch (e) {
+    return res.status(500).render("pages/error/error", { code: 500, error: e });
   }
 
 });
@@ -363,21 +401,24 @@ router.get("/delete", async (req, res) => {
   res.render("pages/medium/delete", {});
 });
 
-router.post("/delete",async (req, res) => {
+router.post("/delete", async (req, res) => {
 
-    try{
-      await data.removeAccount(req.session.user.username);
-      req.session.destroy();
-      return res.redirect("/home");}
-      
-    catch(e){
-      res.render("pages/medium/delete", {
-        error:e,
-        deleteE:true
-      });
-    }
-  
+  try {
+    await data.removeAccount(req.session.user.username);
+    req.session.destroy();
+    return res.redirect("/home");
+  }
+
+  catch (e) {
+    res.render("pages/medium/delete", {
+      error: e,
+      deleteE: true
+    });
+  }
+
 });
+
+
 
 
 module.exports = router;
