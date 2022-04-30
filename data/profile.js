@@ -87,6 +87,36 @@ module.exports = {
         return modifieduser;
     },
 
+    
+  async checkPassword(username, password) {
+
+    username = validation.checkUsername(username);
+    password = validation.checkPassword(password);
+    //check for alphnumeric
+    //https://stackoverflow.com/questions/4434076/best-way-to-alphanumeric-check-in-javascript
+
+
+    username = username.toLowerCase();
+
+    const userCollection = await users();
+    const user = await userCollection.findOne({
+      username: { $regex: "^" + username + "$", $options: "i" },
+    });
+    if (!user) throw "Either the username or password is invalid";
+
+    let compare = false;
+
+    try {
+      compare = await bcrypt.compare(password, user.hashedPassword);
+    } catch (e) {
+      throw "Error: in comparing hashed password and inputted password";
+    }
+
+    if (compare) {
+      return user;
+    } else throw "Password is incorrect";
+  },
+
     //change password
 
     async changePassword(username, password,password2) {
@@ -120,6 +150,16 @@ module.exports = {
             user.stores = null;
         }
 
+
+        let compare = false;
+
+        try {
+          compare = await bcrypt.compare(password, user.hashedPassword);
+        } catch (e) {
+          throw "Error: in comparing hashed password and inputted password";
+        }
+    
+        if (compare) throw "password should not be the same as before";
 
         let updateUser = {
             username: user.username,

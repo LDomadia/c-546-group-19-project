@@ -1,8 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const data = require("../data/profile");
-const data2 = require("../data");
-const accountData = data2.account;
+
 const validation = require("../validation")
 
 //Middleware
@@ -342,7 +341,7 @@ router.post("/password", async (req, res) => {
   }
 
   try {
-    await accountData.login(username, password);
+    await data.checkPassword(username, password);
   } catch (e) {
     return res.status(500).render("pages/single/changepassword", {
       passwordE:true,
@@ -386,8 +385,10 @@ router.post("/password2", async (req, res) => {
     });
   }
 
-  try {
-    return res.render("pages/single/changepassword3", {});
+  try {    
+    req.session.destroy();
+
+    return res.render("pages/single/changepassword3", {      not_logged_in: true,});
   }
   catch (e) {
     return res.status(500).render("pages/error/error", { code: 500, error: e });

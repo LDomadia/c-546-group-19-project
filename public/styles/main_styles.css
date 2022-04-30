@@ -25,6 +25,9 @@ h1 {
     padding: 10px;
   }
 
+  .error{
+    color:red;
+  }
 h2 {
     font-family: "Helvetica";
     font-style: italic;
