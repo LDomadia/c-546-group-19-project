@@ -1,6 +1,6 @@
 <h1>Generate Outfit</h1>
 <div class="error-message">{{error}}</div>
-<form id="generate-outfit-form" method="POST" action="/outfits/generate" enctype="multipart/form-data">
+<form id="generate-outfit-form" method="POST" action="/outfits/generate">
     <div class="form-div">
         <div id="name-div">
             <label class="input-label" for="name-input">Outfit Name *</label>
@@ -33,7 +33,6 @@
             <ul id="styles-list"></ul>
         </div>
         <br>
-        <button id="submit-btn" type="submit">Generate</button>
     </div><br>
     <button id="submit-btn" type="submit">Save</button>
 </form>

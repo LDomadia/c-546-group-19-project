@@ -10,6 +10,31 @@ router.use("/", (req, res, next) => {
   next();
 });
 
+router.route("/").get(async (req, res) => {
+  if (!req.session.user)
+    return res.render("pages/results/clothings", {
+      title: "My Clothes",
+      clothesPage: true,
+      not_logged_in: true,
+    });
+  
+  try {
+    let clothingItems = await clothesData.getClothingItems(req.session.user.username);
+    res.render("pages/results/clothings", {
+      title: "My Clothes",
+      clothesPage: true,
+      clothingItems: clothingItems,
+      stylesheet: "/public/styles/clothes_styles.css"
+    });
+  } catch (e) {
+    res.status(500).render('pages/results/clothings', {
+      title: 'My Clothes',
+      clothesPage: true,
+      error: e
+    });
+  }
+});
+
 
 router.route("/generate").get(async (req, res) => {
     res.render("pages/medium/outfitGenerated", {
@@ -20,8 +45,7 @@ router.route("/generate").get(async (req, res) => {
     });
   }).post(async (req, res) => {
     const data = req.body;
-    console.log(data)
-  
+      
     try {
       if (!data) throw 'Error: Nothing was entered';
       if (!data.name) throw 'Error: Outfit Name is Required';
