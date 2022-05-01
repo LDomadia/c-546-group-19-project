@@ -132,3 +132,7 @@ i {
 .clothing-item-details {
   padding: 10px;
 }
+
+.clothing-item-type {
+  text-transform: capitalize;
+}

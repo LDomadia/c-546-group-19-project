@@ -72,8 +72,9 @@ router.route("/new").get(async (req, res) => {
       data.name,
       req.file.filename,
       data.type,
+      data.size,
       data['colors-patterns'],
-      data.season,
+      data.seasons,
       data.styles,
       data.brand,
       req.session.user.username
