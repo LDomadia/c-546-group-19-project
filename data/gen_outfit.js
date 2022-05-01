@@ -110,6 +110,8 @@ async function generateOutfit(colorPatterns, season, style, threshold=1.5){
     }
     let scoreClothes = {}
     let bestClothes = {}
+    let finalClothes = []
+    let finalClothesindx = 0
 
     //finally get the scores of each type of clothing based on preferences and take the max
     for(let i = 0; i < cloth_names.length; i++){
@@ -125,9 +127,15 @@ async function generateOutfit(colorPatterns, season, style, threshold=1.5){
       if(bestClothes[cloth_names[i]].score < threshold){
         bestClothes[cloth_names[i]] = undefined
       }
+      //finally makes a frontend applicable list
+      else{
+        finalClothes[finalClothesindx] = bestClothes[cloth_names[i]]
+        finalClothes[finalClothesindx]["cloth_name"] = cloth_names[i]
+        finalClothesindx++
+      }
     }
 
-    return bestClothes
+    return finalClothes
 }
 
 

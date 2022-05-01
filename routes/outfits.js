@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const gen_outfitData = require('../data/gen_outfit');
+const clothesData = require('../data/clothes');
 
 //Middleware
 router.use("/", (req, res, next) => {
@@ -8,31 +9,6 @@ router.use("/", (req, res, next) => {
     return res.redirect("/account/login");
   }
   next();
-});
-
-router.route("/").get(async (req, res) => {
-  if (!req.session.user)
-    return res.render("pages/results/clothings", {
-      title: "My Clothes",
-      clothesPage: true,
-      not_logged_in: true,
-    });
-  
-  try {
-    let clothingItems = await clothesData.getClothingItems(req.session.user.username);
-    res.render("pages/results/clothings", {
-      title: "My Clothes",
-      clothesPage: true,
-      clothingItems: clothingItems,
-      stylesheet: "/public/styles/clothes_styles.css"
-    });
-  } catch (e) {
-    res.status(500).render('pages/results/clothings', {
-      title: 'My Clothes',
-      clothesPage: true,
-      error: e
-    });
-  }
 });
 
 
@@ -45,7 +21,8 @@ router.route("/generate").get(async (req, res) => {
     });
   }).post(async (req, res) => {
     const data = req.body;
-      
+    console.log(data)
+
     try {
       if (!data) throw 'Error: Nothing was entered';
       if (!data.name) throw 'Error: Outfit Name is Required';
@@ -68,8 +45,22 @@ router.route("/generate").get(async (req, res) => {
         data.styles
       )
       console.log(result)
-      if (result == 'success') {
-        res.status(200).redirect('/outfits');
+      
+      let clothingItems = await clothesData.getClothingbyIds(result.map(res => res._id))
+
+      console.log(clothingItems)
+
+
+      if (result) {
+        res.status(200).render('pages/medium/outfitGenerated', {
+          title: "Generate Outfit",
+          outfitsPage: true,
+          stylesheet: "/public/styles/clothes_styles.css",
+          script: "/public/scripts/gen_outfit_script.js",
+          error: "outfit generated",
+          savePage: true,
+          results: clothingItems
+        });
       }
       else {
         throw 'Error: Failed to Generate Outfit';

@@ -95,5 +95,15 @@ module.exports = {
       }
     }
     return clothingItems;
+  },
+  async getClothingbyIds(ids){
+    let clothingItems = []
+    const clothesCollection = await clothes();
+    for(let i = 0; i < ids.length; i++){
+      let clothesDocument = await clothesCollection.findOne({_id: ids[i]});
+      if (clothesDocument) clothingItems.push(clothesDocument);
+    }
+    return clothingItems
   }
+
 };
