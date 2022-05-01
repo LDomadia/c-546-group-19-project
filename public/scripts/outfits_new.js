@@ -65,7 +65,7 @@
       outfitsArr.push(image_name);
       if (!typesDict[type] || typesDict[type] <= 0) {
         typesDict[type] = 1;
-      } else if (type !== "Accessory") {
+      } else if (type !== "Type: Accessory") {
         outfitErr.empty();
         outfitErr.text(
           "You cannot have multiple of the same types (except for accessories) in an outfit"
