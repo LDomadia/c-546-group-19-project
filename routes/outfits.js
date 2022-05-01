@@ -51,15 +51,6 @@ router.route("/new").get(async (req, res) => {
     });
   }
 });
-router.route("/success").post(async (req, res) => {
-  let outfitItems = 1;
-  res.render("pages/results/outfits", {
-    title: "My Outfits",
-    outfitsPage: true,
-    outfitItems: outfitItems,
-    successMsg: "Outfit has successfuly been added!",
-  });
-});
 
 router.route("/new").post(async (req, res) => {
   //console.log(req.body);

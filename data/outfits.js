@@ -72,15 +72,6 @@ module.exports = {
     clothes = errors_strlist(clothes, "clothes");
 
     const outfitsCollection = await outfits();
-    const existingOutfits = await outfitsCollection.findOne({
-      outfitName: {
-        $regex:
-          "/^" + outfitName.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + "/$/",
-        $options: "i",
-      },
-    });
-    if (existingOutfits != null) throw "Error: name is already taken";
-
     let newOutfits = {
       creator: creator,
       clothes: clothes,
