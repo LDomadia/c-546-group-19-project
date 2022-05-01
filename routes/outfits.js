@@ -38,6 +38,15 @@ router.route("/new").get(async (req, res) => {
     let clothingItems = await clothesData.getClothingItems(
       req.session.user.username
     );
+    if (clothingItems.length < 2) {
+      let outfitItems = 1;
+      return res.render("pages/results/outfits", {
+        title: "My Outfits",
+        outfitsPage: true,
+        outfitItems: outfitItems,
+        msg: "You need atleast two clothing items before you can make an outfit",
+      });
+    }
     res.status(200).render("pages/medium/outfitNew", {
       title: "Add new outfit",
       outfitsPage: true,
@@ -75,7 +84,7 @@ router.route("/new").post(async (req, res) => {
       title: "My Outfits",
       outfitsPage: true,
       outfitItems: outfitItems,
-      successMsg: "Outfit has successfuly been added!",
+      msg: "Outfit has successfuly been added!",
     });
   } catch (e) {
     res.status(500).render("pages/results/outfits", {
