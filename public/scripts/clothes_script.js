@@ -5,6 +5,8 @@ const nameDiv = document.getElementById('name-div')
 const nameInput = document.getElementById('name-input');
 const typeDiv = document.getElementById('type-div');
 const typeInput = document.getElementById('type-input');
+const sizeDiv = document.getElementById('size-div');
+const sizeInput = document.getElementById('size-input');
 const colorPatternList = document.getElementById('colors-patterns-list');
 const colorPatternInput = document.getElementById('colors-patterns-input');
 const colorPatternBtn = document.getElementById('colors-patterns-btn');
@@ -88,6 +90,18 @@ if (form) {
                 typeInput.classList.add('error-input');
                 typeDiv.append(error);
             }
+
+            let sizeValue = sizeInput.value;
+            if (!sizeValue.trim()) {
+                let error = document.createElement('p');
+                error.classList.add('error-message');
+                error.innerHTML = 'Type is Required';
+                sizeInput.classList.add('error-input');
+                sizeDiv.append(error);
+                
+            }
+            
+
             if (document.getElementsByClassName('error-message').length > 0) throw 'Error';
         } catch (e) {
             event.preventDefault();

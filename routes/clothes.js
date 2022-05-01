@@ -49,6 +49,7 @@ router.route("/new").get(async (req, res) => {
   const data = req.body;
 
   try {
+    console.log(data);
     if (!data) throw 'Error: Nothing was entered';
     if (!data.name) throw 'Error: Clothing Name is Required';
     if (!data.type) throw 'Error: Type is Required';
@@ -67,7 +68,6 @@ router.route("/new").get(async (req, res) => {
   }
 
   try {
-    console.log(`image id: ${JSON.stringify(req.file)}`)
     let result = await clothesData.addNewClothes(
       data.name,
       req.file.filename,
