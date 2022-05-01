@@ -36,6 +36,9 @@ module.exports = {
         return password;
     },
 
+
+
+
     checkId(id) {
         if (!id) throw "must provide s"
         if (typeof id !== 'string') throw 'invalid string input';

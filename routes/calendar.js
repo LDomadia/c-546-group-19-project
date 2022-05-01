@@ -2,13 +2,11 @@ const express = require("express");
 const router = express.Router();
 
 //Middleware
+//have to log in
 router.use("/", (req, res, next) => {
-  if (req.session.user) {
-    return res.render("pages/single/index", {
-      title: "Digital Closet",
-      homePage: true,
-      logged_in: true,
-    });
+  //if session not logged in 
+  if (!req.session.user) {
+    return res.redirect("/account/login");
   }
   next();
 });
@@ -16,9 +14,9 @@ router.use("/", (req, res, next) => {
 // GET /
 router.get("/", async (req, res) => {
   try {
-    res.render("pages/single/calendar", {});
+   return res.render("pages/single/calendar", {title:"Calendar"});
   } catch (e) {
-    res.sendStatus(500);
+    return res.sendStatus(500);
   }
 });
 

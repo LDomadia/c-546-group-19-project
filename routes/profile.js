@@ -6,7 +6,7 @@ const validation = require("../validation")
 
 //Middleware
 router.use("/", (req, res, next) => {
-  //if session logged in 
+  //if session not logged in 
   if (!req.session.user) {
     return res.redirect("/account/login");
   }
@@ -251,7 +251,7 @@ router.post("/", async (req, res) => {
 router.get("/password", async (req, res) => {
 
   try {
-    return res.render("pages/single/changepassword", {});
+    return res.render("pages/single/changepassword", {title:"Change Password"});
   }
   catch (e) {
     return res.status(500).render("pages/error/error", { code: 500, error: e });
@@ -270,20 +270,21 @@ router.post("/password", async (req, res) => {
   }
   catch (e) {
     //error
-    return res.render("pages/single/changepassword", { passwordE: true, error: e })
+    return res.render("pages/single/changepassword", { title: "Change Password",passwordE: true, error: e })
   }
 
   try {
     await data.checkPassword(username, password);
   } catch (e) {
     return res.status(500).render("pages/single/changepassword", {
+      title: "Change Password",
       passwordE: true,
       error: e,
     });
   }
 
   try {
-    return res.render("pages/single/changepassword2", {});
+    return res.render("pages/single/changepassword2", {title: "Change Password"});
   }
   catch (e) {
     return res.status(500).render("pages/error/error", { code: 500, error: e });
@@ -304,7 +305,7 @@ router.post("/password2", async (req, res) => {
   }
   catch (e) {
     //error
-    return res.render("pages/single/changepassword2", { passwordE: true, error: e })
+    return res.render("pages/single/changepassword2", { title: "Change Password",passwordE: true, error: e })
   }
 
 
@@ -321,7 +322,7 @@ router.post("/password2", async (req, res) => {
   try {
     req.session.destroy();
 
-    return res.render("pages/single/changepassword3", { not_logged_in: true, });
+    return res.render("pages/single/changepassword3", {title: "Password Changed", not_logged_in: true, });
   }
   catch (e) {
     return res.status(500).render("pages/error/error", { code: 500, error: e });
@@ -332,7 +333,7 @@ router.post("/password2", async (req, res) => {
 
 //get profile if signed in 
 router.get("/delete", async (req, res) => {
-  res.render("pages/medium/delete", {});
+  res.render("pages/medium/delete", {title:"Delete Account"});
 });
 
 router.post("/delete", async (req, res) => {
@@ -345,6 +346,7 @@ router.post("/delete", async (req, res) => {
 
   catch (e) {
     res.render("pages/medium/delete", {
+      title:"Delete Account",
       error: e,
       deleteE: true
     });
