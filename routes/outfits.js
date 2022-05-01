@@ -12,6 +12,29 @@ router.use("/", (req, res, next) => {
   next();
 });
 
+router.route("/").get(async (req, res) => {
+  if (!req.session.user)
+    return res.render("pages/results/outfits", {
+      title: "My Outfits",
+      outfitsPage: true,
+      not_logged_in: true,
+    });
+  
+  try {
+    res.render("pages/results/outfits", {
+      title: "My Outfits",
+      outfitsPage: true,
+      stylesheet: "/public/styles/clothes_styles.css"
+    });
+  } catch (e) {
+    res.status(500).render('pages/results/outfits', {
+      title: 'My Outfits',
+      outfitsPage: true,
+      error: e
+    });
+  }
+});
+
 
 router.route("/generate").get(async (req, res) => {
     res.render("pages/medium/outfitGenerated", {
