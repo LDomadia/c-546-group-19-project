@@ -99,7 +99,7 @@
     var confirmPsw = pswConfirm.val();
     try {
       confirmPsw = checkPassword(confirmPsw);
-      if (confirmPsw !== pswInput)
+      if (confirmPsw.localeCompare(password))
         throw "Error: password and confirm password do not match";
     } catch (e) {
       //alert(e);
