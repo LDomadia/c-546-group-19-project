@@ -39,7 +39,7 @@ module.exports = {
           stats['colors-patterns'][element] = 1;
       });
     }
-    
+
     if (brand) {
       brand = brand.trim().toLowerCase();
     if (stats['brands'][brand]) 
@@ -62,32 +62,34 @@ module.exports = {
     const insertInfo = await clothesCollection.insertOne(newClothes);
     if (!insertInfo.acknowledged || !insertInfo.insertedId)
       throw "Error: Failed to add new Clothing Item";
-  
-    const updateInfo = await usersCollection.updateOne({username: user}, {
-      $push: {
-        userClothes: insertInfo.insertedId
-      },
-      $set: {
-        statistics: stats
-      }
-    });
 
-    if (updateInfo.matchedCount == 0 || updateInfo.modifiedCount == 0) 
-      throw 'Error: Failed to update user';
-    
+    const updateInfo = await usersCollection.updateOne(
+      { username: user },
+      {
+        $push: {
+          userClothes: insertInfo.insertedId,
+        },
+        $set: {
+          statistics: stats,
+        },
+      }
+    );
+
+    if (updateInfo.matchedCount == 0 || updateInfo.modifiedCount == 0)
+      throw "Error: Failed to update user";
     return {result: 'success'};
   },
   async getClothingItems(user) {
     let clothingItems = [];
     const usersCollection = await users();
-    const userDocument = await usersCollection.findOne({username: user});
+    const userDocument = await usersCollection.findOne({ username: user });
     if (userDocument) {
       const clothesCollection = await clothes();
       for (let id of userDocument.userClothes) {
-        let clothesDocument = await clothesCollection.findOne({_id: id});
+        let clothesDocument = await clothesCollection.findOne({ _id: id });
         if (clothesDocument) clothingItems.push(clothesDocument);
       }
     }
     return clothingItems;
-  }
+  },
 };
