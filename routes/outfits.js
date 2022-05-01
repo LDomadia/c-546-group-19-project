@@ -44,11 +44,14 @@ router.route("/generate").get(async (req, res) => {
         data.season,
         data.styles
       )
-      console.log(result)
       
       let clothingItems = await clothesData.getClothingbyIds(result.map(res => res._id))
 
       console.log(clothingItems)
+
+      if(clothingItems.length < 1){
+        throw "Error: Could not find valid matches for query, try using more common search terms"
+      }
 
 
       if (result) {
