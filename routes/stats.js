@@ -19,6 +19,7 @@ router.route("/").get(async (req, res) => {
       title: req.session.user.username + " Statistics",
       brands: statistics.brands,
       types: statistics.type,
+      statsPage: true,
       "colors-patterns": statistics["colors-patterns"],
     });
   } catch (e) {

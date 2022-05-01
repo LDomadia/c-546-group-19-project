@@ -1,0 +1,18 @@
+<h1>My Outfits</h1>
+<div>
+    <div class="error-message">{{error}}</div>
+    <p class="success">{{msg}}</p>
+    <a href="/outfits/new">Add +</a>
+    <br>
+    {{#each outfitItems}}
+        <div class="outfit-item-card">
+            <img class="clothing-item-image" alt="{{name}}" src="/uploads/{{image}}">
+            <div class="outfit-item-details">
+                <h3 class="outfit-item-title">{{name}}</h3>
+                <p>Type: {{type}}</p>
+                <button>Edit</button>
+                <button>Delete</button>
+            </div>
+        </div>
+    {{/each}}
+</div>
