@@ -4,7 +4,7 @@ const { ObjectId } = require("mongodb");
 
 const errors_string = function(str, name){
 
-  if(!str){
+  if(!str || str==null){
       throw `${name} is not initialized`
   }
 
@@ -23,7 +23,7 @@ const errors_string = function(str, name){
 }
 
 const errors_strlist = function(lst, name){
-  if(!lst){
+  if(!lst || lst==null){
       throw `${name} is not initialized`
   }
 
