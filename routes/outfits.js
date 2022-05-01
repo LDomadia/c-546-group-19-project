@@ -23,18 +23,7 @@ router.route("/").get(async (req, res) => {
       outfitsPage: true,
       not_logged_in: true,
     });
-  
-  try {
-    res.render("pages/results/outfits", {
-      title: "My Outfits",
-      outfitsPage: true,
-      stylesheet: "/public/styles/clothes_styles.css"
-    });
-  } catch (e) {
-    res.status(500).render('pages/results/outfits', {
-      title: 'My Outfits',
-      outfitsPage: true,
-      error: e
+
   try {
     let outfitItems = await outfitsData.getOutfitItems(
       req.session.user.username
@@ -92,12 +81,11 @@ router.route("/generate").get(async (req, res) => {
       }
 
       const new_outfit = await outfitsData.addNewOutfits(req.session.user.username,
+                                                         result.map(res => res._id.toString()),
                                                          "private", 
                                                          data.name, 
                                                          data.season, 
                                                          data.styles)
-      
-      const updated_outfit = await outfitsData.addClothesToOutfit(new_outfit, result.map(res => res._id.toString()))
 
       if (result) {
         res.status(200).render('pages/medium/outfitGenerated', {
