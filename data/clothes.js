@@ -12,7 +12,7 @@ module.exports = {
 
     const usersCollection = await users();
     const userDocument = await usersCollection.findOne({username: user});
-    if (!userDocument) throw 'Error; User does not exists';
+    if (!userDocument) throw 'Error: User does not exists';
     let stats = userDocument.statistics;
 
     if (type == 'Top') stats.type.tops += 1;
@@ -42,16 +42,19 @@ module.exports = {
     }
     
     if (brand) {
-      brand = brand.trim();
-      let words = brand.split(' ');
-      words.forEach(word => {
-        word.charAt(0).toUpperCase();
-      })
-      brand = words.join(' ');
+      brand = brand.toLowerCase().trim();
     if (stats['brands'][brand]) 
       stats['brands'][brand] += 1;
     else 
       stats['brands'][brand] = 1;
+    }
+
+    if (!colorPatterns) {
+      colorPatterns = [];
+    }
+
+    if (!style) {
+      style = [];
     }
 
     let newClothes = {
