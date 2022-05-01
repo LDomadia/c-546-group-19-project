@@ -3,7 +3,9 @@
 <head>
     <meta charset="utf-8">
     <link rel="stylesheet" href="/public/styles/main_styles.css">
-    <link rel="stylesheet" href="{{stylesheet}}">
+    {{#if stylesheet}}
+        <link rel="stylesheet" href="{{stylesheet}}">
+    {{/if}}
     <link rel="icon" type="image/x-icon" href="/public/images/favicon.ico">
     <title>{{title}}</title>
 </head>
