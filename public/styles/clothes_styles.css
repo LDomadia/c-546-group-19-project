@@ -79,6 +79,8 @@ i {
 
 .error-message {
   color: red;
+  margin-top: 10px;
+  margin-bottom: 0;
 }
 
 .error-input {

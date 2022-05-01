@@ -12,6 +12,8 @@ const colorPatternInput = document.getElementById('colors-patterns-input');
 const colorPatternBtn = document.getElementById('colors-patterns-btn');
 const stylesList = document.getElementById('styles-list');
 const stylesInput = document.getElementById('styles-input');
+const brandDiv = document.getElementById('brand-div');
+const brandInput = document.getElementById('brand-input');
 const stylesBtn = document.getElementById('styles-btn');
 const submitBtn = document.getElementById('submit-btn');
 const form = document.getElementById('new-clothing-form');
@@ -58,6 +60,7 @@ if (form) {
             nameInput.classList.remove('error-input');
             typeInput.classList.remove('error-input');
             sizeInput.classList.remove('error-input');
+            brandInput.classList.remove('error-input');
             imageBtn.classList.remove('error-input');
 
             let errors = document.getElementsByClassName('error-message');
@@ -102,7 +105,17 @@ if (form) {
                     sizeDiv.append(error);
                 }
             }
-            
+
+            let brandValue = brandInput.value;
+            if (brandValue) {
+                if (!brandValue.trim()) {
+                    let error = document.createElement('p');
+                    error.classList.add('error-message');
+                    error.innerHTML = 'Brand Name cannot contain empty spaces';
+                    brandInput.classList.add('error-input');
+                    brandDiv.append(error);
+                }
+            }
 
             if (document.getElementsByClassName('error-message').length > 0) throw 'Error';
         } catch (e) {
