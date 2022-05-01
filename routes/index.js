@@ -15,6 +15,10 @@ const constructorMethod = (app) => {
   app.use("/profile", profileRoutes);
   app.use("/stats", statsRoutes);
 
+  app.use("/", (req, res) => {
+    res.redirect("/home");
+  });
+
   app.use("*", (req, res) => {
     res.render("pages/error/error404", {
       error: "Page not found",

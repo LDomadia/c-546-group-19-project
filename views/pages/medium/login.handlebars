@@ -17,14 +17,16 @@
             {{#if usernameErr}}
                 <p>{{error}}</p>
             {{/if}}
-            <label for="username"><b>Username</b></label>
-            <input type="text" placeholder="Enter username (must have at least 2 characters)" value="{{username}}" name="username" required minlength="2">
+            <p class = "username-err" hidden></p>
+            <label for="username" class = "username-label">Username</label>
+            <input type="text" class = "username-input" placeholder="Enter username (must have at least 2 characters)" value="{{username}}" name="username" required minlength="2">
             
             {{#if pswErr}}
                 <p>{{error}}</p>
             {{/if}}
-            <label for="psw"><b>Password</b></label>
-            <input type="password" placeholder="Enter Password (must have at least 8 characters)" value = "{{password}}" name="psw" required minlength="8">
+            <p class = "psw-err" hidden></p>
+            <label for="psw" class = "psw-label">Password</label>
+            <input type="password" class="psw-input" placeholder="Enter Password (must have at least 8 characters)" value = "{{password}}" name="psw" required minlength="8">
           
             {{!-- <div> --}}
             <button type="submit" >Log In</button>
@@ -32,5 +34,11 @@
         </div>
         </form>
     </article>
+    <script
+      src="https://code.jquery.com/jquery-3.5.1.js"
+      integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
+      crossorigin="anonymous">
+    </script>
+    <script src='/public/scripts/login.js'></script>
 </body>
 </html>
