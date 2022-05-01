@@ -87,6 +87,20 @@ module.exports = {
       throw "Could not add outfit";
 
     const newId = insertInfo.insertedId.toString();
+
+    const usersCollection = await users();
+    const updateInfo = await usersCollection.updateOne(
+      { username: creator },
+      {
+        $push: {
+          userOutfits: insertInfo.insertedId,
+        },
+      }
+    );
+
+    if (updateInfo.matchedCount == 0 || updateInfo.modifiedCount == 0)
+      throw "Error: Failed to update user";
+
     return newId;
   },
 };
