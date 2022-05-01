@@ -62,11 +62,6 @@ router.route("/new").get(async (req, res) => {
     if (!data.styles) data.styles = [];
     data.styles = validate.checkListInput(data.styles, 'Styles');
     if (data.brand) data.brand = validate.checkTextInput(data.brand, 'Brand');
-    // if (!data.name) throw 'Error: Clothing Name is Required';
-    // if (!data.type) throw 'Error: Type is Required';
-    // if (!data.name.trim()) throw 'Error: Clothing Name is Required';
-    // if (!data.type.trim() || data.type.trim() == 'null') throw 'Error: Type is Required';
-    // if (!req.file) throw 'Error: Image is required';
     
   } catch (e) {
     return res.status(400).render('pages/medium/clothingNew', {
