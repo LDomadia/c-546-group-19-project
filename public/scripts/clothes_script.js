@@ -57,6 +57,7 @@ if (form) {
         try {
             nameInput.classList.remove('error-input');
             typeInput.classList.remove('error-input');
+            sizeInput.classList.remove('error-input');
             imageBtn.classList.remove('error-input');
 
             let errors = document.getElementsByClassName('error-message');
@@ -92,13 +93,14 @@ if (form) {
             }
 
             let sizeValue = sizeInput.value;
-            if (!sizeValue.trim()) {
-                let error = document.createElement('p');
-                error.classList.add('error-message');
-                error.innerHTML = 'Type is Required';
-                sizeInput.classList.add('error-input');
-                sizeDiv.append(error);
-                
+            if (sizeValue) {
+                if (!sizeValue.trim()) {
+                    let error = document.createElement('p');
+                    error.classList.add('error-message');
+                    error.innerHTML = 'Size cannot contain empty spaces';
+                    sizeInput.classList.add('error-input');
+                    sizeDiv.append(error);
+                }
             }
             
 
