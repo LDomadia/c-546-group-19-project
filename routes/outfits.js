@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const gen_outfitData = require('../data/gen_outfit');
 const clothesData = require('../data/clothes');
+const outfitsData = require('../data/outfits');
 
 //Middleware
 router.use("/", (req, res, next) => {
@@ -21,7 +22,6 @@ router.route("/generate").get(async (req, res) => {
     });
   }).post(async (req, res) => {
     const data = req.body;
-    console.log(data)
 
     try {
       if (!data) throw 'Error: Nothing was entered';
@@ -47,12 +47,17 @@ router.route("/generate").get(async (req, res) => {
       
       let clothingItems = await clothesData.getClothingbyIds(result.map(res => res._id))
 
-      console.log(clothingItems)
-
       if(clothingItems.length < 1){
         throw "Error: Could not find valid matches for query, try using more common search terms"
       }
 
+      const new_outfit = await outfitsData.addNewOutfits(req.session.user.username,
+                                                         "private", 
+                                                         data.name, 
+                                                         data.season, 
+                                                         data.styles)
+      
+      const updated_outfit = await outfitsData.addClothesToOutfit(new_outfit, result.map(res => res._id.toString()))
 
       if (result) {
         res.status(200).render('pages/medium/outfitGenerated', {
