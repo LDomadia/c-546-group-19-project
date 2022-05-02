@@ -9,8 +9,9 @@
             <div class="clothing-item-details">
                 <h3 class="clothing-item-title">{{name}}</h3>
                 <p class="capitalize">Type: {{type}}</p>
-                <a href="clothes/edit/{{_id}}">Edit</a>
-                <button>Delete</button>
+                <a class="card-btn" href="clothes/view/{{_id}}">View</a>
+                <a class="card-btn" href="clothes/edit/{{_id}}">Edit</a>
+                <a class="card-btn">Delete</a>
             </div>
         </div>
     {{/each}}

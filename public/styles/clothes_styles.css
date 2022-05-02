@@ -103,6 +103,22 @@ i {
 }
 
 /* DISPLAY CLOTHING ITEMS */
+dl {
+  display: grid;
+  grid-template-columns: max-content auto;
+  margin: 0;
+}
+
+dt {
+  grid-column-start: 1;
+  padding: 10px 0;
+}
+
+dd {
+  grid-column-start: 2;
+  padding: 10px 0;
+}
+
 .clothing-item-card {
   display: inline-block;
   margin: 20px;
@@ -141,4 +157,14 @@ i {
 
 .capitalize {
   text-transform: capitalize;
+}
+
+.card-btn {
+  padding: 6px 10px;
+  border-radius: 5px;
+  background-color: #333;
+  color: white;
+  border: none;
+  font-size: 14px;
+  text-decoration: none;
 }
