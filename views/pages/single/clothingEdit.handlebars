@@ -1,0 +1,87 @@
+<h1>Edit Clothing Item</h1>
+<div class="error-message">{{error}}</div>
+<form id="new-clothing-form" method="POST" action="{{clothingItem._id}}" enctype="multipart/form-data">
+    <div id="img-div" class="form-div">
+        <img id="placeholder-img" alt="Clothing Item" src="/uploads/{{clothingItem.image}}"><br>
+        <label class="input-label" for="img-btn">Add Image *</label>
+        <input class="edit-form" id="img-btn" name="img" type="file" accept="image/png, image/jpeg">
+    </div>
+    <div class="form-div">
+        <div id="name-div">
+            <label class="input-label" for="name-input">Clothing Name *</label>
+            <input id="name-input" name="name" type="text" value="{{clothingItem.name}}" required>
+        </div>
+        <br>
+        <div id="type-div">
+            <label class="input-label" for="type-input">Type *</label>
+            <select id="type-input" name="type" required>
+                <option value="" disabled>- Select a Type -</option>
+                <option value="top" {{#equals 'top' clothingItem.type}} selected {{/equals}}>Top</option>
+                <option value="bottom" {{#equals 'bottom' clothingItem.type}} selected {{/equals}}>Bottom</option>
+                <option value="dress" {{#equals 'dress' clothingItem.type}} selected {{/equals}}>Dress</option>
+                <option value="shoes" {{#equals 'shoes' clothingItem.type}} selected {{/equals}}>Shoes</option>
+                <option value="accessory" {{#equals 'accessory' clothingItem.type}} selected {{/equals}}>Accessory</option>
+                <option value="outerwear" {{#equals 'outerwear' clothingItem.type}} selected {{/equals}}>Outerwear</option>
+                <option value="socks" {{#equals 'socks' clothingItem.type}} selected {{/equals}}>Socks</option>
+            </select>
+        </div>
+        <br>
+        <div id="size-div">
+            <label class="input-label" for="size-input">Size</label>
+            <input id="size-input" name="size" type="text" value="{{clothingItem.size}}">
+        </div>
+        <br>
+        <div id="colors-patterns-div">
+            <label class="input-label" for="colors-patterns-input">Colors/Patterns</label>
+            <input id="colors-patterns-input" type="text">
+            <button id="colors-patterns-btn" class="add-btn" type="button">Add</button><br>
+            <ul id="colors-patterns-list">
+                {{#each clothingItem.colors-patterns}}
+                    <li>
+                        {{this}}
+                        <input type="hidden" name="colors-patterns[]" value="{{this}}">
+                        <button type="button" class="chip-btn" aria-label="delete {{this}}" title="delete {{this}}">
+                            <i class="fa-solid fa-circle-xmark"></i>
+                        </button>
+                    </li>
+                {{/each}}
+            </ul>
+        </div>
+        <br>
+        <div>
+            <label class="input-label">Seasons</label>
+            <input id="winter-input" type="checkbox" name="seasons[]" value="winter" {{#ifIn 'winter' clothingItem.season}} checked {{/ifIn}}>
+            <label for="winter-input">Winter</label>
+            <input id="spring-input" type="checkbox" name="seasons[]" value="spring" {{#ifIn 'spring' clothingItem.season}} checked {{/ifIn}}>
+            <label for="spring-input">Spring</label>
+            <input id="summer-input" type="checkbox" name="seasons[]" value="summer" {{#ifIn 'summer' clothingItem.season}} checked {{/ifIn}}>
+            <label for="summer-input">Summer</label>
+            <input id="fall-input" type="checkbox" name="seasons[]" value="fall" {{#ifIn 'fall' clothingItem.season}} checked {{/ifIn}}>
+            <label for="fall-input">Fall</label>
+        </div>
+        <br>
+        <div id="styles-div">
+            <label class="input-label" for="styles-input">Styles</label>
+            <input id="styles-input" type="text">
+            <button id="styles-btn" class="add-btn" type="button">Add</button><br>
+            <ul id="styles-list">
+                {{#each clothingItem.style}}
+                    <li>
+                        {{this}}
+                        <input type="hidden" name="style[]" value="{{this}}">
+                        <button type="button" class="chip-btn" aria-label="delete {{this}}" title="delete {{this}}">
+                            <i class="fa-solid fa-circle-xmark"></i>
+                        </button>
+                    </li>
+                {{/each}}
+            </ul>
+        </div>
+        <br>
+        <div id="brand-div">
+            <label class="input-label" for="brand-input">Brand</label>
+            <input id="brand-input" class="capitalize" name="brand" type="text" value="{{clothingItem.brand}}">
+        </div>
+        <br>
+    </div><br>
+    <button id="submit-btn" type="submit">Save</button>
+</form>

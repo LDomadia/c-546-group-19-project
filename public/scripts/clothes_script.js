@@ -19,6 +19,7 @@ const brandInput = document.getElementById('brand-input');
 const stylesBtn = document.getElementById('styles-btn');
 const submitBtn = document.getElementById('submit-btn');
 const form = document.getElementById('new-clothing-form');
+const chips = document.getElementsByClassName('chip-btn')
 
 if (imageBtn) {
     imageBtn.addEventListener("change", function() {
@@ -56,6 +57,12 @@ if (stylesInput) {
     });
 }
 
+if (chips) {
+    for (let i = 0; i < chips.length; i++) {
+        chips[i].addEventListener('click', removeFromList);
+    }
+}
+
 if (form) {
     form.addEventListener("submit", (event) => {
         try {
@@ -79,12 +86,14 @@ if (form) {
             }
 
             let imageValue = imageBtn.value.trim();
-            if (!imageValue) {
-                let error = document.createElement('p');
-                error.classList.add('error-message');
-                error.innerHTML = 'Image is Required';
-                imageBtn.classList.add('error-input');
-                imageDiv.append(error);
+            if (!imageBtn.classList.contains('edit-form')) {
+                if (!imageValue) {
+                    let error = document.createElement('p');
+                    error.classList.add('error-message');
+                    error.innerHTML = 'Image is Required';
+                    imageBtn.classList.add('error-input');
+                    imageDiv.append(error);
+                }
             }
             
             let typeValue = typeInput.value.trim();
