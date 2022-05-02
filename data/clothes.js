@@ -231,7 +231,6 @@ module.exports = {
     if (updateInfo.matchedCount == 0)
       throw "Error: Failed to find User";
 
-    
     return {result: 'success'};
   }
 };
