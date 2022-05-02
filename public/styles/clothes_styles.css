@@ -136,9 +136,7 @@ i {
 }
 
 .clothing-item-type {
-  color: rgb(0, 42, 84);
-  font-weight: bold;
-  margin: 0;
+  text-transform: capitalize;
 }
 
 .clothing-item-details {
