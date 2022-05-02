@@ -73,7 +73,7 @@ router.route("/new").get(async (req, res) => {
   }
 
   try {
-    let result = await clothesData.addNewClothes(
+    let result = await clothesData.addNewClothingItem(
       data.name,
       req.file.filename,
       data.type,

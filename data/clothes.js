@@ -5,8 +5,7 @@ const validate = require('../validation/clothes_validation');
 const { ObjectId } = require('mongodb');
 
 module.exports = {
-  async addNewClothes(name, image, type, size, colorPatterns, seasons, styles, brand, user) {
-
+  async addNewClothingItem(name, image, type, size, colorPatterns, seasons, styles, brand, user) {
     name = validate.checkTextInput(name, 'Clothing Name');
     image = validate.checkFileInput(image, 'Image');
     type = validate.checkSelectInput(type, 'Type', ['top', 'bottom', 'dress', 'shoes', 'accessory', 'outerwear', 'socks']);
