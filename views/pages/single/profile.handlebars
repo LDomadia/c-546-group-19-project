@@ -1,11 +1,3 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="utf-8">
-    <title>{{title}}</title>
-</head>
-
 <h1 class="right">{{title}}</h1>
 
 
@@ -43,13 +35,13 @@
         {{#if E}}
         <p class="error">{{error}}</p>
         {{/if}}
+        <p class="error" id="error" hidden></p>
+
 
         <h3>Change Bio</h3>
 
 
         <form id="bio" method="POST" action="/profile">
-
-
             <label for="bio_term">Change Bio</label> <br />
             <textarea id="bio_term" name="bio" rows="4" cols="50" placeholder="Enter bio"> </textarea>
             <button type="submit">submit</button>
@@ -84,3 +76,8 @@
 
 
 </article>
+
+
+<script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
+    crossorigin="anonymous"></script>
+<script src='/public/scripts/profile.js'></script>
