@@ -53,6 +53,7 @@ const main = async () => {
 
     for(let i = 0; i < 10; i++){
         await outfits.addNewOutfits(outfits_info.creator[i],
+                                    [],
                                     outfits_info.status[i],
                                     outfits_info.outfitName[i],
                                     outfits_info.season[i],

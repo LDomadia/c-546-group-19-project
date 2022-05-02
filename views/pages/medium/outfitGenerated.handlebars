@@ -1,0 +1,54 @@
+<h1>Generate Outfit</h1>
+<div class="error-message">{{error}}</div>
+{{#if savePage}}
+        {{#if results}}
+        <h2>Outfit Made!:</h2>
+        {{#each results}}
+            <div class="clothing-item-card">
+                <img class="clothing-item-image" alt="{{name}}" src="/uploads/{{image}}">
+                <div class="clothing-item-details">
+                    <p class="clothing-item-title">{{name}}</p>
+                    <p class="clothing-item-brand">{{brand}}</p>
+                    <p class="clothing-item-type">{{type}}</p>
+                </div>
+            </div>
+        {{/each}}
+        {{/if}}
+{{else}}
+<form id="generate-outfit-form" method="POST" action="/outfits/generate">
+    <div class="form-div">
+        <div id="name-div">
+            <label class="input-label" for="name-input">Outfit Name *</label>
+            <input id="name-input" name="name" type="text" required>
+        </div>
+        <br>
+        <div>
+            <label class="input-label" for="colors-patterns-input">Colors/Patterns *</label>
+            <input id="colors-patterns-input" type="text">
+            <button id="colors-patterns-btn" class="add-btn" type="button">Add</button><br>
+            <ul id="colors-patterns-list"></ul>
+        </div>
+        <br>
+        <div>
+            <label class="input-label">Seasons *</label>
+            <input id="winter-input" type="checkbox" name="season[]" value="Winter">
+            <label for="winter-input">Winter</label>
+            <input id="spring-input" type="checkbox" name="season[]" value="Spring">
+            <label for="spring-input">Spring</label>
+            <input id="summer-input" type="checkbox" name="season[]" value="Summer">
+            <label for="summer-input">Summer</label>
+            <input id="fall-input" type="checkbox" name="season[]" value="Fall">
+            <label for="fall-input">Fall</label>
+        </div>
+        <br>
+        <div>
+            <label class="input-label" for="styles-input">Styles *</label>
+            <input id="styles-input" type="text">
+            <button id="styles-btn" class="add-btn" type="button">Add</button><br>
+            <ul id="styles-list"></ul>
+        </div>
+        <br>
+        <button id="submit-btn" type="submit">Generate</button>
+    </div><br>
+</form>
+{{/if}}
