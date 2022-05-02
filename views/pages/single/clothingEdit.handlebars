@@ -15,7 +15,7 @@
         <div id="type-div">
             <label class="input-label" for="type-input">Type *</label>
             <select id="type-input" name="type" required>
-                <option value="" disabled selected>- Select a Type -</option>
+                <option value="" disabled>- Select a Type -</option>
                 <option value="top">Top</option>
                 <option value="bottom">Bottom</option>
                 <option value="dress">Dress</option>
@@ -50,13 +50,13 @@
         <br>
         <div>
             <label class="input-label">Seasons</label>
-            <input id="winter-input" type="checkbox" name="seasons[]" value="winter">
+            <input id="winter-input" type="checkbox" name="seasons[]" value="winter" {{#ifIn 'winter' clothingItem.season}} checked {{/ifIn}}>
             <label for="winter-input">Winter</label>
-            <input id="spring-input" type="checkbox" name="seasons[]" value="spring">
+            <input id="spring-input" type="checkbox" name="seasons[]" value="spring" {{#ifIn 'spring' clothingItem.season}} checked {{/ifIn}}>
             <label for="spring-input">Spring</label>
-            <input id="summer-input" type="checkbox" name="seasons[]" value="summer">
+            <input id="summer-input" type="checkbox" name="seasons[]" value="summer" {{#ifIn 'summer' clothingItem.season}} checked {{/ifIn}}>
             <label for="summer-input">Summer</label>
-            <input id="fall-input" type="checkbox" name="seasons[]" value="fall">
+            <input id="fall-input" type="checkbox" name="seasons[]" value="fall" {{#ifIn 'fall' clothingItem.season}} checked {{/ifIn}}>
             <label for="fall-input">Fall</label>
         </div>
         <br>
