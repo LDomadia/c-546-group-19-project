@@ -60,7 +60,9 @@ function matchClothPreferences(prefs, cloth){
 
   //score calculated as: total similarities*control
   for(let i = 0; i < tags.length; i++){
-    let sim = prefs[tags[i]].sort().filter(val => cloth[tags[i]].sort().includes(val)).length;
+    let score_prefs = prefs[tags[i]].map(ele => ele.toLowerCase()).sort()
+    let score_cloth = cloth[tags[i]].map(ele => ele.toLowerCase()).sort()
+    let sim = score_prefs.filter(val => score_cloth.includes(val)).length;
     score += sim*tags_control[i];
   }
 

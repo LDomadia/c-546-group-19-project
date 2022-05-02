@@ -76,7 +76,7 @@ router.route("/generate").get(async (req, res) => {
       
       let clothingItems = await clothesData.getClothingbyIds(result.map(res => res._id))
 
-      if(clothingItems.length < 1){
+      if(clothingItems.length < 3){
         throw "Error: Could not find valid matches for query, try using more common search terms"
       }
 
