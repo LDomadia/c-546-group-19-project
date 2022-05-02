@@ -103,6 +103,22 @@ i {
 }
 
 /* DISPLAY CLOTHING ITEMS */
+dl {
+  display: grid;
+  grid-template-columns: max-content auto;
+  margin: 0;
+}
+
+dt {
+  grid-column-start: 1;
+  padding: 10px 0;
+}
+
+dd {
+  grid-column-start: 2;
+  padding: 10px 0;
+}
+
 .clothing-item-card {
   display: inline-block;
   margin: 20px;

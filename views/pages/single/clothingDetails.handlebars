@@ -1,0 +1,42 @@
+<h1>Clothing Details</h1>
+<a href="/clothes">Back</a>
+<br>
+<div class="form-div">
+    <img id="placeholder-img" alt="Clothing Item" src="/uploads/{{clothingItem.image}}">
+</div>
+<div class="form-div">
+    <dl>
+        <dt>Clothing Name</dt>
+        <dd>{{clothingItem.name}}</dd>
+        <dt>Type</dt>
+        <dd class="capitalize">{{clothingItem.type}}</dd>
+        <dt>Size</dt>
+        <dd class="capitalize">{{clothingItem.size}}</dd>
+        <dt>Colors/Patterns</dt>
+        <dd>
+            <ul>
+                {{#each clothingItem.colors-patterns}}
+                <li>{{this}}</li>
+                {{/each}}
+            </ul>
+        </dd>
+        <dt>Seasons</dt>
+        <dd>
+            <ul>
+                {{#each clothingItem.season}}
+                <li>{{this}}</li>
+                {{/each}}
+            </ul>
+        </dd>
+        <dt>Styles</dt>
+        <dd>
+            <ul>
+                {{#each clothingItem.style}}
+                <li>{{this}}</li>
+                {{/each}}
+            </ul>
+        </dd>
+        <dt>Brand</dt>
+        <dd class="capitalize">{{clothingItem.brand}}</dd>
+    </dl>
+</div>

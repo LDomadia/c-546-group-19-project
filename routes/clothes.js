@@ -219,4 +219,27 @@ router.route('/edit/:id').get(async (req, res) => {
   }
 });
 
+router.route('/view/:id').get(async (req, res) => {
+  try {
+    const clothingItem = await clothesData.getClothingItemById(req.params.id);
+    if (clothingItem) {
+      return res.status(200).render('pages/single/clothingDetails', {
+        title: 'Clothing Details',
+        clothesPage: true,
+        clothingItem: clothingItem,
+        stylesheet: '/public/styles/clothes_styles.css'
+      })
+    }
+    else {
+      throw 'Error: Clothing Item cannot be found';
+    }
+  } catch (e) {
+    return res.status(404).render('pages/error/error', {
+      title: 'Page Not Found',
+      errorCode: 404,
+      error: e
+    })
+  }
+})
+
 module.exports = router;
