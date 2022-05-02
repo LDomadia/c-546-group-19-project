@@ -107,6 +107,7 @@ router.route('/edit/:id').get(async (req, res) => {
     if (clothingItem) {
       return res.status(200).render('pages/single/clothingEdit', {
         title: 'Edit Clothing Item',
+        clothingItem: clothingItem,
         clothesPage: true,
         stylesheet: "/public/styles/clothes_styles.css",
         script: "/public/scripts/clothes_script.js",

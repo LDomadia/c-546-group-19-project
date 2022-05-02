@@ -1,15 +1,15 @@
-<h1>Add New Clothing Item</h1>
+<h1>Edit Clothing Item</h1>
 <div class="error-message">{{error}}</div>
-<form id="new-clothing-form" method="POST" action="/clothes/new" enctype="multipart/form-data">
+<form id="new-clothing-form" method="POST" enctype="multipart/form-data">
     <div id="img-div" class="form-div">
-        <img id="placeholder-img" alt="Clothing Item" src="/public/images/placeholder.jpg"><br>
+        <img id="placeholder-img" alt="Clothing Item" src="/uploads/{{clothingItem.image}}"><br>
         <label class="input-label" for="img-btn">Add Image *</label>
         <input id="img-btn" name="img" type="file" accept="image/png, image/jpeg" required>
     </div>
     <div class="form-div">
         <div id="name-div">
             <label class="input-label" for="name-input">Clothing Name *</label>
-            <input id="name-input" name="name" type="text" required>
+            <input id="name-input" name="name" type="text" value="{{clothingItem.name}}" required>
         </div>
         <br>
         <div id="type-div">
@@ -28,7 +28,7 @@
         <br>
         <div id="size-div">
             <label class="input-label" for="size-input">Size</label>
-            <input id="size-input" name="size" type="text">
+            <input id="size-input" name="size" type="text" value="{{clothingItem.size}}">
         </div>
         <br>
         <div id="colors-patterns-div">
@@ -59,7 +59,7 @@
         <br>
         <div id="brand-div">
             <label class="input-label" for="brand-input">Brand</label>
-            <input id="brand-input" name="brand" type="text">
+            <input id="brand-input" class="capitalize" name="brand" type="text" value="{{clothingItem.brand}}">
         </div>
         <br>
     </div><br>

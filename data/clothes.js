@@ -2,6 +2,7 @@ const mongoCollections = require("../config/mongoCollections");
 const clothes = mongoCollections.clothes;
 const users = mongoCollections.users;
 const validate = require('../validation/clothes_validation');
+const { ObjectId } = require('mongodb');
 
 module.exports = {
   async addNewClothes(name, image, type, size, colorPatterns, seasons, styles, brand, user) {
@@ -52,6 +53,7 @@ module.exports = {
       image: image,
       name: name,
       type: type,
+      size: size,
       "colors-patterns": colorPatterns,
       season: seasons,
       style: styles,
@@ -107,6 +109,8 @@ module.exports = {
   },
   async getClothingItemById(id) {
     const clothesCollection = await clothes();
+    if (!ObjectId.isValid(id)) throw 'Error: Clothing Item id is not valid';
+    id = ObjectId(id);
     const clothingItem = await clothesCollection.findOne({ _id: id });
     if (clothingItem) return clothingItem;
     else throw 'Error: Clothing Item cannot be found';

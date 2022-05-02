@@ -135,14 +135,10 @@ i {
   margin: 0;
 }
 
-.clothing-item-type {
-  text-transform: capitalize;
-}
-
 .clothing-item-details {
   padding: 10px;
 }
 
-.clothing-item-type {
+.capitalize {
   text-transform: capitalize;
 }
