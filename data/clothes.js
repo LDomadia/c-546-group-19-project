@@ -53,8 +53,8 @@ module.exports = {
       name: name,
       type: type,
       "colors-patterns": colorPatterns,
-      seasons: seasons,
-      styles: styles,
+      season: seasons,
+      style: styles,
       brand: brand
     };
 
