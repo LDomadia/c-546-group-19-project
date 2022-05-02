@@ -86,12 +86,14 @@ if (form) {
             }
 
             let imageValue = imageBtn.value.trim();
-            if (!imageValue) {
-                let error = document.createElement('p');
-                error.classList.add('error-message');
-                error.innerHTML = 'Image is Required';
-                imageBtn.classList.add('error-input');
-                imageDiv.append(error);
+            if (!imageBtn.classList.contains('edit-form')) {
+                if (!imageValue) {
+                    let error = document.createElement('p');
+                    error.classList.add('error-message');
+                    error.innerHTML = 'Image is Required';
+                    imageBtn.classList.add('error-input');
+                    imageDiv.append(error);
+                }
             }
             
             let typeValue = typeInput.value.trim();
