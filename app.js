@@ -21,6 +21,13 @@ hbs.handlebars.registerHelper('ifIn', function(elem, list, options) {
   return options.inverse(this);
 });
 
+hbs.handlebars.registerHelper('equals', function(elem, target, options) {
+  if(elem === target) {
+    return options.fn(this);
+  }
+  return options.inverse(this);
+});
+
 app.use(
   session({
     name: "AuthCookie",
