@@ -219,19 +219,18 @@ module.exports = {
       throw "Error: Failed to update Clothing Item";
     }
 
-    if (JSON.stringify(oldStats) != JSON.stringify(stats)) {
-      const updateInfo = await usersCollection.updateOne(
-        { username: user },
-        {
-          $set: {
-            statistics: stats,
-          },
-        }
-      );
-  
-      if (updateInfo.matchedCount == 0 || updateInfo.modifiedCount == 0)
-        throw "Error: Failed to update User";
-    }
+    const updateInfo = await usersCollection.updateOne(
+      { username: user },
+      {
+        $set: {
+          statistics: stats,
+        },
+      }
+    );
+
+    if (updateInfo.matchedCount == 0)
+      throw "Error: Failed to find User";
+
     
     return {result: 'success'};
   }
