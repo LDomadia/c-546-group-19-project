@@ -1,63 +1,51 @@
 const mongoCollections = require("../config/mongoCollections");
 const clothes = mongoCollections.clothes;
 const users = mongoCollections.users;
+const validate = require('../validation/clothes_validation');
 
 module.exports = {
-  async addNewClothes(
-    name,
-    image,
-    type,
-    colorPatterns,
-    season,
-    style,
-    brand,
-    user
-  ) {
-    if (!name) throw "Error: Clothing Name is required";
-    if (!type) throw "Error: Type is required";
-    if (!image) throw "Error: Image is required";
-    if (!name.trim()) throw "Error: Clothing Name is required";
-    if (!type.trim() || type.trim() == "null") throw "Error: Type is required";
+  async addNewClothes(name, image, type, size, colorPatterns, seasons, styles, brand, user) {
+
+    name = validate.checkTextInput(name, 'Clothing Name');
+    image = validate.checkFileInput(image, 'Image');
+    type = validate.checkSelectInput(type, 'Type', ['top', 'bottom', 'dress', 'shoes', 'accessory', 'outerwear', 'socks']);
+    if (size) size = validate.checkTextInput(size, 'Size');
+    if (!colorPatterns) colorPatterns = [];
+    colorPatterns = validate.checkListInput(colorPatterns, 'Colors/Patterns');
+    if (!seasons) seasons = [];
+    seasons = validate.checkCheckboxInput(seasons, 'seasons', ['winter', 'spring', 'summer', 'fall']);
+    if (!styles) styles = [];
+    styles = validate.checkListInput(styles, 'Styles');
+    if (brand) brand = validate.checkTextInput(brand, 'Brand');
 
     const usersCollection = await users();
-    const userDocument = await usersCollection.findOne({ username: user });
-    if (!userDocument) throw "Error; User does not exists";
+    const userDocument = await usersCollection.findOne({username: user});
+    if (!userDocument) throw 'Error: User does not exists';
     let stats = userDocument.statistics;
 
-    if (type == "Top") stats.type.tops += 1;
-    else if (type == "Bottom") stats.type.bottoms += 1;
-    else if (type == "Dress") stats.type.dresses += 1;
-    else if (type == "Shoes") stats.type.shoes += 1;
-    else if (type == "Accessory") stats.type.accessories += 1;
-    else if (type == "Outerwear") stats.type.outerwear += 1;
-    else if (type == "Socks") stats.type.socks += 1;
-
-    if (style) {
-      style = style.map((element) => {
-        return element.toLowerCase().trim();
-      });
-    }
+    if (type == 'top') stats.type.tops += 1;
+    else if (type == 'bottom') stats.type.bottoms += 1;
+    else if (type == 'dress') stats.type.dresses += 1;
+    else if (type == 'shoes') stats.type.shoes += 1;
+    else if (type == 'accessory') stats.type.accessories += 1;
+    else if (type == 'outerwear') stats.type.outerwear += 1;
+    else if (type == 'socks') stats.type.socks += 1;
 
     if (colorPatterns) {
-      colorPatterns = colorPatterns.map((element) => {
-        return element.toLowerCase().trim();
-      });
-      colorPatterns.forEach((element) => {
-        if (stats["colors-patterns"][element])
-          stats["colors-patterns"][element] += 1;
-        else stats["colors-patterns"][element] = 1;
+      colorPatterns.forEach(element => {
+        if (stats['colors-patterns'][element]) 
+          stats['colors-patterns'][element] += 1;
+        else 
+          stats['colors-patterns'][element] = 1;
       });
     }
 
     if (brand) {
-      brand = brand.trim();
-      let words = brand.split(" ");
-      words.forEach((word) => {
-        word.charAt(0).toUpperCase();
-      });
-      brand = words.join(" ");
-      if (stats["brands"][brand]) stats["brands"][brand] += 1;
-      else stats["brands"][brand] = 1;
+      brand = brand.trim().toLowerCase();
+    if (stats['brands'][brand]) 
+      stats['brands'][brand] += 1;
+    else 
+      stats['brands'][brand] = 1;
     }
 
     let newClothes = {
@@ -65,9 +53,9 @@ module.exports = {
       name: name,
       type: type,
       "colors-patterns": colorPatterns,
-      season: season,
-      style: style,
-      brand: brand,
+      seasons: seasons,
+      styles: styles,
+      brand: brand
     };
 
     const clothesCollection = await clothes();
@@ -89,8 +77,7 @@ module.exports = {
 
     if (updateInfo.matchedCount == 0 || updateInfo.modifiedCount == 0)
       throw "Error: Failed to update user";
-
-    return "success";
+    return {result: 'success'};
   },
   async getClothingItems(user) {
     let clothingItems = [];

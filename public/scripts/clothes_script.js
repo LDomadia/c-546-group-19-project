@@ -5,11 +5,17 @@ const nameDiv = document.getElementById('name-div')
 const nameInput = document.getElementById('name-input');
 const typeDiv = document.getElementById('type-div');
 const typeInput = document.getElementById('type-input');
+const sizeDiv = document.getElementById('size-div');
+const sizeInput = document.getElementById('size-input');
+const colorPatternDiv = document.getElementById('colors-patterns-div');
 const colorPatternList = document.getElementById('colors-patterns-list');
 const colorPatternInput = document.getElementById('colors-patterns-input');
 const colorPatternBtn = document.getElementById('colors-patterns-btn');
+const stylesDiv = document.getElementById('styles-div');
 const stylesList = document.getElementById('styles-list');
 const stylesInput = document.getElementById('styles-input');
+const brandDiv = document.getElementById('brand-div');
+const brandInput = document.getElementById('brand-input');
 const stylesBtn = document.getElementById('styles-btn');
 const submitBtn = document.getElementById('submit-btn');
 const form = document.getElementById('new-clothing-form');
@@ -53,13 +59,14 @@ if (stylesInput) {
 if (form) {
     form.addEventListener("submit", (event) => {
         try {
-            nameInput.classList.remove('error-input');
-            typeInput.classList.remove('error-input');
-            imageBtn.classList.remove('error-input');
+            let errorInputs = document.getElementsByClassName('error-input');
+            while (errorInputs.length > 0) {
+                errorInputs[0].classList.remove('error-input');
+            }
 
-            let errors = document.getElementsByClassName('error-message');
-            while (errors.length > 0) {
-                errors[0].remove();
+            let errorsMessages = document.getElementsByClassName('error-message');
+            while (errorsMessages.length > 0) {
+                errorsMessages[0].remove();
             }
 
             let nameValue = nameInput.value.trim();
@@ -88,6 +95,47 @@ if (form) {
                 typeInput.classList.add('error-input');
                 typeDiv.append(error);
             }
+
+            let sizeValue = sizeInput.value;
+            if (sizeValue) {
+                if (!sizeValue.trim()) {
+                    let error = document.createElement('p');
+                    error.classList.add('error-message');
+                    error.innerHTML = 'Size cannot contain empty spaces';
+                    sizeInput.classList.add('error-input');
+                    sizeDiv.append(error);
+                }
+            }
+
+            let brandValue = brandInput.value;
+            if (brandValue) {
+                if (!brandValue.trim()) {
+                    let error = document.createElement('p');
+                    error.classList.add('error-message');
+                    error.innerHTML = 'Brand Name cannot contain empty spaces';
+                    brandInput.classList.add('error-input');
+                    brandDiv.append(error);
+                }
+            }
+
+            let colorPatternValue = colorPatternInput.value;
+            if (colorPatternValue.trim()) {
+                let error = document.createElement('p');
+                error.classList.add('error-message');
+                error.innerHTML = 'Click "Add" to add Color/Pattern to Clothing Item';
+                colorPatternInput.classList.add('error-input');
+                colorPatternDiv.append(error);
+            }
+
+            let stylesValue = stylesInput.value;
+            if (stylesValue.trim()) {
+                let error = document.createElement('p');
+                error.classList.add('error-message');
+                error.innerHTML = 'Click "Add" to add Style to Clothing Item';
+                stylesInput.classList.add('error-input');
+                stylesDiv.append(error);
+            }
+
             if (document.getElementsByClassName('error-message').length > 0) throw 'Error';
         } catch (e) {
             event.preventDefault();

@@ -79,6 +79,8 @@ i {
 
 .error-message {
   color: red;
+  margin-top: 10px;
+  margin-bottom: 0;
 }
 
 .error-input {
@@ -129,4 +131,8 @@ i {
 
 .clothing-item-details {
   padding: 10px;
+}
+
+.clothing-item-type {
+  text-transform: capitalize;
 }

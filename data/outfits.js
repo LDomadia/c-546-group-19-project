@@ -1,5 +1,5 @@
 const mongoCollections = require("../config/mongoCollections");
-const validation = require("../validation");
+const validation = require("../validation/account_validation");
 const outfits = mongoCollections.outfits;
 const users = mongoCollections.users;
 const { ObjectId } = require("mongodb");

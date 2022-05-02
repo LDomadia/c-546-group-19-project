@@ -2,8 +2,8 @@ const express = require("express");
 const router = express.Router();
 const clothesData = require('../data/clothes');
 const multer = require('multer');
-
 const upload = multer({dest: 'uploads/'});
+const validate = require('../validation/clothes_validation');
 
 //Middleware
 router.use("/", (req, res, next) => {
@@ -50,11 +50,17 @@ router.route("/new").get(async (req, res) => {
 
   try {
     if (!data) throw 'Error: Nothing was entered';
-    if (!data.name) throw 'Error: Clothing Name is Required';
-    if (!data.type) throw 'Error: Type is Required';
-    if (!data.name.trim()) throw 'Error: Clothing Name is Required';
-    if (!data.type.trim() || data.type.trim() == 'null') throw 'Error: Type is Required';
-    if (!req.file) throw 'Error: Image is required';
+    data.name = validate.checkTextInput(data.name, 'Clothing Name');
+    req.file.filename = validate.checkFileInput(req.file.filename, 'Image');
+    data.type = validate.checkSelectInput(data.type, 'Type', ['top', 'bottom', 'dress', 'shoes', 'accessory', 'outerwear', 'socks']);
+    if (data.size) data.size = validate.checkTextInput(data.size, 'Size');
+    if (!data['colors-patterns']) data['colors-patterns'] = [];
+    data['colors-patterns'] = validate.checkListInput(data['colors-patterns'], 'Colors/Patterns');
+    if (!data.seasons) data.seasons = [];
+    data.seasons = validate.checkCheckboxInput(data.seasons, 'seasons', ['winter', 'spring', 'summer', 'fall']);
+    if (!data.styles) data.styles = [];
+    data.styles = validate.checkListInput(data.styles, 'Styles');
+    if (data.brand) data.brand = validate.checkTextInput(data.brand, 'Brand');
     
   } catch (e) {
     return res.status(400).render('pages/medium/clothingNew', {
@@ -67,18 +73,18 @@ router.route("/new").get(async (req, res) => {
   }
 
   try {
-    console.log(`image id: ${JSON.stringify(req.file)}`)
     let result = await clothesData.addNewClothes(
       data.name,
       req.file.filename,
       data.type,
+      data.size,
       data['colors-patterns'],
-      data.season,
+      data.seasons,
       data.styles,
       data.brand,
       req.session.user.username
     )
-    if (result == 'success') {
+    if (result.result == 'success') {
       res.status(200).redirect('/clothes');
     }
     else {
