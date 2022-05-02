@@ -201,7 +201,7 @@ module.exports = {
         }
       });
       if (updateClothing.matchedCount == 0 || updateClothing.modifiedCount == 0)
-      throw "Error: Failed to update Clothing Item";
+      throw "Error: Failed to update Clothing Item, no changes were made";
     }
     else {
       const updateClothing = await clothesCollection.updateOne({ _id: id}, {
