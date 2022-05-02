@@ -101,4 +101,26 @@ router.route("/new").get(async (req, res) => {
   }
 });
 
+router.route('/edit/:id').get(async (req, res) => {
+  try {
+    const clothingItem = await clothesData.getClothingItemById(req.params.id);
+    if (clothingItem) {
+      return res.status(200).render('pages/single/clothingEdit', {
+        title: 'Edit Clothing Item',
+        clothesPage: true,
+        stylesheet: "/public/styles/clothes_styles.css",
+        script: "/public/scripts/clothes_script.js",
+      });
+    }
+    else {
+      throw 'Error: Failed to find Clothing Item';
+    }
+  } catch (e) {
+    return res.status(404).render('pages/error/error', {
+      title: 'Page Not Found',
+      error: e
+    })
+  }
+});
+
 module.exports = router;

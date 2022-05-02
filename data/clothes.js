@@ -88,7 +88,11 @@ module.exports = {
       for (let id of userDocument.userClothes) {
         let clothesDocument = await clothesCollection.findOne({ _id: id });
         if (clothesDocument) clothingItems.push(clothesDocument);
+        else throw 'Error: Clothing item could not be found';
       }
+    }
+    else {
+      throw 'Error: User could not be found';
     }
     return clothingItems;
   },
@@ -100,6 +104,11 @@ module.exports = {
       if (clothesDocument) clothingItems.push(clothesDocument);
     }
     return clothingItems
+  },
+  async getClothingItemById(id) {
+    const clothesCollection = await clothes();
+    const clothingItem = await clothesCollection.findOne({ _id: id });
+    if (clothingItem) return clothingItem;
+    else throw 'Error: Clothing Item cannot be found';
   }
-
 };
