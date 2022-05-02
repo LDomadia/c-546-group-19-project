@@ -49,7 +49,6 @@ router.route("/new").get(async (req, res) => {
   const data = req.body;
 
   try {
-    console.log(data);
     if (!data) throw 'Error: Nothing was entered';
     data.name = validate.checkTextInput(data.name, 'Clothing Name');
     req.file.filename = validate.checkFileInput(req.file.filename, 'Image');
