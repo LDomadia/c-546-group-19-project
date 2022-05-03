@@ -14,3 +14,27 @@
 .outfit-card-details {
   padding: 10px;
 }
+
+.outfit-card-details p {
+  margin: 0;
+}
+
+.outfit-title {
+  font-weight: bold;
+  margin: 0;
+}
+
+.outfit-card-creator-likes {
+  margin: 10px 0;
+}
+
+.card-btn {
+  display: inline-block;
+  padding: 6px 10px;
+  border-radius: 5px;
+  background-color: #333;
+  color: white;
+  border: none;
+  font-size: 14px;
+  text-decoration: none;
+}

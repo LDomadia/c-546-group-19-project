@@ -20,7 +20,6 @@
             {{else}}
             <a href="/home">Home</a>
             {{/if}}
-
             {{#if clothesPage}}
             <a class="active" href="/clothes">My Clothes</a>
             {{else}}
@@ -48,16 +47,21 @@
             <a href="/calendar">Calendar</a>
             {{/if}}
  
-
-
             {{#if not_logged_in}}
+            <a href="/account/signup">Signup</a>
+            <a href="/account/login">Login</a>
+            {{else}}
+            <a href="/account/logout">Logout</a>
+            {{/if}}
+
+            {{!-- {{#if not_logged_in}}
             <a href="/account/signup">Signup</a>
             <a href="/account/login">Login</a>
             {{/if}}
 
             {{#unless not_logged_in}}
             <a href="/account/logout">Logout</a>
-            {{/unless}}
+            {{/unless}} --}}
         </div>
     </header>
     <main>
