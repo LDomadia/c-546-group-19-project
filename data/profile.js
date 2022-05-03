@@ -5,7 +5,7 @@ const { ObjectId } = require("mongodb");
 const bcrypt = require("bcryptjs");
 const saltRounds = 16;
 const isAlphanumeric = require("is-alphanumeric");
-const validation = require('../validation');
+const validation = require('../validation/account_validation');
 
 
 module.exports = {
