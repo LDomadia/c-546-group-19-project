@@ -93,6 +93,7 @@ footer {
 #signup-form label, #signup-form button {
   margin:2px 0 20px 10px;
   text-align: left;
+  font-weight: bold;
 }
 
 #signup-form h1{
@@ -118,6 +119,7 @@ footer {
 #login-form label, #login-form button {
   margin:2px 0 20px 10px;
   text-align: left;
+  font-weight: bold;
 }
 
 #login-form h1{

@@ -1,7 +1,6 @@
 const express = require("express");
 const router = express.Router();
 const data = require("../data/profile");
-
 const validation = require("../validation/account_validation")
 
 //Middleware

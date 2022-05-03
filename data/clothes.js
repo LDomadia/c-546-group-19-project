@@ -1,38 +1,37 @@
 const mongoCollections = require("../config/mongoCollections");
 const clothes = mongoCollections.clothes;
 const users = mongoCollections.users;
+const validate = require('../validation/clothes_validation');
+const { ObjectId } = require('mongodb');
 
 module.exports = {
-  async addNewClothes(name, image, type, colorPatterns, season, style, brand, user) {
-    if (!name) throw 'Error: Clothing Name is required';
-    if (!type) throw 'Error: Type is required';
-    if (!image) throw 'Error: Image is required';
-    if (!name.trim()) throw 'Error: Clothing Name is required';
-    if (!type.trim() || type.trim() == 'null') throw 'Error: Type is required';
+  async addNewClothingItem(name, image, type, size, colorPatterns, seasons, styles, brand, user) {
+    name = validate.checkTextInput(name, 'Clothing Name');
+    image = validate.checkFileInput(image, 'Image');
+    type = validate.checkSelectInput(type, 'Type', ['top', 'bottom', 'dress', 'shoes', 'accessory', 'outerwear', 'socks']);
+    if (size) size = validate.checkTextInput(size, 'Size');
+    if (!colorPatterns) colorPatterns = [];
+    colorPatterns = validate.checkListInput(colorPatterns, 'Colors/Patterns');
+    if (!seasons) seasons = [];
+    seasons = validate.checkCheckboxInput(seasons, 'seasons', ['winter', 'spring', 'summer', 'fall']);
+    if (!styles) styles = [];
+    styles = validate.checkListInput(styles, 'Styles');
+    if (brand) brand = validate.checkTextInput(brand, 'Brand');
 
     const usersCollection = await users();
     const userDocument = await usersCollection.findOne({username: user});
-    if (!userDocument) throw 'Error; User does not exists';
+    if (!userDocument) throw 'Error: User does not exists';
     let stats = userDocument.statistics;
 
-    if (type == 'Top') stats.type.tops += 1;
-    else if (type == 'Bottom') stats.type.bottoms += 1;
-    else if (type == 'Dress') stats.type.dresses += 1;
-    else if (type == 'Shoes') stats.type.shoes += 1;
-    else if (type == 'Accessory') stats.type.accessories += 1;
-    else if (type == 'Outerwear') stats.type.outerwear += 1;
-    else if (type == 'Socks') stats.type.socks += 1;
-
-    if (style) {
-      style = style.map(element => {
-        return element.toLowerCase().trim();
-      })
-    }
+    if (type == 'top') stats.type.tops += 1;
+    else if (type == 'bottom') stats.type.bottoms += 1;
+    else if (type == 'dress') stats.type.dresses += 1;
+    else if (type == 'shoes') stats.type.shoes += 1;
+    else if (type == 'accessory') stats.type.accessories += 1;
+    else if (type == 'outerwear') stats.type.outerwear += 1;
+    else if (type == 'socks') stats.type.socks += 1;
 
     if (colorPatterns) {
-      colorPatterns = colorPatterns.map(element => {
-        return element.toLowerCase().trim();
-      })
       colorPatterns.forEach(element => {
         if (stats['colors-patterns'][element]) 
           stats['colors-patterns'][element] += 1;
@@ -40,14 +39,9 @@ module.exports = {
           stats['colors-patterns'][element] = 1;
       });
     }
-    
+
     if (brand) {
-      brand = brand.trim();
-      let words = brand.split(' ');
-      words.forEach(word => {
-        word.charAt(0).toUpperCase();
-      })
-      brand = words.join(' ');
+      brand = brand.trim().toLowerCase();
     if (stats['brands'][brand]) 
       stats['brands'][brand] += 1;
     else 
@@ -58,9 +52,10 @@ module.exports = {
       image: image,
       name: name,
       type: type,
+      size: size,
       "colors-patterns": colorPatterns,
-      season: season,
-      style: style,
+      season: seasons,
+      style: styles,
       brand: brand
     };
 
@@ -68,32 +63,174 @@ module.exports = {
     const insertInfo = await clothesCollection.insertOne(newClothes);
     if (!insertInfo.acknowledged || !insertInfo.insertedId)
       throw "Error: Failed to add new Clothing Item";
-  
-    const updateInfo = await usersCollection.updateOne({username: user}, {
-      $push: {
-        userClothes: insertInfo.insertedId
-      },
-      $set: {
-        statistics: stats
-      }
-    });
 
-    if (updateInfo.matchedCount == 0 || updateInfo.modifiedCount == 0) 
-      throw 'Error: Failed to update user';
-    
-    return 'success';
+    const updateInfo = await usersCollection.updateOne(
+      { username: user },
+      {
+        $push: {
+          userClothes: insertInfo.insertedId,
+        },
+        $set: {
+          statistics: stats,
+        },
+      }
+    );
+
+    if (updateInfo.matchedCount == 0 || updateInfo.modifiedCount == 0)
+      throw "Error: Failed to update User";
+    return {result: 'success'};
   },
   async getClothingItems(user) {
     let clothingItems = [];
     const usersCollection = await users();
-    const userDocument = await usersCollection.findOne({username: user});
+    const userDocument = await usersCollection.findOne({ username: user });
     if (userDocument) {
       const clothesCollection = await clothes();
       for (let id of userDocument.userClothes) {
-        let clothesDocument = await clothesCollection.findOne({_id: id});
+        let clothesDocument = await clothesCollection.findOne({ _id: id });
         if (clothesDocument) clothingItems.push(clothesDocument);
+        else throw 'Error: Clothing item could not be found';
       }
     }
+    else {
+      throw 'Error: User could not be found';
+    }
     return clothingItems;
+  },
+  async getClothingbyIds(ids){
+    let clothingItems = []
+    const clothesCollection = await clothes();
+    for(let i = 0; i < ids.length; i++){
+      let clothesDocument = await clothesCollection.findOne({_id: ids[i]});
+      if (clothesDocument) clothingItems.push(clothesDocument);
+    }
+    return clothingItems
+  },
+  async getClothingItemById(id) {
+    const clothesCollection = await clothes();
+    if (!ObjectId.isValid(id)) throw 'Error: Clothing Item id is not valid';
+    id = ObjectId(id);
+    const clothingItem = await clothesCollection.findOne({ _id: id });
+    if (clothingItem) return clothingItem;
+    else throw 'Error: Clothing Item cannot be found';
+  },
+  async updateClothingItem(id, name, image, type, size, colorPatterns, seasons, styles, brand, user) {
+    if (!ObjectId.isValid(id)) throw 'Error: Clothing Item id is not valid';
+    id = ObjectId(id);
+    name = validate.checkTextInput(name, 'Clothing Name');
+    if (image) image = validate.checkFileInput(image, 'Image');
+    type = validate.checkSelectInput(type, 'Type', ['top', 'bottom', 'dress', 'shoes', 'accessory', 'outerwear', 'socks']);
+    if (size) size = validate.checkTextInput(size, 'Size');
+    if (!colorPatterns) colorPatterns = [];
+    colorPatterns = validate.checkListInput(colorPatterns, 'Colors/Patterns');
+    if (!seasons) seasons = [];
+    seasons = validate.checkCheckboxInput(seasons, 'seasons', ['winter', 'spring', 'summer', 'fall']);
+    if (!styles) styles = [];
+    styles = validate.checkListInput(styles, 'Styles');
+    if (brand) brand = validate.checkTextInput(brand, 'Brand');
+
+    const clothesCollection = await clothes();
+    const oldClothing = await clothesCollection.findOne({ _id: id });
+    if (!oldClothing) throw 'Error: Clothing Item does not exists';
+
+    const usersCollection = await users();
+    const userDocument = await usersCollection.findOne({username: user});
+    if (!userDocument) throw 'Error: User does not exists';
+    let stats = userDocument.statistics;
+    let oldStats = stats;
+
+    if (oldClothing.type !== type) {
+      if (oldClothing.type == 'top') stats.type.tops -= 1;
+      else if (oldClothing.type == 'bottom') stats.type.bottoms -= 1;
+      else if (oldClothing.type == 'dress') stats.type.dresses -= 1;
+      else if (oldClothing.type == 'shoes') stats.type.shoes -= 1;
+      else if (oldClothing.type == 'accessory') stats.type.accessories -= 1;
+      else if (oldClothing.type == 'outerwear') stats.type.outerwear -= 1;
+      else if (oldClothing.type == 'socks') stats.type.socks -= 1;
+
+      if (type == 'top') stats.type.tops += 1;
+      else if (type == 'bottom') stats.type.bottoms += 1;
+      else if (type == 'dress') stats.type.dresses += 1;
+      else if (type == 'shoes') stats.type.shoes += 1;
+      else if (type == 'accessory') stats.type.accessories += 1;
+      else if (type == 'outerwear') stats.type.outerwear += 1;
+      else if (type == 'socks') stats.type.socks += 1;
+    }
+
+    oldClothing['colors-patterns'].forEach(element => {
+      if (!colorPatterns || !colorPatterns.includes(element)) {
+        stats['colors-patterns'][element] -= 1;
+        if (stats['colors-patterns'][element] == 0) delete stats['colors-patterns'][element];
+      }
+    })
+    if (colorPatterns) {
+      colorPatterns.forEach(element => {
+        element = element.toLowerCase();
+        if (!oldClothing['colors-patterns'].includes(element)) {
+          if (stats['colors-patterns'][element]) 
+            stats['colors-patterns'][element] += 1;
+          else 
+            stats['colors-patterns'][element] = 1;
+        }
+      })
+    }
+
+    if (oldClothing.brand != brand.toLowerCase()) {
+      stats['brands'][oldClothing.brand] -= 1;
+      if (stats['brands'][oldClothing.brand] == 0) delete stats['brands'][oldClothing.brand];
+      if (brand) {
+        brand = brand.toLowerCase();
+        if (stats['brands'][brand]) 
+          stats['brands'][brand] += 1;
+        else 
+          stats['brands'][brand] = 1;
+      }
+    }
+
+    if (image) {
+      const updateClothing = await clothesCollection.updateOne({ _id: id }, {
+        $set: {
+          image: image,
+          name: name,
+          type: type,
+          size: size,
+          "colors-patterns": colorPatterns,
+          season: seasons,
+          style: styles,
+          brand: brand
+        }
+      });
+      if (updateClothing.matchedCount == 0 || updateClothing.modifiedCount == 0)
+      throw "Error: Failed to update Clothing Item, no changes were made";
+    }
+    else {
+      const updateClothing = await clothesCollection.updateOne({ _id: id}, {
+        $set: {
+          name: name,
+          type: type,
+          size: size,
+          "colors-patterns": colorPatterns,
+          season: seasons,
+          style: styles,
+          brand: brand
+        }
+      });
+      if (updateClothing.matchedCount == 0 || updateClothing.modifiedCount == 0)
+      throw "Error: Failed to update Clothing Item";
+    }
+
+    const updateInfo = await usersCollection.updateOne(
+      { username: user },
+      {
+        $set: {
+          statistics: stats,
+        },
+      }
+    );
+
+    if (updateInfo.matchedCount == 0)
+      throw "Error: Failed to find User";
+
+    return {result: 'success'};
   }
 };

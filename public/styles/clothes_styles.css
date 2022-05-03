@@ -37,7 +37,7 @@ li {
   margin: 0 4px;
 }
 
-i {
+p {
   color: #333;
   font-size: 16px;
 }
@@ -79,6 +79,8 @@ i {
 
 .error-message {
   color: red;
+  margin-top: 10px;
+  margin-bottom: 0;
 }
 
 .error-input {
@@ -101,6 +103,22 @@ i {
 }
 
 /* DISPLAY CLOTHING ITEMS */
+dl {
+  display: grid;
+  grid-template-columns: max-content auto;
+  margin: 0;
+}
+
+dt {
+  grid-column-start: 1;
+  padding: 10px 0;
+}
+
+dd {
+  grid-column-start: 2;
+  padding: 10px 0;
+}
+
 .clothing-item-card {
   display: inline-block;
   margin: 20px;
@@ -127,6 +145,26 @@ i {
   margin: 0;
 }
 
+.clothing-item-brand {
+  color: rgb(50, 95, 140);
+  font-weight: bold;
+  margin: 0;
+}
+
 .clothing-item-details {
   padding: 10px;
+}
+
+.capitalize {
+  text-transform: capitalize;
+}
+
+.card-btn {
+  padding: 6px 10px;
+  border-radius: 5px;
+  background-color: #333;
+  color: white;
+  border: none;
+  font-size: 14px;
+  text-decoration: none;
 }

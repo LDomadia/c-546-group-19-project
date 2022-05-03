@@ -95,9 +95,7 @@ router.post("/signup", async (req, res) => {
   }
 
   try {
-    res.status(200).render("pages/medium/login", {
-      title: "Digital Closet",
-    });
+    return res.redirect("/account/login");
   } catch (e) {
     res.status(500);
   }

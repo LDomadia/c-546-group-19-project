@@ -8,9 +8,10 @@
             <img class="clothing-item-image" alt="{{name}}" src="/uploads/{{image}}">
             <div class="clothing-item-details">
                 <h3 class="clothing-item-title">{{name}}</h3>
-                <p>Type: {{type}}</p>
-                <button>Edit</button>
-                <button>Delete</button>
+                <p class="capitalize">Type: {{type}}</p>
+                <a class="card-btn" href="clothes/view/{{_id}}">View</a>
+                <a class="card-btn" href="clothes/edit/{{_id}}">Edit</a>
+                <a class="card-btn">Delete</a>
             </div>
         </div>
     {{/each}}

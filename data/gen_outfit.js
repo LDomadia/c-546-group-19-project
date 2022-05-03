@@ -4,7 +4,7 @@ const clothes = mongoCollections.clothes;
 //handle string errors and trim
 const errors_string = function(str, name){
 
-    if(!str){
+    if(!str || str==null){
         throw `${name} is not initialized`
     }
   
@@ -23,7 +23,7 @@ const errors_string = function(str, name){
   }
 
   const errors_strlist = function(lst, name){
-    if(!lst){
+    if(!lst || lst==null){
         throw `${name} is not initialized`
     }
   
@@ -60,7 +60,9 @@ function matchClothPreferences(prefs, cloth){
 
   //score calculated as: total similarities*control
   for(let i = 0; i < tags.length; i++){
-    let sim = prefs[tags[i]].sort().filter(val => cloth[tags[i]].sort().includes(val)).length;
+    let score_prefs = prefs[tags[i]].map(ele => ele.toLowerCase()).sort()
+    let score_cloth = cloth[tags[i]].map(ele => ele.toLowerCase()).sort()
+    let sim = score_prefs.filter(val => score_cloth.includes(val)).length;
     score += sim*tags_control[i];
   }
 
@@ -110,6 +112,8 @@ async function generateOutfit(colorPatterns, season, style, threshold=1.5){
     }
     let scoreClothes = {}
     let bestClothes = {}
+    let finalClothes = []
+    let finalClothesindx = 0
 
     //finally get the scores of each type of clothing based on preferences and take the max
     for(let i = 0; i < cloth_names.length; i++){
@@ -125,9 +129,15 @@ async function generateOutfit(colorPatterns, season, style, threshold=1.5){
       if(bestClothes[cloth_names[i]].score < threshold){
         bestClothes[cloth_names[i]] = undefined
       }
+      //finally makes a frontend applicable list
+      else{
+        finalClothes[finalClothesindx] = bestClothes[cloth_names[i]]
+        finalClothes[finalClothesindx]["cloth_name"] = cloth_names[i]
+        finalClothesindx++
+      }
     }
 
-    return bestClothes
+    return finalClothes
 }
 
 

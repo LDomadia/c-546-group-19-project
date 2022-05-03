@@ -13,6 +13,21 @@ app.use(express.urlencoded({ extended: true }));
 app.engine("handlebars", exphbs.engine({ defaultLayout: "main" }));
 app.set("view engine", "handlebars");
 
+var hbs = exphbs.create({});
+hbs.handlebars.registerHelper('ifIn', function(elem, list, options) {
+  if(list.indexOf(elem) > -1) {
+    return options.fn(this);
+  }
+  return options.inverse(this);
+});
+
+hbs.handlebars.registerHelper('equals', function(elem, target, options) {
+  if(elem === target) {
+    return options.fn(this);
+  }
+  return options.inverse(this);
+});
+
 app.use(
   session({
     name: "AuthCookie",

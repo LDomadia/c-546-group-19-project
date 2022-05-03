@@ -1,0 +1,63 @@
+<link rel="stylesheet" href="/public/styles/clothes_styles.css">
+<link rel="stylesheet" href="/public/styles/outfit_styles.css">
+<h1>Add new outfit</h1>
+<div>
+    <div class="error-message">{{error}}</div>
+    <br>
+    <form id="new-outfit-form" method="POST" action="/outfits/new">
+    <div class="form-div">
+        <p class="outfit-err" tabindex="0" hidden></p>
+        {{#each clothingItems}}
+        <div class="clothing-item-card">
+            <img class="clothing-item-image" alt="{{name}}" src="/uploads/{{image}}">
+            <div class="clothing-item-details">
+                <h3 class="clothing-item-title">{{name}}</h3>
+                <p class="clothing-type">Type: {{type}}</p>
+               <label class ="add-label"><input type="checkbox" class="add-box">
+               Add to outfit</label>
+                <br>
+            </div>
+        </div>
+        {{/each}}
+    </div>
+    <div class="form-div">
+        <p class="form-err" tabindex="0" hidden></p>
+        <div id="name-div">
+            <label class="input-label" for="name-input">Outfit Name *</label>
+            <input id="name-input" name="name" type="text" required>
+        </div>
+        <br>
+        <div>
+            <label class="input-label">Seasons</label>
+            <input id="winter-input" type="checkbox" name="season[]" value="Winter">
+            <label for="winter-input">Winter</label>
+            <input id="spring-input" type="checkbox" name="season[]" value="Spring">
+            <label for="spring-input">Spring</label>
+            <input id="summer-input" type="checkbox" name="season[]" value="Summer">
+            <label for="summer-input">Summer</label>
+            <input id="fall-input" type="checkbox" name="season[]" value="Fall">
+            <label for="fall-input">Fall</label>
+        </div>
+        <br>
+        <div>
+            <label class="input-label" for="styles-input">Styles</label>
+            <input id="styles-input" type="text">
+            <button id="styles-btn" class="add-btn" type="button">Add</button><br>
+            <ul id="styles-list"></ul>
+        </div>
+        <br>
+    <div><label class="input-label">Public</label>
+    <input type="checkbox" class="public-box" name="public" value="Public">
+    </div>
+    </div><br>
+    <button id="submit-btn" type="submit">Save</button>
+    </form>
+    <br>
+    <a href="/outfits">Go back</a>
+<script
+      src="https://code.jquery.com/jquery-3.5.1.js"
+      integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
+      crossorigin="anonymous">
+    </script>
+    <script src='/public/scripts/outfits_new.js'></script>
+</div>

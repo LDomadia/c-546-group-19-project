@@ -35,10 +35,7 @@ module.exports = {
             throw "Error: password must have at least eight characters";
         return password;
     },
-
-
-
-
+  
     checkId(id) {
         if (!id) throw "must provide s"
         if (typeof id !== 'string') throw 'invalid string input';
