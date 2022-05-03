@@ -2,7 +2,6 @@ const express = require("express");
 const session = require("express-session");
 const app = express();
 const static = express.static(__dirname + "/public");
-
 const configRoutes = require("./routes");
 const exphbs = require("express-handlebars");
 
@@ -14,15 +13,15 @@ app.engine("handlebars", exphbs.engine({ defaultLayout: "main" }));
 app.set("view engine", "handlebars");
 
 var hbs = exphbs.create({});
-hbs.handlebars.registerHelper('ifIn', function(elem, list, options) {
-  if(list.indexOf(elem) > -1) {
+hbs.handlebars.registerHelper("ifIn", function (elem, list, options) {
+  if (list.indexOf(elem) > -1) {
     return options.fn(this);
   }
   return options.inverse(this);
 });
 
-hbs.handlebars.registerHelper('equals', function(elem, target, options) {
-  if(elem === target) {
+hbs.handlebars.registerHelper("equals", function (elem, target, options) {
+  if (elem === target) {
     return options.fn(this);
   }
   return options.inverse(this);

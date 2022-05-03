@@ -1,6 +1,0 @@
-{
-  "mongoConfig": {
-    "serverUrl": "mongodb+srv://admin:qoKTB7w65LJVqhCZ@cs546.qmhwz.mongodb.net/test",
-    "database": "CS546_group19_final"
-  }
-}
