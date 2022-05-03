@@ -137,7 +137,6 @@ module.exports = {
     const userDocument = await usersCollection.findOne({username: user});
     if (!userDocument) throw 'Error: User does not exists';
     let stats = userDocument.statistics;
-    let oldStats = stats;
 
     if (oldClothing.type !== type) {
       if (oldClothing.type == 'top') stats.type.tops -= 1;
@@ -165,7 +164,7 @@ module.exports = {
     })
     if (colorPatterns) {
       colorPatterns.forEach(element => {
-        element = element.toLowerCase();
+        element = element.trim().toLowerCase();
         if (!oldClothing['colors-patterns'].includes(element)) {
           if (stats['colors-patterns'][element]) 
             stats['colors-patterns'][element] += 1;
@@ -175,13 +174,13 @@ module.exports = {
       })
     }
 
-    if (oldClothing.brand != brand.toLowerCase()) {
+    if (oldClothing.brand != brand.trim().toLowerCase()) {
       if (oldClothing.brand) {
         stats['brands'][oldClothing.brand] -= 1;
         if (stats['brands'][oldClothing.brand] == 0) delete stats['brands'][oldClothing.brand];
       }
       if (brand) {
-        brand = brand.toLowerCase();
+        brand = brand.trim().toLowerCase();
         if (stats['brands'][brand]) 
           stats['brands'][brand] += 1;
         else 

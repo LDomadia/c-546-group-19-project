@@ -26,8 +26,10 @@ function checkSelectInput(input, inputName, acceptableValues) {
 function checkListInput(input, inputName) {
     if (!input) throw `Error: ${inputName} is empty`;
     if (!Array.isArray(input)) throw `Error: ${inputName} must be an array`;
+    input = input.map(element => {
+        return element.trim().toLowerCase();
+    })
     input.forEach(element => {
-        element = element.trim().toLowerCase();
         if (!element) throw `Error: ${inputName} contains empty elements`;
     });
     return input;
