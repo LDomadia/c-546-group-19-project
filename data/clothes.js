@@ -176,8 +176,10 @@ module.exports = {
     }
 
     if (oldClothing.brand != brand.toLowerCase()) {
-      stats['brands'][oldClothing.brand] -= 1;
-      if (stats['brands'][oldClothing.brand] == 0) delete stats['brands'][oldClothing.brand];
+      if (oldClothing.brand) {
+        stats['brands'][oldClothing.brand] -= 1;
+        if (stats['brands'][oldClothing.brand] == 0) delete stats['brands'][oldClothing.brand];
+      }
       if (brand) {
         brand = brand.toLowerCase();
         if (stats['brands'][brand]) 
