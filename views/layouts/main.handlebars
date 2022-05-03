@@ -1,7 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="utf-8">
+    
     <link rel="stylesheet" href="/public/styles/main_styles.css">
     {{#if stylesheet}}
         <link rel="stylesheet" href="{{stylesheet}}">
@@ -9,35 +11,44 @@
     <link rel="icon" type="image/x-icon" href="/public/images/favicon.ico">
     <title>{{title}}</title>
 </head>
+
 <body>
     <header>
         <div class="topnav">
             {{#if homePage}}
-                <a class="active" href="/home">Home</a>
+            <a class="active" href="/home">Home</a>
             {{else}}
-                <a href="/home">Home</a>
+            <a href="/home">Home</a>
             {{/if}}
-            
+
             {{#if clothesPage}}
-                <a class="active" href="/clothes">My Clothes</a>
+            <a class="active" href="/clothes">My Clothes</a>
             {{else}}
-                <a href="/clothes">My Clothes</a>
+            <a href="/clothes">My Clothes</a>
             {{/if}}
             {{#if outfitsPage}}
-                <a class="active" href="/outfits">My Outfits</a>
+            <a class="active" href="/">My Outfits</a>
             {{else}}
-                <a href="/outfits">My Outfits</a>
+            <a href="/">My Outfits</a>
             {{/if}}
             {{#if statsPage}}
-                <a class="active" href="/">Statistics</a>
+            <a class="active" href="/">Statistics</a>
             {{else}}
-                <a href="/stats">Statistics</a>
+            <a href="/stats">Statistics</a>
             {{/if}}
             {{#if profPage}}
-                <a class="active" href="/profile">Profile</a>
+            <a class="active" href="/profile">Profile</a>
             {{else}}
-                <a href="/profile">Profile</a>
+            <a href="/profile">Profile</a>
             {{/if}}
+
+            {{#if calPage}}
+            <a class="active" href="/calendar">Calendar</a>
+            {{else}}
+            <a href="/calendar">Calendar</a>
+            {{/if}}
+ 
+
 
             {{#if not_logged_in}}
             <a href="/account/signup">Signup</a>
@@ -50,11 +61,12 @@
         </div>
     </header>
     <main>
-    {{{body}}}
+        {{{body}}}
     </main>
     {{#if script}}
-        <script src="{{script}}"></script>
+    <script src="{{script}}"></script>
     {{/if}}
     <script src="https://kit.fontawesome.com/288bd44038.js" crossorigin="anonymous"></script>
 </body>
+
 </html>

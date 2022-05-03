@@ -13,13 +13,14 @@
             <dd>
                 {{#if stores.length}}
                 <ul> {{#each stores}}
-                    <li>    <a href="{{this.website}}"> {{this.name}} </a> </li>
+                    {{!-- https://www.freecodecamp.org/news/how-to-use-html-to-open-link-in-new-tab/ --}}
+                    <li> <a href="{{this.website}}" target="_blank" rel="noreferrer noopener"> {{this.name}} </a> </li>
                     {{/each}}
                 </ul>
                 {{/if}}
             </dd>
 
-            {{#if err}}
+            {{#if noStore}}
             <dd>N/A</dd>
             {{/if}}
 
@@ -27,77 +28,56 @@
     </div>
 
 
-    <div id="edit_profile">
-
+    <div class="profile">
 
         <h2>Edit Profile</h2>
 
-        
-            {{#if submitE}}
-            <p>{{error}}</p>
-            {{/if}}
+        {{#if E}}
+        <p class="error">{{error}}</p>
+        {{/if}}
+        <p class="error" id="error" hidden></p>
 
 
-        <form id="cuser" class="cuser" method="POST" action="/profile">
-
-            {{#if userE}}
-            <p>{{error}}</p>
-            {{/if}}
-
-            <label for="change_username">Change Username</label><br />
-            <input type="text" name="username" id="change_username" placeholder="Enter username">
-            <button type="submit">submit</button>
-        </form>
-
-        <form id="cpassword" class="cpassword" method="POST" action="/profile">
-
-            {{#if PasswordE}}
-            <p>{{error}}</p>
-            {{/if}}
-
-            <label for="change_password">Change Password</label><br />
-            <input type="password" name="password" id="change_password" placeholder="Enter password">
-            <button type="submit">submit</button>
-        </form>
+        <h3>Change Bio</h3>
 
 
         <form id="bio" method="POST" action="/profile">
-
-            {{#if bioE}}
-            <p>{{error}}</p>
-            {{/if}}
-
-            <label for="bio_term">Bio</label> <br />
+            <label for="bio_term">Change Bio</label> <br />
             <textarea id="bio_term" name="bio" rows="4" cols="50" placeholder="Enter bio"> </textarea>
             <button type="submit">submit</button>
         </form>
 
         <h3>Add Your Favorite Stores!</h3>
 
-
+        {{!-- to add stores --}}
         <form id="stores" method="POST" action="/profile">
 
-            {{#if storeE}}
-            <p>{{error}}</p>
-            {{/if}}
 
             <label for="store_name">Store Name</label><br />
             <input type="text" id="store_name" name="storename" placeholder="enter store name">
             <br />
 
-            
+
             <label for="store_link">Store Link </label><br />
-            <input type="text" id="store_link" name="storelink" placeholder ="enter store link">
+            <input type="text" id="store_link" name="storelink" placeholder="enter store link">
             <button type="submit">submit</button>
         </form>
+
+
+
     </div>
 
-    <div id="edit_profile">
+    <h2>Manage Account</h2>
 
+    <br />
+    <a href="/profile/password">Click here to change password</a>
+    <br />
+    <a href="/profile/delete">Click here to delete account</a>
 
-        <h2>Manage Account</h2>
-  
-        <br />
-        <a href="/profile/delete">Click here to delete account</a>
 
 </article>
+
+
+<script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
+    crossorigin="anonymous"></script>
+<script src='/public/scripts/profile.js'></script>

@@ -180,4 +180,5 @@ router.get("/logout", async (req, res) => {
   return res.redirect("/home");
 });
 
+
 module.exports = router;

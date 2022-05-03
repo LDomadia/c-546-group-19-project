@@ -5,6 +5,7 @@ const outfitsRoutes = require("./outfits");
 const statsRoutes = require("./stats");
 const accountRoutes = require("./account");
 const profileRoutes = require("./profile");
+const calRoutes = require("./calendar")
 
 const constructorMethod = (app) => {
   app.use("/account", accountRoutes);
@@ -14,6 +15,7 @@ const constructorMethod = (app) => {
   app.use("/outfits", outfitsRoutes);
   app.use("/profile", profileRoutes);
   app.use("/stats", statsRoutes);
+  app.use("/calendar",calRoutes);
 
   app.use("/", (req, res) => {
     res.redirect("/home");

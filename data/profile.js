@@ -87,14 +87,49 @@ module.exports = {
         return modifieduser;
     },
 
+    
+  async checkPassword(username, password) {
+
+    username = validation.checkUsername(username);
+    password = validation.checkPassword(password);
+    //check for alphnumeric
+    //https://stackoverflow.com/questions/4434076/best-way-to-alphanumeric-check-in-javascript
+
+
+    username = username.toLowerCase();
+
+    const userCollection = await users();
+    const user = await userCollection.findOne({
+      username: { $regex: "^" + username + "$", $options: "i" },
+    });
+    if (!user) throw "Either the username or password is invalid";
+
+    let compare = false;
+
+    try {
+      compare = await bcrypt.compare(password, user.hashedPassword);
+    } catch (e) {
+      throw "Error: in comparing hashed password and inputted password";
+    }
+
+    if (compare) {
+      return user;
+    } else throw "Password is incorrect";
+  },
+
     //change password
 
-    async changePassword(username, password) {
+    async changePassword(username, password,password2) {
         //check id 
         //see lab6 
 
+      
         username = validation.checkUsername(username);
         password = validation.checkPassword(password);
+        password2 = validation.checkPassword(password2);
+
+        if(password!==password2) throw "passwords do not match"
+
         const userCollection = await users();
         //id=validation.checkId(id);
 
@@ -103,6 +138,8 @@ module.exports = {
         });
 
         let hashedPassword = await bcrypt.hash(password, 10);
+
+
         if (!user) {
             throw "invalid username";
         }
@@ -113,6 +150,16 @@ module.exports = {
             user.stores = null;
         }
 
+
+        let compare = false;
+
+        try {
+          compare = await bcrypt.compare(password, user.hashedPassword);
+        } catch (e) {
+          throw "Error: in comparing hashed password and inputted password";
+        }
+    
+        if (compare) throw "password should not be the same as before";
 
         let updateUser = {
             username: user.username,

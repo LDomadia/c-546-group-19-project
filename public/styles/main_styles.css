@@ -25,6 +25,9 @@ h1 {
     padding: 10px;
   }
 
+  .error{
+    color:red;
+  }
 h2 {
     font-family: "Helvetica";
     font-style: italic;
@@ -133,7 +136,6 @@ dt {
   font-weight: bold ;
 }
 
-
-#edit_profile label{
+.profile label{
   font-weight:bold;
 }

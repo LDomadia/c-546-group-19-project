@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <link rel="stylesheet" href="public/styles/calendar_styles.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet" />
+</head>
+
+<body>
+
+  <br/>
+  <br/>
+
+  <h1>{{title}}</h1>
+  
+
+  <p> Click on a day to add and view outfits!</p>
+  <br/>
+  
+
+  {{!-- https://www.youtube.com/watch?v=o1yMqPyYeAo&t=2142s&ab_channel=CodeAndCreate --}}
+
+  <div class="container">
+    <div class="calendar">
+      <div class="month">
+        <button class="fas fa-angle-left prev"></button>
+        <div class="date">
+          <h1></h1>
+          <p></p>
+        </div>
+        <button class="fas fa-angle-right next"></button>
+      </div>
+
+      <div class="weekdays">
+        <div>Sun</div>
+        <div>Mon</div>
+        <div>Tue</div>
+        <div>Wed</div>
+        <div>Thu</div>
+        <div>Fri</div>
+        <div>Sat</div>
+      </div>
+      <div class="days"></div>
+    </div>
+  </div>
+
+  <script src="public/scripts/calendar.js"></script>
+</body>
+
+</html>
