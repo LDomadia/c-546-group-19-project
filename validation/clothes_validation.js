@@ -29,6 +29,8 @@ function checkListInput(input, inputName) {
     input = input.map(element => {
         return element.trim().toLowerCase();
     })
+    const setInput = [...new Set(input)];
+    if (setInput.length != input.length) throw `Error: ${inputName} contains duplicates`;
     input.forEach(element => {
         if (!element) throw `Error: ${inputName} contains empty elements`;
     });

@@ -127,6 +127,17 @@ if (form) {
                 }
             }
 
+            let setColorPatterns = [...new Set(colorPatternList.children)];
+            let listColorPatterns = [...new Array(colorPatternList.children)]
+            if (setColorPatterns != 0 && listColorPatterns != 0)
+            if (setColorPatterns.length != listColorPatterns.length) {
+                let error = document.createElement('p');
+                error.classList.add('error-message');
+                error.innerHTML = 'Colors/Patterns cannot contain duplicates';
+                colorPatternInput.classList.add('error-input');
+                colorPatternDiv.append(error);
+            }
+
             let colorPatternValue = colorPatternInput.value;
             if (colorPatternValue.trim()) {
                 let error = document.createElement('p');
@@ -134,6 +145,17 @@ if (form) {
                 error.innerHTML = 'Click "Add" to add Color/Pattern to Clothing Item';
                 colorPatternInput.classList.add('error-input');
                 colorPatternDiv.append(error);
+            }
+
+            let setStyles = [...new Set(stylesList.children)];
+            let listStyles = [...new Array(stylesList.children)];
+            if (setStyles != 0 && listStyles != 0)
+            if (setStyles.length != listStyles.length) {
+                let error = document.createElement('p');
+                error.classList.add('error-message');
+                error.innerHTML = 'Styles cannot contain duplicates';
+                stylesInput.classList.add('error-input');
+                stylesDiv.append(error);
             }
 
             let stylesValue = stylesInput.value;
