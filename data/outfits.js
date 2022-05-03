@@ -140,6 +140,15 @@ module.exports = {
 
 
 
+  },
+  async getAllOutfits() {
+    const outfitsCollection = await outfits();
+    if (outfitsCollection) {
+      const publicOutfits = await outfitsCollection.find({ status: 'public' }, {
+        $orderby: { likes: 1 }
+      }).toArray();
+      if (publicOutfits) return publicOutfits;
+    }
+    throw 'Error: Failed to load outfits';
   }
-
 };

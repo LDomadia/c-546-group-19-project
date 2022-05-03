@@ -3,5 +3,13 @@
     <p class="left">
         Digital Closet is a web application that makes organizing a user's wardrobe easy and efficient!
     </p>
-
+    {{#each outfits}}
+        <div class="outfit-card">
+            {{!-- The image carousel here --}}
+            <div class="outfit-card-details">
+                <h3>{{outfitName}}</h3>
+                <p>{{creator}}</p>
+            </div>
+        </div>
+    {{/each}}
 </article>
