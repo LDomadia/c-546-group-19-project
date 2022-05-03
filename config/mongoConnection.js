@@ -7,6 +7,7 @@ const settings = {
   },
 };
 
+settings.mongoConfig.serverUrl = settings.mongoConfig.serverUrl.trim();
 const mongoConfig = settings.mongoConfig;
 
 let _connection = undefined;
