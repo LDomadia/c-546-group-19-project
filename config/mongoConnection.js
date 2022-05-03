@@ -1,5 +1,13 @@
-const MongoClient = require('mongodb').MongoClient;
-const settings = require('./settings');
+const MongoClient = require("mongodb").MongoClient;
+require("dotenv").config();
+const settings = {
+  mongoConfig: {
+    serverUrl: process.env.MONGO_URL,
+    database: "CS546_group19_final",
+  },
+};
+
+settings.mongoConfig.serverUrl = settings.mongoConfig.serverUrl.trim();
 const mongoConfig = settings.mongoConfig;
 
 let _connection = undefined;
@@ -16,5 +24,5 @@ module.exports = {
   },
   closeConnection: () => {
     _connection.close();
-  }
+  },
 };
