@@ -3,7 +3,6 @@ const validation = require("../validation/account_validation");
 const clothesData = require('../data/clothes');
 const outfits = mongoCollections.outfits;
 const users = mongoCollections.users;
-const clothes = mongoCollections.clothes;
 const { ObjectId } = require("mongodb");
       
 const errors_string = function (str, name) {
@@ -149,10 +148,15 @@ module.exports = {
       const publicOutfits = await outfitsCollection.find({ status: 'public' }, {
         $orderby: { likes: 1 }
       }).toArray();
+      // console.log(publicOutfits);
       if (publicOutfits) {
         for (let outfit of publicOutfits) {
           for (let clothingId of outfit.clothes) {
-             console.log(clothingId) // right now, I see images being stored, not the id
+            //  console.log(clothingId) // right now, I see images being stored, not the id
+            if (ObjectId.isValid(clothingId.toString())) console.log('Valid!');
+            // const clothingItem = await clothesData.getClothingItemById(clothingId.toString());
+            // if (clothingItem) console.log(clothingItem)
+            // else throw 'Error: Failed to find Clothing Item';
           }
         }
       }

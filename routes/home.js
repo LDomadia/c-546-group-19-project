@@ -23,7 +23,8 @@ router.get("/", async (req, res) => {
       title: "Digital Closet",
       homePage: true,
       outfits: publicOutfits,
-      stylesheet: '/public/styles/outfit_card_styles.css'
+      stylesheet: '/public/styles/outfit_card_styles.css',
+      script: '/public/scripts/home_script.js'
     });
   } catch (e) {
     res.sendStatus(500);

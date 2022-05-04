@@ -107,9 +107,9 @@ module.exports = {
     return clothingItems
   },
   async getClothingItemById(id) {
-    const clothesCollection = await clothes();
     if (!ObjectId.isValid(id)) throw 'Error: Clothing Item id is not valid';
     id = ObjectId(id);
+    const clothesCollection = await clothes();
     const clothingItem = await clothesCollection.findOne({ _id: id });
     if (clothingItem) return clothingItem;
     else throw 'Error: Clothing Item cannot be found';
