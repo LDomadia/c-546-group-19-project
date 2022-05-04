@@ -154,14 +154,12 @@ module.exports = {
           outfit['clothingData'] = []
           for (let clothingId of outfit.clothes) {
              console.log(clothingId)
-            // if (ObjectId.isValid(clothingId.toString())) console.log('Valid!');
             const clothingItem = await clothesData.getClothingItemById(clothingId.toString());
             if (clothingItem) outfit['clothingData'].push(clothingItem)
             else throw 'Error: Failed to find Clothing Item';
           }
         }
       }
-      console.log(publicOutfits);
       return publicOutfits;
     }
     throw 'Error: Failed to load outfits';
