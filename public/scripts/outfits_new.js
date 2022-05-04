@@ -58,8 +58,7 @@
       .parent()
       .parent()
       .siblings(".clothing-item-image")
-      .attr("src")
-      .split("/")[2];
+      .attr("id");
     let type = $(this).parent().siblings(".clothing-type").text();
     if ($(this).is(":checked")) {
       outfitsArr.push(image_name);
