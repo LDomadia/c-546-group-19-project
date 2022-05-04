@@ -155,10 +155,6 @@ dd {
   padding: 10px;
 }
 
-.capitalize {
-  text-transform: capitalize;
-}
-
 .card-btn {
   padding: 6px 10px;
   border-radius: 5px;
