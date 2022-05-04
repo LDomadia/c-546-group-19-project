@@ -46,3 +46,9 @@
   font-size: 14px;
   text-decoration: none;
 }
+
+.error-message {
+  color: red;
+  margin-top: 10px;
+  margin-bottom: 0;
+}
