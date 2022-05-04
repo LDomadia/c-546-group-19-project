@@ -32,7 +32,7 @@ router.get("/", async (req, res) => {
       homePage: true,
       stylesheet: '/public/styles/outfit_card_styles.css',
       script: '/public/scripts/home_script.js',
-      error: e
+      error: 'Error: Failed to load outfits'
     });
   }
 });
