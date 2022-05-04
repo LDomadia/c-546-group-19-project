@@ -26,8 +26,12 @@ function checkSelectInput(input, inputName, acceptableValues) {
 function checkListInput(input, inputName) {
     if (!input) throw `Error: ${inputName} is empty`;
     if (!Array.isArray(input)) throw `Error: ${inputName} must be an array`;
+    input = input.map(element => {
+        return element.trim().toLowerCase();
+    })
+    const setInput = [...new Set(input)];
+    if (setInput.length != input.length) throw `Error: ${inputName} contains duplicates`;
     input.forEach(element => {
-        element = element.trim().toLowerCase();
         if (!element) throw `Error: ${inputName} contains empty elements`;
     });
     return input;

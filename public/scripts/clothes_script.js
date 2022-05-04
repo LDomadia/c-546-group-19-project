@@ -127,6 +127,23 @@ if (form) {
                 }
             }
 
+            let setColorPatterns = new Array();
+            let listColorPatterns = colorPatternList.children;
+            for (let i = 0; i < listColorPatterns.length; i++) {
+                const chip = listColorPatterns[i].innerText.trim().toLowerCase();
+                if (setColorPatterns.includes(chip)) {
+                    let error = document.createElement('p');
+                    error.classList.add('error-message');
+                    error.innerHTML = 'Colors/Patterns cannot contain duplicates';
+                    colorPatternInput.classList.add('error-input');
+                    colorPatternDiv.append(error);
+                    break;
+                }
+                else {
+                    setColorPatterns.push(chip);
+                }
+            }
+
             let colorPatternValue = colorPatternInput.value;
             if (colorPatternValue.trim()) {
                 let error = document.createElement('p');
@@ -134,6 +151,23 @@ if (form) {
                 error.innerHTML = 'Click "Add" to add Color/Pattern to Clothing Item';
                 colorPatternInput.classList.add('error-input');
                 colorPatternDiv.append(error);
+            }
+
+            let setStyles = new Array();
+            let listStyles = stylesList.children;
+            for (let i = 0; i < listStyles.length; i++) {
+                const chip = listStyles[i].innerText.trim().toLowerCase();
+                if (setStyles.includes(chip)) {
+                    let error = document.createElement('p');
+                    error.classList.add('error-message');
+                    error.innerHTML = 'Styles cannot contain duplicates';
+                    stylesInput.classList.add('error-input');
+                    stylesDiv.append(error);
+                    break;
+                }
+                else {
+                    setStyles.push(chip);
+                }
             }
 
             let stylesValue = stylesInput.value;

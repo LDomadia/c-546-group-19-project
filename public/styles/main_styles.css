@@ -149,3 +149,7 @@ dt {
 .profile label{
   font-weight:bold;
 }
+
+.capitalize {
+  text-transform: capitalize;
+}
