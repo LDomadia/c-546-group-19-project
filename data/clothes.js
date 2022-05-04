@@ -289,7 +289,7 @@ module.exports = {
           image: im,
         });
         if (!item) throw "Error: could not find id with given image ${im}";
-        return item;
+        return item._id;
       })
     );
     return clothesIdArr;

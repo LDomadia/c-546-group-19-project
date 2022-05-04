@@ -35,7 +35,7 @@ const errors_clothes = function (lst, name) {
     throw `${name} is not initialized`;
   }
 
-  return lst.map((a) => errors_clothing(a._id));
+  return lst.map((a) => errors_clothing(a));
 };
 
 const errors_clothing = function (id, name) {
