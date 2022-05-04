@@ -1,7 +1,48 @@
 <h1 class="right">Digital Closet</h1>
 <article class="main">
-    <p class="left">
+    {{#if error}}
+    <p class="error-message">{{error}}</p>
+    {{else}}
+    <p>
         Digital Closet is a web application that makes organizing a user's wardrobe easy and efficient!
     </p>
+    {{#each outfits}}
+        <div class="outfit-card">
+            <!-- Carousel wrapper -->
+            <div id="a{{_id}}" class="carousel carousel-dark slide" data-mdb-ride="carousel" data-mdb-interval="false">
 
+            <!-- Inner -->
+            <div class="carousel-inner">
+                {{#each clothingData}}
+                <!-- Single Item -->
+                <div class="carousel-item">
+                    <img class="outfit-card-image d-block w-100" src="/uploads/{{image}}" alt="{{name}}">
+                </div>
+                {{/each}}
+            </div>
+
+            <!-- Controls -->
+            <button class="carousel-control-prev" type="button" data-mdb-target="#a{{_id}}" data-mdb-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-mdb-target="#a{{_id}}" data-mdb-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
+            </div>
+            <!-- Carousel wrapper -->
+            <div class="outfit-card-details">
+                <h3 class="outfit-title">{{outfitName}}</h3>
+                <div class="outfit-card-creator-likes">
+                    <p>{{creator}}</p>
+                    <p>{{likes}} likes</p>
+                </div>
+                <a class="card-btn">View</a>
+                <a class="card-btn">Like</a>
+                <a class="card-btn">Save</a>
+            </div>
+        </div>
+    {{/each}}
+    {{/if}}
 </article>

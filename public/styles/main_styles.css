@@ -1,23 +1,29 @@
+*:focus {
+  border: 1px solid blue !important;
+}
+
 body {
-    width: auto;
+    /* width: auto; */
     font-family: "Courier New";
-    padding: 1em;
+    /* padding: 1em; */
+    padding: 0;
+    margin: 0;
 
     background-color: #f5eef5;
   
-    /* Full height */
+    /* Full height
     height: 100%;
   
     /* Center and scale the image nicely */
-    background-position: center;
+    /* background-position: center;
     background-repeat: no-repeat;
-    background-size: cover;
+    background-size: cover; */
 
 }
 
 h1 {
     font-family: "Helvetica";
-    transform: translate(10px, 5px);
+    /* transform: translate(10px, 5px); */
 }
 
 .left {
@@ -41,6 +47,10 @@ header{
     color: #b80659;
 }
 
+main {
+  padding: 0 1em;
+}
+
 footer {
     text-align: right;
     color: #d813b7;
@@ -53,7 +63,7 @@ footer {
     overflow: hidden;
 
     /* fill top part of screen*/
-    position: absolute;
+    /* position: absolute; */
     top: 0;
     right: 0;
     left: 0;
