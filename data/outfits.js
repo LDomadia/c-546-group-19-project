@@ -151,12 +151,13 @@ module.exports = {
       // console.log(publicOutfits);
       if (publicOutfits) {
         for (let outfit of publicOutfits) {
+          outfit['clothingData'] = []
           for (let clothingId of outfit.clothes) {
-            //  console.log(clothingId) // right now, I see images being stored, not the id
-            if (ObjectId.isValid(clothingId.toString())) console.log('Valid!');
-            // const clothingItem = await clothesData.getClothingItemById(clothingId.toString());
-            // if (clothingItem) console.log(clothingItem)
-            // else throw 'Error: Failed to find Clothing Item';
+             console.log(clothingId)
+            // if (ObjectId.isValid(clothingId.toString())) console.log('Valid!');
+            const clothingItem = await clothesData.getClothingItemById(clothingId.toString());
+            if (clothingItem) outfit['clothingData'].push(clothingItem)
+            else throw 'Error: Failed to find Clothing Item';
           }
         }
       }

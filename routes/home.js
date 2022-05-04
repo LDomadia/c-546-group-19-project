@@ -19,7 +19,7 @@ router.get("/", async (req, res) => {
   try {
     const publicOutfits = await outfitsData.getAllOutfits(); 
 
-    res.render("pages/single/index", {
+    res.status(200).render("pages/single/index", {
       title: "Digital Closet",
       homePage: true,
       outfits: publicOutfits,
@@ -27,7 +27,13 @@ router.get("/", async (req, res) => {
       script: '/public/scripts/home_script.js'
     });
   } catch (e) {
-    res.sendStatus(500);
+    res.status(404).render("pages/single/index", {
+      title: "Digital Closet",
+      homePage: true,
+      stylesheet: '/public/styles/outfit_card_styles.css',
+      script: '/public/scripts/home_script.js',
+      error: e
+    });
   }
 });
 
