@@ -24,6 +24,14 @@
   margin: 0;
 }
 
+.outfit-card-image {
+  height: 250px;
+  width: 250px;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  object-fit: cover;
+}
+
 .outfit-card-creator-likes {
   margin: 10px 0;
 }
