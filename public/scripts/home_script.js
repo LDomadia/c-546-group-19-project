@@ -1,6 +1,5 @@
-const carousels = document.getElementsByClassName('carousel-inner');
+const carouselImages = document.getElementsByClassName('carousel-inner');
 
-for (let i = 0; i < carousels.length; i++) {
-    carousels[i].firstElementChild.classList.add('active');
-    // console.log(carousels[i]);
+for (let i = 0; i < carouselImages.length; i++) {
+    carouselImages[i].firstElementChild.classList.add('active');
 }

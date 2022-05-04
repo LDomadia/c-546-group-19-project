@@ -112,12 +112,10 @@ dl {
 dt {
   width: 150px;
   grid-column-start: 1;
-  padding: 10px 0;
 }
 
 dd {
   grid-column-start: 2;
-  padding: 10px 0;
 }
 
 .clothing-item-card {
