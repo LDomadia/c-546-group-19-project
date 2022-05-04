@@ -2,7 +2,6 @@ const mongoCollections = require("../config/mongoCollections");
 const validation = require("../validation/account_validation");
 const outfits = mongoCollections.outfits;
 const users = mongoCollections.users;
-const clothing = mongoCollections.clothes;
 const { ObjectId } = require("mongodb");
 
 const errors_string = function (str, name) {
@@ -31,14 +30,30 @@ const errors_strlist = function (lst, name) {
   return lst.map((a) => errors_string(a));
 };
 
+const errors_clothes = function (lst, name) {
+  if (!lst || lst == null) {
+    throw `${name} is not initialized`;
+  }
+
+  return lst.map((a) => errors_clothing(a._id));
+};
+
+const errors_clothing = function (id, name) {
+  if (!id || id == null) {
+    throw `${name} is not initialized`;
+  }
+
+  if (!ObjectId.isValid(id)) throw `${name} must be a valid mongo id`;
+
+  id = ObjectId(id);
+  return id;
+};
+
 module.exports = {
   async getOutfitItems(username) {
     username = validation.checkUsername(username);
     const usersCollection = await users();
     const userDocument = await usersCollection.findOne({ username: username });
-
-    if (!userDocument) throw "Error: could not find outfits for this user";
-
     return userDocument.userOutfits;
   },
   async addNewOutfits(creator, clothes, status, outfitName, season, style) {
@@ -73,11 +88,8 @@ module.exports = {
 
     season = errors_strlist(season, "season");
     style = errors_strlist(style, "style");
-    clothes = errors_strlist(clothes, "clothes");
+    clothes = errors_clothes(clothes, "clothes");
 
-    if (clothes.length < 2)
-      throw "Error: you must need at least two clothing items to create an outfit";
-    const usersCollection = await users();
     const outfitsCollection = await outfits();
     let newOutfits = {
       creator: creator,
@@ -95,6 +107,7 @@ module.exports = {
 
     const newId = insertInfo.insertedId.toString();
 
+    const usersCollection = await users();
     const updateInfo = await usersCollection.updateOne(
       { username: creator },
       {
@@ -109,6 +122,7 @@ module.exports = {
 
     return newId;
   },
+
   async addClothesToOutfit(outfit_id, cloth_ids) {
     outfit_id = errors_string(outfit_id, "outfit_id");
     cloth_ids = errors_strlist(cloth_ids, "cloth_ids");
@@ -139,22 +153,5 @@ module.exports = {
     }
 
     return outfit_id;
-  },
-
-  async getClothingIdsByImages(creator, imagesArr) {
-    username = validation.checkUsername(creator);
-    imagesArr = errors_strlist(imagesArr, "imagesArr");
-    const clothingCollection = await clothing();
-
-    let clothesIdArr = [];
-    for (const clothing_image of imagesArr) {
-      let item = await clothingCollection.findOne({
-        username: creator,
-      });
-      //console.log(item);
-      clothesIdArr.push(item._id);
-    }
-
-    return clothesIdArr;
   },
 };

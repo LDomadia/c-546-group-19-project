@@ -134,10 +134,6 @@ router.route("/new").get(async (req, res) => {
         msg: "You need atleast two clothing items before you can make an outfit",
       });
     }
-    for (const item of clothingItems) {
-      item._id = item._id.toString();
-    }
-
     res.status(200).render("pages/medium/outfitNew", {
       title: "Add new outfit",
       outfitsPage: true,
@@ -154,18 +150,22 @@ router.route("/new").get(async (req, res) => {
 
 router.route("/new").post(async (req, res) => {
   //console.log(req.body);
+
+  //need error checking
   try {
     let name = req.body.name;
-    let clothes = req.body.outfits;
+    let images = req.body.outfits;
     let seasons = req.body.season ? req.body.season : [];
     let status = req.body.public ? "public" : "private";
     let styles = req.body.styles ? req.body.styles : [];
 
-    if (!clothes || clothes.length < 2)
+    if (!images || images.length < 2)
       throw "Error: not enough clothes to make outfit";
+
+    let clothesIdArr = await clothesData.getClothingIdsByImages(images);
     let newOutfit = await outfitsData.addNewOutfits(
       req.session.user.username,
-      clothes,
+      clothesIdArr,
       status,
       name,
       seasons,
