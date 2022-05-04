@@ -23,8 +23,8 @@ form {
 }
 
 ul {
-  margin: 0;
-  padding: 0;
+  margin: 0 !important;
+  padding: 0 !important;
 }
 
 li {
@@ -34,7 +34,7 @@ li {
   border-radius: 30px;
   color: #333;
   padding: 4px 10px;
-  margin: 0 4px;
+  /* margin: 0 4px; */
 }
 
 p {
@@ -110,6 +110,7 @@ dl {
 }
 
 dt {
+  width: 150px;
   grid-column-start: 1;
   padding: 10px 0;
 }

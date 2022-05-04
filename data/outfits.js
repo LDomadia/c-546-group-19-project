@@ -1,7 +1,9 @@
 const mongoCollections = require("../config/mongoCollections");
 const validation = require("../validation/account_validation");
+const clothesData = require('../data/clothes');
 const outfits = mongoCollections.outfits;
 const users = mongoCollections.users;
+const clothes = mongoCollections.clothes;
 const { ObjectId } = require("mongodb");
       
 const errors_string = function (str, name) {
@@ -147,7 +149,15 @@ module.exports = {
       const publicOutfits = await outfitsCollection.find({ status: 'public' }, {
         $orderby: { likes: 1 }
       }).toArray();
-      if (publicOutfits) return publicOutfits;
+      if (publicOutfits) {
+        for (let outfit of publicOutfits) {
+          for (let clothingId of outfit.clothes) {
+             console.log(clothingId) // right now, I see images being stored, not the id
+          }
+        }
+      }
+      console.log(publicOutfits);
+      return publicOutfits;
     }
     throw 'Error: Failed to load outfits';
   }

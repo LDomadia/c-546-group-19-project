@@ -10,21 +10,26 @@
             <div id="a{{_id}}" class="carousel slide" data-mdb-ride="carousel" data-mdb-interval="false">
 
             <!-- Inner -->
-            <div class="carousel-inner">
-                <!-- Single item -->
+            <div class="carousel-inner active">
+                {{#each clothes}}
+                <div class="carousel-item active">
+                    <img class="outfit-card-image d-block w-100" src="/uploads/{{this}}" alt="{{this}}">
+                </div>
+                {{/each}}
+                {{!-- <!-- Single item -->
                 <div class="carousel-item active">
                 <img src="https://mdbcdn.b-cdn.net/img/Photos/Slides/img%20(15).webp" class="outfit-card-image d-block w-100" alt="Sunset Over the City"/>
                 </div>
 
                 <!-- Single item -->
-                <div class="carousel-item">
+                <div class="carousel-item active">
                 <img src="https://mdbcdn.b-cdn.net/img/Photos/Slides/img%20(22).webp" class="outfit-card-image d-block w-100" alt="Canyon at Nigh"/>
                 </div>
 
                 <!-- Single item -->
                 <div class="carousel-item">
                 <img src="https://mdbcdn.b-cdn.net/img/Photos/Slides/img%20(23).webp" class="outfit-card-image d-block w-100" alt="Cliff Above a Stormy Sea"/>
-                </div>
+                </div> --}}
             </div>
             <!-- Inner -->
 
