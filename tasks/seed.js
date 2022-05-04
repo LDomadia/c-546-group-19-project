@@ -62,7 +62,7 @@ const main = async () => {
 
     //comments
     let comments_info = {
-        commentor : ["artistconfidence","giantdelighted","ollieomit","oraclelame","graduateaboard","venturetriangle","bobmajor","metalshipwreck","noisyhundred","pitysparkles"],
+        commentor : ["artistconfidence","artistconfidence","artistconfidence","artistconfidence","giantdelighted","giantdelighted","ollieomit","ollieomit","ollieomit","ollieomit"],
         text : ["wow this looks amazing!", "im not sure about this..", "Ratio + L", "Amazing 😍😍", "wheres the hat??", "yoooooo@#(@(!23", "Hatrick Pill would love this", "The outfit looks great, but the shoes look terrifying", "nice comment", "love this outfit!!"]
     }
     
