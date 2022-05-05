@@ -26,13 +26,15 @@ router.route("/").get(async (req, res) => {
     });
 
   try {
-    let outfitItems = await outfitsData.getOutfitItems(
+    let outfitItems = await outfitsData.getUserOutfits(
       req.session.user.username
     );
     res.render("pages/results/outfits", {
       title: "My Outfits",
       outfitsPage: true,
-      outfitItems: outfitItems,
+      stylesheet: "/public/styles/outfit_card_styles.css",
+      script: "/public/scripts/outfits.js",
+      outfits: outfitItems,
     });
   } catch (e) {
     res.status(500).render("pages/results/outfits", {
