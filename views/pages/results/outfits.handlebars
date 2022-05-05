@@ -5,6 +5,9 @@
     {{#if error}}
     <p class="error-message">{{error}}</p>
     {{else}}
+    {{#if msg}}
+    <p class="success-message">{{msg}}</p>
+    {{/if}}
     {{#each outfits}}
         <div class="outfit-card">
             <!-- Carousel wrapper -->

@@ -174,17 +174,22 @@ router.route("/new").post(async (req, res) => {
       styles
     );
     if (!newOutfit) throw "Error: could not create new outfit";
-    //get all outfitd=s
-    let outfitItems = 1;
+    let outfitItems = await outfitsData.getUserOutfits(
+      req.session.user.username
+    );
     res.render("pages/results/outfits", {
       title: "My Outfits",
       outfitsPage: true,
-      outfitItems: outfitItems,
+      stylesheet: "/public/styles/outfit_card_styles.css",
+      script: "/public/scripts/outfits.js",
+      outfits: outfitItems,
       msg: "Outfit has successfuly been added!",
     });
   } catch (e) {
     res.status(500).render("pages/results/outfits", {
       title: "My Outfits",
+      stylesheet: "/public/styles/outfit_card_styles.css",
+      script: "/public/scripts/outfits.js",
       outfitsPage: true,
       error: e,
     });
