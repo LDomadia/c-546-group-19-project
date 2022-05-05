@@ -12,8 +12,9 @@ router.use("/", (req, res, next) => {
 });
 
 // GET /
-router.get("/", async (req, res) => {
+router.route("/").get(async (req, res) => {
   try {
+    console.log("test123")
    return res.render("pages/single/calendar", {title:"Calendar"});
   } catch (e) {
     return res.sendStatus(500);
