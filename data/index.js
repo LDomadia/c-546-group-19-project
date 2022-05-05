@@ -4,6 +4,7 @@ const commentsData = require("./comments");
 const clothesData = require("./clothes");
 const outfitsData = require("./outfits");
 const accountData = require("./account");
+const detailedData = require("./detailed");
 
 module.exports = {
   //export list
@@ -11,5 +12,6 @@ module.exports = {
   comments: commentsData,
   clothes: clothesData,
   outfits: outfitsData,
-  account: accountData
+  account: accountData,
+  detailed:detailedData
 };

@@ -1,0 +1,46 @@
+<h1 class="right">Outfit Details</h1>
+<article class="main">
+    {{#if error}}
+    <p class="error-message">{{error}}</p>
+    {{/if}}
+
+    {{!-- image,username,likes,comments--}}
+
+    {{#each clothingData}}
+    <!-- Single Item -->
+    <img src="/uploads/{{image}}" alt="{{name}}">
+    {{/each}}
+
+    {{!-- https://stackoverflow.com/questions/1713048/how-to-style-dt-and-dd-so-they-are-on-the-same-line --}}
+    <dl >
+        <dt> Creator </dt>
+        <dd>{{creator}}</dd>
+
+        <dt> Number of Likes </dt>
+        <dd> {{likes}}</dd>
+        {{!-- TODO should update each time user presses like --}}
+
+        {{!-- TODO check comments length = 0 --}}
+
+        <dt>Comments</dt>
+        <dd>
+            {{#if condition}}
+            <p>No Comments Yet</p>
+            {{else}}
+            <ul>
+                {{#each comments}}
+                <li>{{this.commenter}}: {{this.text}}</li>
+                {{/each}}
+            </ul>
+            {{/if}}
+        </dd>
+    </dl>
+
+
+    {{!--like button;;save button;;add comment button --}}
+    <a class="btn">Like</a>
+    <a class="btn">Save</a>
+    <a class="btn">Comment</a>
+
+
+</article>
