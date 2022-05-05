@@ -68,12 +68,14 @@
     <main>
         {{{body}}}
     </main>
-    {{#if script}}
-    <script src="{{script}}"></script>
-    {{/if}}
+    <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
+    crossorigin="anonymous"></script>
     <script src="https://kit.fontawesome.com/288bd44038.js" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/4.0.0/mdb.min.js"></script>
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    {{#if script}}
+    <script src="{{script}}"></script>
+    {{/if}}
 </body>
 
 </html>
