@@ -166,7 +166,6 @@ module.exports = {
         for (let outfit of publicOutfits) {
           outfit['clothingData'] = []
           for (let clothingId of outfit.clothes) {
-             console.log(clothingId)
             const clothingItem = await clothesData.getClothingItemById(clothingId.toString());
             if (clothingItem) outfit['clothingData'].push(clothingItem)
             else throw 'Error: Failed to find Clothing Item';

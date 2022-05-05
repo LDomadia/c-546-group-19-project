@@ -276,4 +276,13 @@ router.route("/view/:id").get(async (req, res) => {
   }
 });
 
+router.route("/delete/:id").delete(async (req, res) => {
+  try {
+    console.log('id: ' + req.params.id);
+    return res.status(200).json({ result: 'success' });
+  } catch (e) {
+    return res.status(500).json({ result: 'error' });
+  }
+});
+
 module.exports = router;
