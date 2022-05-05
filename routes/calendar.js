@@ -18,6 +18,16 @@ router.get("/", async (req, res) => {
   } catch (e) {
     return res.sendStatus(500);
   }
+}).post(async (req, res) => {
+  let data = req.body
+
+  console.log(data)
+
+  try {
+   return res.render("pages/single/calendar", {title:"Calendar"});
+  } catch (e) {
+    return res.sendStatus(500);
+  }
 });
 
 module.exports = router;
