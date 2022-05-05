@@ -1,6 +1,6 @@
 const mongoCollections = require("../config/mongoCollections");
 const validation = require("../validation/account_validation");
-const clothesData = require('../data/clothes');
+const clothesData = require("../data/clothes");
 const outfits = mongoCollections.outfits;
 const users = mongoCollections.users;
 const { ObjectId } = require("mongodb");
@@ -91,6 +91,8 @@ module.exports = {
     style = errors_strlist(style, "style");
     clothes = errors_clothes(clothes, "clothes");
 
+    style = style.map((s) => s.trim().toLowerCase());
+
     const outfitsCollection = await outfits();
     let newOutfits = {
       creator: creator,
@@ -158,23 +160,30 @@ module.exports = {
   async getAllOutfits() {
     const outfitsCollection = await outfits();
     if (outfitsCollection) {
-      const publicOutfits = await outfitsCollection.find({ status: 'public' }, {
-        $orderby: { likes: 1 }
-      }).toArray();
+      const publicOutfits = await outfitsCollection
+        .find(
+          { status: "public" },
+          {
+            $orderby: { likes: 1 },
+          }
+        )
+        .toArray();
       // console.log(publicOutfits);
       if (publicOutfits) {
         for (let outfit of publicOutfits) {
-          outfit['clothingData'] = []
+          outfit["clothingData"] = [];
           for (let clothingId of outfit.clothes) {
-             console.log(clothingId)
-            const clothingItem = await clothesData.getClothingItemById(clothingId.toString());
-            if (clothingItem) outfit['clothingData'].push(clothingItem)
-            else throw 'Error: Failed to find Clothing Item';
+            console.log(clothingId);
+            const clothingItem = await clothesData.getClothingItemById(
+              clothingId.toString()
+            );
+            if (clothingItem) outfit["clothingData"].push(clothingItem);
+            else throw "Error: Failed to find Clothing Item";
           }
         }
       }
       return publicOutfits;
     }
-    throw 'Error: Failed to load outfits';
-  }
+    throw "Error: Failed to load outfits";
+  },
 };
