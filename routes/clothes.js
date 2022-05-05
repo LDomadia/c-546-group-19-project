@@ -30,6 +30,7 @@ router.route("/").get(async (req, res) => {
       clothesPage: true,
       clothingItems: clothingItems,
       stylesheet: "/public/styles/clothes_styles.css",
+      script: 'public/scripts/clothes_all.js'
     });
   } catch (e) {
     res.status(500).render("pages/results/clothings", {
