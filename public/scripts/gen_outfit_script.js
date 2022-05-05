@@ -10,6 +10,7 @@ const stylesInput = document.getElementById('styles-input');
 const stylesBtn = document.getElementById('styles-btn');
 const submitBtn = document.getElementById('submit-btn');
 const form = document.getElementById('generate-outfit-form');
+const chips = document.getElementsByClassName('chip-btn')
 
 
 if (colorPatternBtn) {
@@ -40,6 +41,12 @@ if (stylesInput) {
             addToList(stylesInput, stylesList, 'styles[]');
         }
     });
+}
+
+if (chips) {
+    for (let i = 0; i < chips.length; i++) {
+        chips[i].addEventListener('click', removeFromList);
+    }
 }
 
 if (form) {
