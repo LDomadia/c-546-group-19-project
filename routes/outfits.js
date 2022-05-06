@@ -112,7 +112,7 @@ router
         throw "Error: Failed to Generate Outfit";
       }
     } catch (e) {
-      return res.status(500).render("pages/medium/outfitGenerated", {
+      return res.status(400).render("pages/medium/outfitGenerated", {
         title: "Generate Outfit",
         outfitsPage: true,
         stylesheet: "/public/styles/clothes_styles.css",
@@ -130,7 +130,9 @@ router.route("/new").get(async (req, res) => {
       req.session.user.username
     );
     if (clothingItems.length < 2) {
-      let outfitItems = 1;
+      let outfitItems = await outfitsData.getUserOutfits(
+        req.session.user.username
+      );
       return res.render("pages/results/outfits", {
         title: "My Outfits",
         outfitsPage: true,
@@ -187,7 +189,48 @@ router.route("/new").post(async (req, res) => {
       msg: "Outfit has successfuly been added!",
     });
   } catch (e) {
-    res.status(500).render("pages/results/outfits", {
+    res.status(400).render("pages/results/outfits", {
+      title: "My Outfits",
+      stylesheet: "/public/styles/outfit_card_styles.css",
+      script: "/public/scripts/outfits.js",
+      outfitsPage: true,
+      error: e,
+    });
+  }
+});
+
+router.route("/edit/:id").get(async (req, res) => {
+  let id;
+  try {
+    id = outfitValidation.checkId(req.params.id);
+    let clothingItems = await clothesData.getClothingItems(
+      req.session.user.username
+    );
+    //change this to a redirect to outfits page, use session for msg
+    if (clothingItems.length < 2) {
+      let outfitItems = await outfitsData.getUserOutfits(
+        req.session.user.username
+      );
+      let currentOutfit = await outfitsData.getUserOutfitById(
+        req.session.user.username,
+        id
+      );
+      return res.render("pages/results/outfits", {
+        title: "My Outfits",
+        outfitsPage: true,
+        outfitItems: outfitItems,
+        msg: "You need more clothing items to edit this outfit",
+        outfit: currentOutfit,
+      });
+    }
+
+    res.status(200).render("pages/single/outfitEdit", {
+      title: "Edit Outfit",
+      outfitsPage: true,
+      clothingItems: clothingItems,
+    });
+  } catch (e) {
+    res.status(400).render("pages/results/outfits", {
       title: "My Outfits",
       stylesheet: "/public/styles/outfit_card_styles.css",
       script: "/public/scripts/outfits.js",

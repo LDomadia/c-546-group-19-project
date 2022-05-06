@@ -197,9 +197,11 @@ module.exports = {
         for (let outfit of publicOutfits) {
           outfit["clothingData"] = [];
           for (let clothingId of outfit.clothes) {
-            const clothingItem = await clothesData.getClothingItemById(clothingId.toString());
-            if (clothingItem) outfit['clothingData'].push(clothingItem)
-            else throw 'Error: Failed to find Clothing Item';
+            const clothingItem = await clothesData.getClothingItemById(
+              clothingId.toString()
+            );
+            if (clothingItem) outfit["clothingData"].push(clothingItem);
+            else throw "Error: Failed to find Clothing Item";
           }
         }
       }
@@ -207,7 +209,6 @@ module.exports = {
     }
     throw "Error: Failed to load outfits";
   },
-
 
   async delUserOutfit(username, outfitId) {
     username = validation.checkUsername(username);
@@ -235,6 +236,18 @@ module.exports = {
       throw `Could not delete band with id of ${id}`;
     }
     return `${deletionInfo.value.outfitName} has been successfully deleted!`;
+  },
+  async getUserOutfitById(username, outfitId) {
+    username = validation.checkUsername(username);
+    outfitId = ObjectId(outfitValidation.checkId(outfitId));
+    const outfitsCollection = await outfits();
+    const outfit = await outfitsCollection.findOne({
+      creator: username,
+      _id: outfitId,
+    });
+    if (!outfit) "Error: could not find outfit";
+
+    return outfit;
   },
   async makeAllOutfitsPublic(username) {
     username = validation.checkUsername(username);
