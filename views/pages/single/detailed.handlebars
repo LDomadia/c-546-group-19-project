@@ -1,12 +1,5 @@
 <h1 class="right">Outfit Details</h1>
 <article class="main">
-    {{#if error}}
-    <p class="error-message">{{error}}</p>
-    {{/if}}
-
-    <p class = "error-message" id = "error"></p>
-
-
 
     {{!-- image,username,likes,comments--}}
 
@@ -32,12 +25,19 @@
 
         {{!-- TODO check comments length = 0 --}}
 
+        {{#if error}}
+        <p class="error">{{error}}</p>
+        {{/if}}
+
+        <p class="error" id="error"></p>
+
+
         <dt>Comments</dt>
         <dd id="no_comments"></dd>
         <dd id="comments"></dd>
     </dl>
 
-    
+
     <form id="commentForm" method="POST" action="/detailed/comment">
         <label for="comment_term">Comment</label> <br />
         <textarea id="comment_term" name="comment" rows="4" cols="50" placeholder="Enter comment"> </textarea>

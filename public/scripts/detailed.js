@@ -11,6 +11,55 @@
         errorDiv = $('#error'),
         noComment = $('#no_comments')
 
+    function checkString(string) {
+        if (!string) throw "must provide text input"
+        if (typeof string !== 'string') throw 'invalid string input';
+        if (string.trim().length === 0)
+            throw 'string cannot be an empty string or just spaces';
+        return string;
+    }
+
+
+    //get likes
+    var getLikes = {
+        method: "GET",
+        //https://stackoverflow.com/questions/1696429/get-the-current-url-but-without-the-http-part-bookmarklet
+        //equivalent to geting /detailed/:id/comment
+        url: window.location.pathname + '/likes',
+    }
+    $.ajax(getLikes).then(function (responseMessage) {
+        //get likes
+        let likes = responseMessage.likes;
+        number_likes.text = likes;
+        number_likes.show;
+    })
+
+    //copy 
+    likeButton.click(function (event) {
+        console.log("here");
+        event.preventDefault();
+        //dont do anything if user already likes the outfit
+
+        var addLike = {
+            method: "POST",
+            //https://stackoverflow.com/questions/1696429/get-the-current-url-but-without-the-http-part-bookmarklet
+            //equivalent to geting /detailed/:id/comment
+            url: window.location.pathname + '/likes',
+        }
+
+        $.ajax(addLike).then(function (responseMessage) {
+            //get likes
+
+            let likes = responseMessage.likes;
+            console.log(likes);
+            number_likes.text = likes;
+            number_likes.show;
+        })
+
+    })
+
+
+
     //get all comments
 
 
@@ -31,7 +80,6 @@
 
 
         if (comments.length == 0) {
-            console.log("no comments");
             commentList.hide();
             let p = $("<p></p>");
             let s = "no comments yet. be the first one to comment!"
@@ -55,13 +103,20 @@
     })
 
 
-
+    //add comment
     commentForm.submit(function (event) {
         event.preventDefault();
 
         var comment = commentInput.val();
+        try {
+            comment = checkString(comment);
+        }
+        catch (e) {
+            errorDiv.empty();
+            errorDiv.show();
+            errorDiv.text(e);
 
-        //console.log(comment);
+        }
 
         //deal with commenter in routes
 
@@ -75,19 +130,27 @@
         }
 
         $.ajax(requestConfig).then(function (responseMessage) {
-            console.log(responseMessage.comment);
-            //display comments
+            if (responseMessage.success) {
 
-            //return singular new comment
-            let newComment = responseMessage.comment;
+                //console.log(responseMessage.comment);
+                //display comments
 
-            let l = $("<li></li>");
-            let s = newComment.commenter + ": " + newComment.text
-            l.append(s);
-            //need to empty
-            commentList.append(l);
-            commentList.show();
-            noComment.hide();
+                //return singular new comment
+                let newComment = responseMessage.comment;
+
+                let l = $("<li></li>");
+                let s = newComment.commenter + ": " + newComment.text
+                l.append(s);
+                //need to empty
+                commentList.append(l);
+                commentList.show();
+                noComment.hide();
+                errorDiv.hide();
+
+            }
+            else{
+
+            }
 
         })
 

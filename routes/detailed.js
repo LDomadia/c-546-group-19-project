@@ -47,6 +47,7 @@ router.get("/:id", async (req, res) => {
       creator: outfit.creator,
       likes: outfit.likes,
       comments: outfit.comments,
+      title: "Outfit Details",
       stylesheet: '/public/styles/detailed_styles.css',
       script: '/public/scripts/detailed.js',
       condition: condition
@@ -70,16 +71,10 @@ router.get("/:id/comment", async (req, res) => {
   try {
     //get all the comments
     let comments = await data.get_all_comments(req.params.id);
-    console.log(comments);
     return res.json({ success: true, comments: comments });
   }
   catch (e) {
-    return res.status(500).render("pages/error/error", {
-      title: "Error",
-      stylesheet: '/public/styles/outfit_card_styles.css',
-      error: e,
-      code: 500
-    });
+    return res.json({error:e});
 
   }
 
@@ -104,13 +99,7 @@ router.post("/:id/comment", async (req, res) => {
   }
   catch (e) {
     //TODO check over status
-
-    return res.status(500).render("pages/error/error", {
-      title: "Error",
-      stylesheet: '/public/styles/outfit_card_styles.css',
-      error: e,
-      code: 500
-    });
+    return res.json({error:e});
 
   }
 
@@ -128,36 +117,31 @@ router.get("/:id/likes", async (req, res) => {
   }
   catch (e) {
     //TODO check over status code
-    return res.status(500).render("pages/error/error", {
-      title: "Error",
-      stylesheet: '/public/styles/outfit_card_styles.css',
-      error: e,
-      code: 500
-    });
+    return res.json({error:e});
 
   }
 
 });
 
 
-router.post("/:id/likes", async (req, res) => {
-//add one like
+// router.post("/:id/likes", async (req, res) => {
+// //add one like
 
-  try {
-    let id = validation2.checkId(req.params.id);
-    let num = await data.update_like(id);
-    return res.json({ success: true, likes: num });
-  }
-  catch (e) {
-    return res.status(500).render("pages/error/error", {
-      title: "Error",
-      stylesheet: '/public/styles/outfit_card_styles.css',
-      error: e,
-      code: 500
-    });
-  }
+//   try {
+//     let id = validation2.checkId(req.params.id);
+//     let num = await data.update_like(id);
+//     return res.json({ success: true, likes: num });
+//   }
+//   catch (e) {
+//     return res.status(500).render("pages/error/error", {
+//       title: "Error",
+//       stylesheet: '/public/styles/outfit_card_styles.css',
+//       error: e,
+//       code: 500
+//     });
+//   }
 
-})
+// })
 
 
 

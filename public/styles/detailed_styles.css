@@ -32,3 +32,7 @@ dl.inline dt {
     display: inline-block;
     min-width: 100px;
 }
+
+.error{
+    color:red;
+  }

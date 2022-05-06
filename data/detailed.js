@@ -101,45 +101,45 @@ module.exports = {
 
     
 
-    //update likes
+    // //update likes
 
-    async update_like(id) {
-        //check id
-        let outfit;
+    // async update_like(id) {
+    //     //check id
+    //     let outfit;
 
-        const outfitsCollection = await outfits();
-        if (outfitsCollection) {
-            outfit = await outfitsCollection.findOne({ status: 'public', _id: ObjectId(id) });
+    //     const outfitsCollection = await outfits();
+    //     if (outfitsCollection) {
+    //         outfit = await outfitsCollection.findOne({ status: 'public', _id: ObjectId(id) });
 
-            if (!outfit) {
-                throw "no user found";
-            }
-        }
-        let num = outfit.likes+1;
+    //         if (!outfit) {
+    //             throw "no user found";
+    //         }
+    //     }
+    //     let num = outfit.likes+1;
 
-        let updatedOutfit = {
-            creator: outfit.creator,
-            clothes: outfit.clothes,
-            likes: num,
-            status: outfit.status,
-            outfitName: outfit.outfitName,
-            season: outfit.season,
-            style: outfit.style,
-            comments: outfit.comments
-        };
+    //     let updatedOutfit = {
+    //         creator: outfit.creator,
+    //         clothes: outfit.clothes,
+    //         likes: num,
+    //         status: outfit.status,
+    //         outfitName: outfit.outfitName,
+    //         season: outfit.season,
+    //         style: outfit.style,
+    //         comments: outfit.comments
+    //     };
 
 
-        const updatedInfo = await outfitsCollection.updateOne(
-            { _id: ObjectId(id) },
-            { $set: updatedOutfit }
-        );
+    //     const updatedInfo = await outfitsCollection.updateOne(
+    //         { _id: ObjectId(id) },
+    //         { $set: updatedOutfit }
+    //     );
 
-        if (updatedInfo.modifiedCount === 0) {
-            throw "Cout not comemnt successfully";
-        };
+    //     if (updatedInfo.modifiedCount === 0) {
+    //         throw "Cout not comemnt successfully";
+    //     };
 
-        return num;
-    }
+    //     return num;
+    // }
 
 
 };
