@@ -4,7 +4,9 @@
     <p class="error-message">{{error}}</p>
     {{/if}}
 
-    <p id="error" hidden> {{error}}</p>
+    <p class = "error-message" id = "error"></p>
+
+
 
     {{!-- image,username,likes,comments--}}
 
@@ -35,19 +37,7 @@
         <dd id="comments"></dd>
     </dl>
 
-
-    {{!-- {{#if condition}}
-    <p>No Comments Yet</p>
-    {{else}}
-    <ul>
-        {{#each comments}}
-        <li>{{this.commenter}}: {{this.text}}</li>
-        {{/each}}
-        {{/if}}
-    </ul>
-    --}}
-
-
+    
     <form id="commentForm" method="POST" action="/detailed/comment">
         <label for="comment_term">Comment</label> <br />
         <textarea id="comment_term" name="comment" rows="4" cols="50" placeholder="Enter comment"> </textarea>

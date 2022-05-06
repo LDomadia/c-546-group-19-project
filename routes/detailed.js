@@ -65,13 +65,7 @@ router.get("/:id", async (req, res) => {
 
 
 // //get detailed public outfit page
-// router.get("/:id/comment", async (req, res) => {
-// console.log("here");
-// });
-
-
-
-
+//get all comments
 router.get("/:id/comment", async (req, res) => {
   try {
     //get all the comments
@@ -92,6 +86,7 @@ router.get("/:id/comment", async (req, res) => {
 
 });
 
+//add comment
 router.post("/:id/comment", async (req, res) => {
 
 
@@ -120,6 +115,51 @@ router.post("/:id/comment", async (req, res) => {
   }
 
 });
+
+router.get("/:id/likes", async (req, res) => {
+  try {
+    //get outfit
+    let outfit = await data.get_outfit_by_id(req.params.id);
+    //get likes for outfit
+    let likes = outfit.likes;
+
+    return res.json({ success: true, likes: likes });
+
+  }
+  catch (e) {
+    //TODO check over status code
+    return res.status(500).render("pages/error/error", {
+      title: "Error",
+      stylesheet: '/public/styles/outfit_card_styles.css',
+      error: e,
+      code: 500
+    });
+
+  }
+
+});
+
+
+router.post("/:id/likes", async (req, res) => {
+//add one like
+
+  try {
+    let id = validation2.checkId(req.params.id);
+    let num = await data.update_like(id);
+    return res.json({ success: true, likes: num });
+  }
+  catch (e) {
+    return res.status(500).render("pages/error/error", {
+      title: "Error",
+      stylesheet: '/public/styles/outfit_card_styles.css',
+      error: e,
+      code: 500
+    });
+  }
+
+})
+
+
 
 
 module.exports = router;
