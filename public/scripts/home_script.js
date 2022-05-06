@@ -12,7 +12,22 @@
         for (let i = 0; i < likeBtns.length; i++) {
             likeBtns[i].addEventListener('click', function(event) {
                 event.preventDefault();
-                
+                const requestConfig = {
+                    method: 'POST', 
+                    url: this
+                };
+                $.ajax(requestConfig).then(function(result) {
+                    if (result.result == 'success') {
+                        location.reload();
+                    }
+                    else {
+                        Swal.fire(
+                            'Oh no!',
+                            'An error occurred liking this outfit.',
+                            'error'
+                        );
+                    }
+                });
             });
         }
     }
