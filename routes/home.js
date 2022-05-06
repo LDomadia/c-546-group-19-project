@@ -41,10 +41,16 @@ router.route('/like/:id').post(async (req, res) => {
   try {
     if (!req.session.user) throw 'Error: No user is logged in';
     if (!ObjectId.isValid(req.params.id)) throw "Error: Clothing Item id is not valid";
-    
+    const result = await outfitsData.likeOutfit(req.params.id, req.session.user);
+    if (result.result == 'success') {
+      return res.status(200).json({ result: 'success' });
+    }
+    else {
+      throw 'Error: Failed to like/dislike Outfit';
+    }
   } catch (e) {
-
+    return res.status(500).json({ result: e });
   }
-})
+});
 
 module.exports = router;

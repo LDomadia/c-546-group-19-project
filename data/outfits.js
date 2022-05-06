@@ -257,7 +257,7 @@ module.exports = {
   async likeOutfit(id, user) {
     if (!ObjectId.isValid(id)) throw 'Error: Outfit id is not valid';
     id = ObjectId(id);
-    if (!user && !user.trim()) throw 'Error: User is not logged in';
+    if (!user || !user.trim()) throw 'Error: User is not logged in';
 
     const usersCollection = await users();
     const userDoc = await usersCollection.findOne({ username: user });
