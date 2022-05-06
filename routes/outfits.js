@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-
+const outfitValidation = require("../validation/outfit_validation");
 const gen_outfitData = require("../data/gen_outfit");
 const outfitsData = require("../data/outfits");
 const clothesData = require("../data/clothes");
@@ -18,23 +18,29 @@ router.use("/", (req, res, next) => {
 });
 
 router.route("/").get(async (req, res) => {
-  if (!req.session.user)
-    return res.render("pages/results/outfits", {
-      title: "My Outfits",
-      outfitsPage: true,
-      not_logged_in: true,
-    });
-
   try {
     let outfitItems = await outfitsData.getUserOutfits(
       req.session.user.username
     );
-    res.render("pages/results/outfits", {
+    if (req.session.outfitDeletion) {
+      req.session.outfitDeletion = false;
+      return res.render("pages/results/outfits", {
+        title: "My Outfits",
+        outfitsPage: true,
+        stylesheet: "/public/styles/outfit_card_styles.css",
+        script: "/public/scripts/outfits.js",
+        outfits: outfitItems,
+        msg: "Outfit has successfully been deleted!",
+      });
+    }
+
+    return res.render("pages/results/outfits", {
       title: "My Outfits",
       outfitsPage: true,
       stylesheet: "/public/styles/outfit_card_styles.css",
       script: "/public/scripts/outfits.js",
       outfits: outfitItems,
+      msg: "",
     });
   } catch (e) {
     res.status(500).render("pages/results/outfits", {
@@ -151,8 +157,6 @@ router.route("/new").get(async (req, res) => {
 });
 
 router.route("/new").post(async (req, res) => {
-  //console.log(req.body);
-
   //need error checking
   try {
     let name = req.body.name;
@@ -195,4 +199,21 @@ router.route("/new").post(async (req, res) => {
     });
   }
 });
+
+router.route("/delete/:id").delete(async (req, res) => {
+  let id;
+  try {
+    id = outfitValidation.checkId(req.params.id);
+    let deletionInfo = await outfitsData.delUserOutfit(
+      req.session.user.username,
+      id
+    );
+    if (!deletionInfo) throw "Error: could not delete outfit";
+    req.session.outfitDeletion = true;
+    return res.json({ redirect: true });
+  } catch (e) {
+    return res.json({ error: e });
+  }
+});
+
 module.exports = router;
