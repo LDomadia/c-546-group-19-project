@@ -13,6 +13,7 @@
                     cancelButtonColor: '#d33',
                     confirmButtonText: 'Yes, delete it!'
                 }).then((result) => {
+                    let clothingItem = this.parentElement.parentElement;
                     if (result.isConfirmed) {
                         const requestConfig = {
                             method: 'DELETE',
@@ -22,11 +23,10 @@
                             if (result.result == 'success') {
                                 Swal.fire(
                                     'Deleted!',
-                                    'Your file has been deleted.',
+                                    'Your clothing item has been deleted.',
                                     'success'
-                                ).then(result => {
-                                    location.reload();
-                                });
+                                );
+                                clothingItem.remove();
                             }
                             else {
                                 Swal.fire(
