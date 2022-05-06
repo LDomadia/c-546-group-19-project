@@ -1,13 +1,10 @@
 <h1 class="right">My Outfits</h1>
 <a href="/outfits/new">Add +</a>
 <a href="/outfits/generate">Generate +</a>
+<link rel="stylesheet" href="/public/styles/modal_public.css">
 <article class="main">
-    {{#if error}}
     <p class="error-message">{{error}}</p>
-    {{else}}
-    {{#if msg}}
-    <p class="success-message">{{msg}}</p>
-    {{/if}}
+    <p id="outfit-message">{{msg}}</p>
     {{#each outfits}}
         <div class="outfit-card">
             <!-- Carousel wrapper -->
@@ -41,12 +38,45 @@
                     <p>{{likes}} likes</p>
                 </div>
                 <a class="card-btn" href="/outfits/edit/{{_id}}">Edit</a>
-                <a class="card-btn" href="/outfits/delete/{{_id}}">Delete</a>
+                <a class="card-btn outfit-delete" href="/outfits/delete/{{_id}}">Delete</a>
             </div>
         </div>
     {{/each}}
-    {{/if}}
     <br>
-    <button class="button-44">Make all outfits public</button>
-     <br>
+    <button type="button" onclick="document.getElementById('public-modal').style.display='block'" class="button-44" id="make-outfits-public" data-toggle="modal" data-target="#public-modal">Make all outfits public</button>
+    <div id="public-modal" class="modal">
+  <span onclick="document.getElementById('public-modal').style.display='none'" class="close" title="Close Modal">×</span>
+  <form class="modal-content" action="/publicize" method="POST">
+    <div class="container">
+      <h1>Make All Outfits Public</h1>
+      <p>Waring: this action cannot be undone.</p>
+    
+      <div class="clearfix">
+        <button type="button" onclick="document.getElementById('public-modal').style.display='none'" class="cancelbtn">Cancel</button>
+        <button type="submit" class="deletebtn" id="confirm-public">Confirm</button>
+      </div>
+    </div>
+  </form>
+</div>
+
+<div id="delete-modal" class="modal">
+  <span onclick="document.getElementById('delete-modal').style.display='none'" class="close" title="Close Modal">×</span>
+  <form class="modal-content" id="form-delete" action="" method="DELETE">
+    <div class="container">
+      <h1>Delete outfit</h1>
+      <p>Waring: this action cannot be undone.</p>
+    
+      <div class="clearfix">
+        <button type="button" onclick="document.getElementById('delete-modal').style.display='none'" class="cancelbtn">Cancel</button>
+        <button type="submit" class="deletebtn" id="confirm-delete">Delete</button>
+      </div>
+    </div>
+  </form>
+</div>
+
 </article>
+ <script
+      src="https://code.jquery.com/jquery-3.5.1.js"
+      integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
+      crossorigin="anonymous">
+</script>
