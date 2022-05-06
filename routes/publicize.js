@@ -3,6 +3,7 @@ const router = express.Router();
 const data = require("../data");
 const { route } = require("./home");
 const outfitsData = data.outfits;
+const clothesData = data.clothes;
 
 //Middleware
 router.use("/", (req, res, next) => {
@@ -13,6 +14,10 @@ router.use("/", (req, res, next) => {
 });
 router.route("/").patch(async (req, res) => {
   try {
+    let clothes = await clothesData.getClothingItems(req.session.user.username);
+    if (clothes.length === 0)
+      throw "Error: user does not have any outfits to make public";
+
     const updateOutfits = await outfitsData.makeAllOutfitsPublic(
       req.session.user.username
     );

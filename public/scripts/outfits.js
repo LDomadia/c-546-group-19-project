@@ -38,6 +38,9 @@
   });
 
   confirmBtn.on("click", function (event) {
+    if ($(".outfit-card").length === 0)
+      outfitMsg.text("Error: user does not have outfits to make public");
+
     var requestConfig = {
       method: "PATCH",
       url: window.location.origin + "/publicize",

@@ -167,7 +167,7 @@ module.exports = {
         for (let outfit of userOutfits) {
           outfit["clothingData"] = [];
           for (let clothingId of outfit.clothes) {
-            console.log(clothingId);
+            // console.log(clothingId);
             const clothingItem = await clothesData.getClothingItemById(
               clothingId.toString()
             );
@@ -241,6 +241,10 @@ module.exports = {
     const outfitsCollection = await outfits();
     if (!outfitsCollection) throw "Error: could not retrieve outfits";
 
+    let clothes = await clothesData.getClothingItems(username);
+
+    if (clothes.length === 0)
+      throw "Error: user does not have any outfits to make public";
     const updateInfo = await outfitsCollection.updateMany(
       { creator: username },
       { $set: { status: "public" } }
