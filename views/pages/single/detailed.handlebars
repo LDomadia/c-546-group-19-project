@@ -4,6 +4,8 @@
     <p class="error-message">{{error}}</p>
     {{/if}}
 
+    <p id="error" hidden> {{error}}</p>
+
     {{!-- image,username,likes,comments--}}
 
     {{#each clothingData}}
@@ -12,17 +14,22 @@
     {{/each}}
 
     {{!-- https://stackoverflow.com/questions/1713048/how-to-style-dt-and-dd-so-they-are-on-the-same-line --}}
-    <dl >
+    <dl>
         <dt> Creator </dt>
         <dd>{{creator}}</dd>
 
         <dt> Number of Likes </dt>
-        <dd> {{likes}}</dd>
+        <dd id="number_likes"> {{likes}}</dd>
         {{!-- TODO should update each time user presses like --}}
+
+        {{!--like button;;save button;;add comment button --}}
+        <a class="btn" id="like">Like</a>
+        <a class="btn" id="save">Save</a>
+        </br>
 
         {{!-- TODO check comments length = 0 --}}
 
-        <dt>Comments</dt>
+        {{!-- <dt>Comments</dt>
         <dd>
             {{#if condition}}
             <p>No Comments Yet</p>
@@ -33,14 +40,23 @@
                 {{/each}}
             </ul>
             {{/if}}
-        </dd>
+        </dd> --}}
+
+        <dt>Comments</dt>
+        <dd id = comments></dd>
     </dl>
 
 
-    {{!--like button;;save button;;add comment button --}}
-    <a class="btn">Like</a>
-    <a class="btn">Save</a>
-    <a class="btn">Comment</a>
+    <form id="commentForm" method="POST" action="/detailed/comment">
+        <label for="comment_term">Comment</label> <br />
+        <textarea id="comment_term" name="comment" rows="4" cols="50" placeholder="Enter comment"> </textarea>
+        <button type="submit" class="btn">submit</button>
+    </form>
+
+
+
+    <script src="https://code.jquery.com/jquery-2.2.4.min.js"
+        integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
 
 
 </article>

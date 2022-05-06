@@ -5,7 +5,9 @@ const data = require("../data/detailed");
 const data2 = require("../data/clothes");
 //add in validation 
 const validation = require("../validation/outfits_validation");
-
+const validation2 = require("../validation/account_validation");
+const xss = require('xss');
+const { ObjectId } = require('mongodb');
 
 
 //Middleware
@@ -39,7 +41,6 @@ router.get("/:id", async (req, res) => {
       condition = true;
     }
 
-
     res.render("pages/single/detailed", {
       //get cloths by data
       clothingData: clothes,
@@ -47,21 +48,72 @@ router.get("/:id", async (req, res) => {
       likes: outfit.likes,
       comments: outfit.comments,
       stylesheet: '/public/styles/detailed_styles.css',
+      script: '/public/scripts/detailed.js',
       condition:condition
     });
   }
   catch (e) {
-    console.log(e);
+    //TODO 
+    res.status(404).render("pages/error/error",{
+      title: "Error",
+      stylesheet: '/public/styles/outfit_card_styles.css',
+      error: e,
+      code:404
+    });
   }
-
-  //check if public 
-  //if private: then if creator = username display
-
-
-  //need: image; username; likes; comments
-
 });
 
+
+// //get detailed public outfit page
+// router.get("/:id/comment", async (req, res) => {
+// console.log("here");
+// });
+
+
+
+
+router.post("/:id/comment", async (req, res) => {
+
+  console.log("here");
+  let username,outfit,comment,id;
+  try{
+    //validate 
+    username = validation2.checkUsername(req.session.user.username);
+
+    console.log(req.body);
+    comment = validation2.checkString(req.body.comment);
+
+    console.log(req.params);
+    console.log(req.params.id);
+    id = validation2.checkId(req.params.id);
+
+    console.log("here");
+    console.log(username);
+    console.log(comment);
+    console.log(id);
+
+    outfit = await data.add_comment(id,username,comment);
+    console.log(outfit);
+    //return all outfit comments
+    return res.json({success: true, comments:outfit.comments});
+  }
+  catch(e){
+    //TODO check over status
+    console.log("Error"+e);
+    return res.status(500).render("pages/error/error",{
+      title: "Error",
+      stylesheet: '/public/styles/outfit_card_styles.css',
+      error: e,
+      code:500
+    });
+
+  }
+
+
+  
+
+
+});
 
 
 module.exports = router;

@@ -117,6 +117,7 @@ module.exports = {
     return clothingItems;
   },
   async getClothingbyIds(ids) {
+    //TODO validate array
     let clothingItems = [];
     const clothesCollection = await clothes();
     for (let i = 0; i < ids.length; i++) {
