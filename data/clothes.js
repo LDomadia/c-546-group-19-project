@@ -1,8 +1,9 @@
-const mongoCollections = require("../config/mongoCollections");
-const clothes = mongoCollections.clothes;
-const users = mongoCollections.users;
+// const mongoCollections = require("../config/mongoCollections");
+// const clothes = mongoCollections.clothes;
+// const users = mongoCollections.users;
 const validate = require("../validation/clothes_validation");
 const { ObjectId } = require("mongodb");
+const { clothes, outfits, users } = require("../config/mongoCollections");
 
 module.exports = {
   async addNewClothingItem(
@@ -298,4 +299,32 @@ module.exports = {
     );
     return clothesIdArr;
   },
+  async deleteClothingItem(id, user) {
+    if (!ObjectId.isValid(id)) throw "Error: Clothing Item id is not valid";
+    id = ObjectId(id);
+    const clothesCollection = await clothes();
+
+    const deleteClothingItem = await clothesCollection.deleteOne({ _id: id });
+    if (!deleteClothingItem.acknowledged || deleteClothingItem.deletedCount == 0) {
+      throw 'Error: Failed to delete Clothing Item';
+    }
+
+    const usersCollection = await users();
+    const userUpdate = await usersCollection.updateOne({ username: user }, {
+      $pull: { userClothes: id }
+    })
+    if (userUpdate.matchedCount == 0 || userUpdate.modifiedCount == 0) {
+      throw "Error: Failed to delete Clothing Item from User";
+    } 
+
+    const outfitsCollection = await outfits();
+    const outfitUpdates = await outfitsCollection.updateMany({ clothes: id }, {
+      $pull: { clothes: id }
+    })
+    if (outfitUpdates.matchedCount != 0 && outfitUpdates.modifiedCount == 0) {
+      throw 'Error: Failed to delete Clothing Item from Outfits';
+    }
+
+    return { result: 'success' };
+  }
 };

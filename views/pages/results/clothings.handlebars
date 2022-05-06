@@ -1,17 +1,17 @@
 <h1>My Clothes</h1>
 <div>
-    <div>{{error}}</div>
+    <p class="error-message">{{error}}</p>
     <a href="/clothes/new">Add +</a>
     <br>
     {{#each clothingItems}}
-        <div class="clothing-item-card">
+        <div class="clothing-item-card" id="a{{_id}}">
             <img class="clothing-item-image" alt="{{name}}" src="/uploads/{{image}}">
             <div class="clothing-item-details">
                 <h3 class="clothing-item-title">{{name}}</h3>
                 <p class="capitalize">Type: {{type}}</p>
                 <a class="card-btn" href="clothes/view/{{_id}}">View</a>
                 <a class="card-btn" href="clothes/edit/{{_id}}">Edit</a>
-                <a class="card-btn">Delete</a>
+                <a class="delete-btn card-btn" href="clothes/delete/{{_id}}">Delete</a>
             </div>
         </div>
     {{/each}}

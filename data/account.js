@@ -112,7 +112,7 @@ module.exports = {
     }
 
     if (compare) {
-      return { authenticated: true };
+      return user.username;
     } else throw "Either the username or password is invalid";
   },
 

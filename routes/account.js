@@ -151,10 +151,8 @@ router.post("/login", async (req, res) => {
 
   try {
     let existingUser = await accountData.login(username, userPsw);
-    if (existingUser) {
-      req.session.user = { username: username };
-      return res.redirect("/home");
-    }
+    req.session.user = { username: existingUser };
+    return res.redirect("/home");
   } catch (e) {
     return res.status(400).render("pages/medium/login", {
       error: e,
@@ -180,6 +178,5 @@ router.get("/logout", async (req, res) => {
   req.session.destroy();
   return res.redirect("/home");
 });
-
 
 module.exports = router;

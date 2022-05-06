@@ -11,8 +11,8 @@ const main = async () => {
 
     //users
     let user_info = {
-        users : ["artistconfidence","giantdelighted","ollieomit","oraclelame","graduateaboard","venturetriangle","bobmajor","metalshipwreck","noisyhundred","pitysparkles"],
-        pwds : ["pineapple124", "tower_1111", "bob2ross9", "dinosauce313", "nevergonnagiveyouup2", "129cake126", "elgato100", "328dm2e29E", "dE)(@K!dms9@-", "woein20!em"]
+        users : ["artistconfidence","giantdelighted","ollieomit"],
+        pwds : ["pineapple124", "tower_1111","dinosauce313"]
     }
     
     for(let i = 0; i < 10; i++){
@@ -28,7 +28,7 @@ const main = async () => {
         season: [["Spring"], ["Winter"], ["Winter", "Spring", "Summer", "Fall"], ["Summer"], ["Summer", "Spring"], ["Winter", "Spring", "Summer", "Fall"], ["Winter"], ["Winter", "Spring", "Summer", "Fall"], ["Winter", "Spring"], ["Winter", "Fall"]],
         style: [["business"], ["casual"], ["sports", "casual"], ["sports"], ["casual", "travel"], ["casual"], ["casual"], ["casual"], ["casual", "sports"], ["casual", "festive"]],
         brand: ["Tommy Hilfiger", "Gucci", "Nike", "Fruit Clothes", "Ray-Ban", "Almost Famous", "Polo Ralph Lauren", "Polo Ralph Lauren", "Reebok", "MSK"],
-        user : ["artistconfidence","artistconfidence","ollieomit","oraclelame","ollieomit","venturetriangle","ollieomit","metalshipwreck","noisyhundred","metalshipwreck"]
+        user : ["artistconfidence","artistconfidence","artistconfidence","artistconfidence","giantdelighted","giantdelighted","giantdelighted","ollieomit","ollieomit","ollieomit"]
     }
 
     for(let i = 0; i < 10; i++){
@@ -62,7 +62,7 @@ const main = async () => {
 
     //comments
     let comments_info = {
-        commentor : ["artistconfidence","giantdelighted","ollieomit","oraclelame","graduateaboard","venturetriangle","bobmajor","metalshipwreck","noisyhundred","pitysparkles"],
+        commentor : ["artistconfidence","artistconfidence","artistconfidence","artistconfidence","giantdelighted","giantdelighted","ollieomit","ollieomit","ollieomit","ollieomit"],
         text : ["wow this looks amazing!", "im not sure about this..", "Ratio + L", "Amazing 😍😍", "wheres the hat??", "yoooooo@#(@(!23", "Hatrick Pill would love this", "The outfit looks great, but the shoes look terrifying", "nice comment", "love this outfit!!"]
     }
     
