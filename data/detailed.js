@@ -1,5 +1,5 @@
 const mongoCollections = require("../config/mongoCollections");
-const validation = require("../validation/outfits_validation");
+const validation = require("../validation/account_validation");
 const clothesData = require('../data/clothes');
 const outfits = mongoCollections.outfits;
 const users = mongoCollections.users;
@@ -13,6 +13,7 @@ module.exports = {
     async get_outfit_by_id(id) {
         //check id
         let outfit;
+        id=validation.checkId(id);
 
         const outfitsCollection = await outfits();
         if (outfitsCollection) {
@@ -33,6 +34,8 @@ module.exports = {
     async get_all_comments(id){
         let outfit;
 
+        id = validation.checkId(id);
+
         const outfitsCollection = await outfits();
         if (outfitsCollection) {
             outfit = await outfitsCollection.findOne({ status: 'public', _id: ObjectId(id) });
@@ -42,7 +45,6 @@ module.exports = {
             }
         }
         //return an array 
-        console.log(outfit);
         return outfit.comments;
     },
 
@@ -52,6 +54,10 @@ module.exports = {
     async add_comment(id, commenter, text) {
         //check id
         let outfit;
+        
+        id = validation.checkId(id);
+        commenter = validation.checkUsername(commenter);
+        text = validation.checkString(text);
 
         const outfitsCollection = await outfits();
         if (outfitsCollection) {

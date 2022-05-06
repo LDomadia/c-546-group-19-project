@@ -29,6 +29,18 @@ router.get("/:id", async (req, res) => {
   let condition;
 
   try {
+    validation2.checkId(req.params.id);
+  }
+  catch (e) {
+    return res.status(400).render("pages/error/error", {
+      title: "Error",
+      stylesheet: '/public/styles/outfit_card_styles.css',
+      error: e,
+      code: 400
+    });
+  }
+
+  try {
     //public only
     outfit = await data.get_outfit_by_id(req.params.id);
     if (!outfit) throw "not a public outfit";
@@ -41,7 +53,7 @@ router.get("/:id", async (req, res) => {
       condition = true;
     }
 
-    res.render("pages/single/detailed", {
+    return res.render("pages/single/detailed", {
       //get cloths by data
       clothingData: clothes,
       creator: outfit.creator,
@@ -54,7 +66,7 @@ router.get("/:id", async (req, res) => {
     });
   }
   catch (e) {
-    //TODO 
+    //404 bc no clothes or outfits found
     res.status(404).render("pages/error/error", {
       title: "Error",
       stylesheet: '/public/styles/outfit_card_styles.css',
@@ -68,16 +80,31 @@ router.get("/:id", async (req, res) => {
 // //get detailed public outfit page
 //get all comments
 router.get("/:id/comment", async (req, res) => {
+
+
+  //check parameters
+  try {
+    validation2.checkId(req.params.id);
+  }
+  catch (e) {
+    return res.status(400).render("pages/error/error", {
+      title: "Error",
+      stylesheet: '/public/styles/outfit_card_styles.css',
+      error: e,
+      code: 400
+    });
+  }
+
+
   try {
     //get all the comments
     let comments = await data.get_all_comments(req.params.id);
     return res.json({ success: true, comments: comments });
   }
   catch (e) {
-    return res.json({error:e});
-
+    //unable to get outfit 
+    return res.status(404).json({ error: e });
   }
-
 
 });
 
@@ -91,7 +118,13 @@ router.post("/:id/comment", async (req, res) => {
     username = validation2.checkUsername(req.session.user.username);
     comment = validation2.checkString(req.body.comment);
     id = validation2.checkId(req.params.id);
+  }
+  catch (e) {
+    return res.status(400).json({ error: e });
 
+
+  }
+  try {
     newComment = await data.add_comment(id, username, comment);
 
     //return all outfit comments
@@ -99,13 +132,24 @@ router.post("/:id/comment", async (req, res) => {
   }
   catch (e) {
     //TODO check over status
-    return res.json({error:e});
+    //404: no comment found
+    return res.status(404).json({ error: e });
 
   }
 
 });
 
 router.get("/:id/likes", async (req, res) => {
+
+  try {
+    //validate input
+    id = validation2.checkId(req.params.id);
+  }
+  catch (e) {
+    return res.status(400).json({ error: e });
+  }
+
+
   try {
     //get outfit
     let outfit = await data.get_outfit_by_id(req.params.id);
@@ -117,7 +161,7 @@ router.get("/:id/likes", async (req, res) => {
   }
   catch (e) {
     //TODO check over status code
-    return res.json({error:e});
+    return res.json({ error: e });
 
   }
 
