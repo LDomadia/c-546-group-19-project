@@ -16,12 +16,14 @@
                     method: 'POST', 
                     url: this
                 };
+                let btn = this;
                 let parent = this.parentElement;
                 let likes = $(parent).find('.outfit-likes');
                 $.ajax(requestConfig).then(function(result) {
                     console.log();
                     if (result.result == 'success') {
                         likes[0].innerText = result.likes + ' likes';
+                        btn.innerText = result.status;
                     }
                     else {
                         Swal.fire(

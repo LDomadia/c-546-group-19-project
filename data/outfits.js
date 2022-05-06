@@ -264,11 +264,12 @@ module.exports = {
     if (!userDoc) throw 'Error: User does not exist';
     const outfitsCollection = await outfits();
     let isLiked = false;
+    let status = '';
     userDoc.userLikes.forEach(outfit => {
       if (outfit.toString() == id.toString()) {
         isLiked = true;
       }
-    })
+    });
     if (isLiked) {
       // unlike the outfit
       const removeLike = await usersCollection.updateOne({ username: user }, {
@@ -282,6 +283,7 @@ module.exports = {
       });
       if (theOutfit.matchedCount == 0 || theOutfit.modifiedCount == 0)
         throw 'Error: Failed to remove like from User document';
+      status = 'Like'
     }
     else {
       // like the outfit
@@ -296,9 +298,10 @@ module.exports = {
       });
       if (theOutfit.matchedCount == 0 || theOutfit.modifiedCount == 0)
         throw 'Error: Failed to add like to User document';
+      status = 'Unlike'
     }
     const updatedOutfit = await outfitsCollection.findOne({ _id: id });
     if (!updatedOutfit) throw 'Error: Failed to get updated Outfit';
-    return { result: 'success', likes: updatedOutfit.likes.length };
+    return { result: 'success', likes: updatedOutfit.likes.length, status: status };
   }
 };
