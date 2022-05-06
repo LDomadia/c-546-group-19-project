@@ -44,7 +44,7 @@ router.route('/like/:id').post(async (req, res) => {
     if (!ObjectId.isValid(req.params.id)) throw "Error: Clothing Item id is not valid";
     const result = await outfitsData.likeOutfit(req.params.id, req.session.user.username);
     if (result.result == 'success') {
-      return res.json({ result: 'success' });
+      return res.json(result);
     }
     else {
       throw 'Error: Failed to like/dislike Outfit';

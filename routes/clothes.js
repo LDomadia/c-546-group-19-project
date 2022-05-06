@@ -289,7 +289,7 @@ router.route("/delete/:id").delete(async (req, res) => {
     if (!ObjectId.isValid(req.params.id)) throw "Error: Clothing Item id is not valid";
     const result = await clothesData.deleteClothingItem(req.params.id, req.session.user.username);
     if (result.result == 'success') {
-      return res.json({ result: 'success' });
+      return res.json(result);
     }
     else {
       throw 'Error: An error occurred deleting the Clothing Item';

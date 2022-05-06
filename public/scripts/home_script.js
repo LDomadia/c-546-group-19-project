@@ -18,14 +18,12 @@
                 };
                 let parent = this.parentElement;
                 let likes = $(parent).find('.outfit-likes');
-                console.log(likes.innerText);
                 $.ajax(requestConfig).then(function(result) {
+                    console.log();
                     if (result.result == 'success') {
-                        console.log('success!');
-                        likes.innerText = result.likes;
+                        likes[0].innerText = result.likes + ' likes';
                     }
                     else {
-                        console.log(result);
                         Swal.fire(
                             'Oh no!',
                             'An error occurred liking this outfit.',
