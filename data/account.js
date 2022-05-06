@@ -135,4 +135,9 @@ module.exports = {
 
     return existingUser.statistics;
   },
+
+  async updateCalendar(username, date, cloth_id){
+    
+  }
+
 };
