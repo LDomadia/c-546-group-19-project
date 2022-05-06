@@ -1,138 +1,52 @@
 (function ($) {
-  //   const outfitForm = $("#new-outfit-form"),
-  //     nameDiv = $("#name-div"),
-  //     nameInput = $("#name-input"),
-  //     outfitsList = $("#outfits-list"),
-  //     stylesList = $("#styles-list"),
-  //     stylesInput = $("#styles-input"),
-  //     stylesBtn = $("#styles-btn"),
-  //     submitBtn = $("#submit-btn"),
-  //     addBox = $(".add-box"),
-  //     publicBox = $(".public-box"),
-  //     outfitErr = $(".outfit-err"),
-  //     formErr = $(".form-err");
+  const outfitMsg = $("#outfit-message"),
+    deleteLink = $(".outfit-delete"),
+    editLink = $(".card-edit"),
+    publicBtn = $("#make-outfits-public"),
+    confirmBtn = $("#confirm-public"),
+    delOutfitBtn = $("#confirm-delete"),
+    errMsg = $(".error-message"),
+    formDel = $("#form-delete");
 
-  //   outfitErr.removeClass();
-  //   outfitErr.hide();
-  //   formErr.removeClass();
-  //   formErr.hide();
-  //   var typesDict = {};
-  //   var outfitsArr = [];
+  const carouselImages = $(".carousel-inner");
 
-  const carouselImages = document.getElementsByClassName("carousel-inner");
+  carouselImages.each(function () {
+    let doc = $(this)[0].firstElementChild.classList.add("active");
+  });
 
-  for (let i = 0; i < carouselImages.length; i++) {
-    carouselImages[i].firstElementChild.classList.add("active");
-  }
-  //   outfitForm.submit(function (event) {
-  //     try {
-  //       if (outfitsArr.length < 2) {
-  //         throw "Please select atleast two clothing items for your outfit";
-  //       }
-  //       outfitsArr.forEach((element) => {
-  //         let hiddenInput = document.createElement("input");
-  //         hiddenInput.setAttribute("type", "hidden");
-  //         hiddenInput.setAttribute("name", "outfits[]");
-  //         hiddenInput.setAttribute("value", element);
-  //         outfitForm.append(hiddenInput);
-  //       });
-  //     } catch (e) {
-  //       outfitErr.empty();
-  //       outfitErr.text(e);
-  //       outfitErr.show();
-  //       outfitErr.focus();
-  //       event.preventDefault();
-  //     }
+  deleteLink.click(function (event) {
+    document.getElementById("delete-modal").style.display = "block";
+    formDel.attr("action", this.href);
+    event.preventDefault();
+  });
+  delOutfitBtn.on("click", function (event) {
+    document.getElementById("delete-modal").style.display = "none";
+    var requestConfig = {
+      method: "DELETE",
+      url: formDel[0].action,
+    };
+    $.ajax(requestConfig).then(function (responseMessage) {
+      if (responseMessage.redirect) {
+        window.location.replace(window.location.origin + "/outfits");
+      } else if (responseMessage.error) {
+        errMsg.text(responseMessage.error);
+      } else {
+        errMsg.text("Error: outfit deletion failed");
+      }
+    });
+    event.preventDefault();
+  });
 
-  //     try {
-  //       if (nameInput.val().trim() === "") {
-  //         nameInput.focus();
-  //         throw "Please enter a name for your outfit";
-  //       }
-  //     } catch (e) {
-  //       formErr.empty();
-  //       formErr.text(e);
-  //       formErr.show();
-  //       formErr.focus();
-  //       event.preventDefault();
-  //     }
-  //   });
-  //   addBox.change(function () {
-  //     outfitErr.empty().hide();
-  //     let image_name = $(this)
-  //       .parent()
-  //       .parent()
-  //       .siblings(".clothing-item-image")
-  //       .attr("src")
-  //       .split("/")[2];
-  //     let type = $(this).parent().siblings(".clothing-type").text();
-  //     if ($(this).is(":checked")) {
-  //       outfitsArr.push(image_name);
-  //       if (!typesDict[type] || typesDict[type] <= 0) {
-  //         typesDict[type] = 1;
-  //       } else if (type !== "Type: Accessory") {
-  //         outfitErr.empty();
-  //         outfitErr.text(
-  //           "You cannot have multiple of the same types (except for accessories) in an outfit"
-  //         );
-  //         outfitErr.show();
-  //         outfitErr.focus();
-  //         $(this).prop("checked", false);
-  //         outfitsArr.splice(outfitsArr.indexOf(image_name), 1);
-  //       } else {
-  //         typesDict[type]++;
-  //       }
-  //     } else {
-  //       outfitsArr.splice(outfitsArr.indexOf(image_name), 1);
-  //       typesDict[type] = 0;
-  //     }
-  //     // if ($(this).is(":checked")) {
-  //     //   sib_pub_box.removeAttr("disabled");
-  //     // } else {
-  //     //   sib_pub_box.attr("disabled", true);
-  //     // }
-  //   });
-
-  //   stylesBtn.click(function () {
-  //     addToList(stylesInput.val().trim(), stylesList, "styles[]");
-  //     stylesInput.val("");
-  //     stylesInput.focus();
-  //   });
-  //   stylesInput.keydown((event) => {
-  //     if (event.key == "Enter") {
-  //       event.preventDefault();
-  //       addToList(stylesInput.val().trim(), stylesList, "styles[]");
-  //       stylesInput.val("");
-  //       stylesInput.focus();
-  //     }
-  //   });
-
-  //   function addToList(inputValue, list, listName) {
-  //     if (inputValue) {
-  //       let btn = document.createElement("button");
-  //       btn.setAttribute("type", "button");
-  //       btn.setAttribute("class", "chip-btn");
-  //       btn.setAttribute("aria-label", "delete " + inputValue);
-  //       btn.setAttribute("title", "delete " + inputValue);
-
-  //       btn.addEventListener("click", removeFromList);
-
-  //       let icon = document.createElement("i");
-  //       icon.setAttribute("class", "fa-solid fa-circle-xmark");
-
-  //       let liItem = document.createElement("li");
-  //       liItem.innerHTML = inputValue;
-  //       let hiddenInput = document.createElement("input");
-  //       hiddenInput.setAttribute("type", "hidden");
-  //       hiddenInput.setAttribute("name", listName);
-  //       hiddenInput.setAttribute("value", inputValue);
-  //       btn.append(icon);
-  //       liItem.append(hiddenInput);
-  //       liItem.append(btn);
-  //       list.append(liItem);
-  //     }
-  //   }
-  //   function removeFromList() {
-  //     this.parentElement.remove();
-  //   }
+  confirmBtn.on("click", function (event) {
+    var requestConfig = {
+      method: "PATCH",
+      url: window.location.origin + "/publicize",
+    };
+    document.getElementById("delete-modal").style.display = "none";
+    $.ajax(requestConfig).then(function (responseMessage) {
+      outfitMsg.text(responseMessage);
+    });
+    document.getElementById("public-modal").style.display = "none";
+    event.preventDefault();
+  });
 })(window.jQuery);
