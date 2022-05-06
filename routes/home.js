@@ -15,7 +15,7 @@ router.use("/", (req, res, next) => {
 });
 
 // GET /
-router.get("/", async (req, res) => {
+router.route('/').get( async (req, res) => {
   try {
     const publicOutfits = await outfitsData.getAllOutfits(); 
 
@@ -36,5 +36,15 @@ router.get("/", async (req, res) => {
     });
   }
 });
+
+router.route('/like/:id').post(async (req, res) => {
+  try {
+    if (!req.session.user) throw 'Error: No user is logged in';
+    if (!ObjectId.isValid(req.params.id)) throw "Error: Clothing Item id is not valid";
+    
+  } catch (e) {
+
+  }
+})
 
 module.exports = router;

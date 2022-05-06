@@ -98,7 +98,7 @@ module.exports = {
     let newOutfits = {
       creator: creator,
       clothes: clothes,
-      likes: 0,
+      likes: [],
       status: status,
       outfitName: outfitName,
       season: season,
@@ -192,7 +192,6 @@ module.exports = {
           }
         )
         .toArray();
-      // console.log(publicOutfits);
       if (publicOutfits) {
         for (let outfit of publicOutfits) {
           outfit["clothingData"] = [];
@@ -255,4 +254,44 @@ module.exports = {
 
     return { updated: true };
   },
+  async likeOutfit(id, user) {
+    if (!ObjectId.isValid(id)) throw 'Error: Outfit id is not valid';
+    id = ObjectId(id);
+    if (!user && !user.trim()) throw 'Error: User is not logged in';
+
+    const usersCollection = await users();
+    const userDoc = await usersCollection.findOne({ username: user });
+    if (!userDoc) throw 'Error: User does not exist';
+    if (userDoc.userLikes.includes(id)) {
+      // unlike the outfit
+      const removeLike = await usersCollection.updateOne({ username: user }, {
+        $pull: { userLikes: id }
+      });
+      if (removeLike.matchedCount == 0 || removeLike.modifiedCount == 0)
+        throw 'Error: Failed to remove like from User document';
+
+      const outfitsCollection = await outfits();
+      const theOutfit = await outfitsCollection.updateOne({ _id: id }, {
+        $pull: { likes: userDoc._id }
+      });
+      if (theOutfit.matchedCount == 0 || theOutfit.modifiedCount == 0)
+        throw 'Error: Failed to remove like from User document';
+    }
+    else {
+      // like the outfit
+      const removeLike = await usersCollection.updateOne({ username: user }, {
+        $push: { userLikes: id }
+      });
+      if (removeLike.matchedCount == 0 || removeLike.modifiedCount == 0)
+        throw 'Error: Failed to add like to User document';
+
+      const outfitsCollection = await outfits();
+      const theOutfit = await outfitsCollection.updateOne({ _id: id }, {
+        $push: { likes: userDoc._id }
+      });
+      if (theOutfit.matchedCount == 0 || theOutfit.modifiedCount == 0)
+        throw 'Error: Failed to add like to User document';
+    }
+    return { result: 'success' };
+  }
 };
