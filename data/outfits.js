@@ -262,7 +262,14 @@ module.exports = {
     const usersCollection = await users();
     const userDoc = await usersCollection.findOne({ username: user });
     if (!userDoc) throw 'Error: User does not exist';
-    if (userDoc.userLikes.includes(id)) {
+    const outfitsCollection = await outfits();
+    let isLiked = false;
+    userDoc.userLikes.forEach(outfit => {
+      if (outfit.toString() == id.toString()) {
+        isLiked = true;
+      }
+    })
+    if (isLiked) {
       // unlike the outfit
       const removeLike = await usersCollection.updateOne({ username: user }, {
         $pull: { userLikes: id }
@@ -270,7 +277,6 @@ module.exports = {
       if (removeLike.matchedCount == 0 || removeLike.modifiedCount == 0)
         throw 'Error: Failed to remove like from User document';
 
-      const outfitsCollection = await outfits();
       const theOutfit = await outfitsCollection.updateOne({ _id: id }, {
         $pull: { likes: userDoc._id }
       });
@@ -285,13 +291,14 @@ module.exports = {
       if (removeLike.matchedCount == 0 || removeLike.modifiedCount == 0)
         throw 'Error: Failed to add like to User document';
 
-      const outfitsCollection = await outfits();
       const theOutfit = await outfitsCollection.updateOne({ _id: id }, {
         $push: { likes: userDoc._id }
       });
       if (theOutfit.matchedCount == 0 || theOutfit.modifiedCount == 0)
         throw 'Error: Failed to add like to User document';
     }
-    return { result: 'success' };
+    const updatedOutfit = await outfitsCollection.findOne({ _id: id });
+    if (!updatedOutfit) throw 'Error: Failed to get updated Outfit';
+    return { result: 'success', likes: updatedOutfit.likes.length };
   }
 };

@@ -16,11 +16,16 @@
                     method: 'POST', 
                     url: this
                 };
+                let parent = this.parentElement;
+                let likes = $(parent).find('.outfit-likes');
+                console.log(likes.innerText);
                 $.ajax(requestConfig).then(function(result) {
                     if (result.result == 'success') {
-                        location.reload();
+                        console.log('success!');
+                        likes.innerText = result.likes;
                     }
                     else {
+                        console.log(result);
                         Swal.fire(
                             'Oh no!',
                             'An error occurred liking this outfit.',

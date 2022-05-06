@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const outfitsData = require('../data/outfits');
+const { ObjectId } = require('mongodb');
 
 //Middleware
 router.use("/", (req, res, next) => {
@@ -41,7 +42,7 @@ router.route('/like/:id').post(async (req, res) => {
   try {
     if (!req.session.user) throw 'Error: No user is logged in';
     if (!ObjectId.isValid(req.params.id)) throw "Error: Clothing Item id is not valid";
-    const result = await outfitsData.likeOutfit(req.params.id, req.session.user);
+    const result = await outfitsData.likeOutfit(req.params.id, req.session.user.username);
     if (result.result == 'success') {
       return res.json({ result: 'success' });
     }
@@ -49,6 +50,7 @@ router.route('/like/:id').post(async (req, res) => {
       throw 'Error: Failed to like/dislike Outfit';
     }
   } catch (e) {
+    console.log(e);
     return res.json({ result: e });
   }
 });
