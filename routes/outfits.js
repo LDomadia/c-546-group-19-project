@@ -165,6 +165,7 @@ router.route("/new").post(async (req, res) => {
     let status = req.body.public ? "public" : "private";
     let styles = req.body.styles ? req.body.styles : [];
 
+    styles = styles.map((style) => style.trim().toLowerCase());
     if (!images || images.length < 2)
       throw "Error: not enough clothes to make outfit";
 

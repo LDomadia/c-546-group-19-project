@@ -92,6 +92,8 @@ module.exports = {
     style = errors_strlist(style, "style");
     clothes = errors_clothes(clothes, "clothes");
 
+    style = style.map((s) => s.trim().toLowerCase());
+
     const outfitsCollection = await outfits();
     let newOutfits = {
       creator: creator,
@@ -208,6 +210,7 @@ module.exports = {
     }
     throw "Error: Failed to load outfits";
   },
+
 
   async delUserOutfit(username, outfitId) {
     username = validation.checkUsername(username);

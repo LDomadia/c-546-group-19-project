@@ -9,8 +9,8 @@
     submitBtn = $("#submit-btn"),
     addBox = $(".add-box"),
     publicBox = $(".public-box"),
-    outfitErr = $(".outfit-err"),
-    formErr = $(".form-err");
+    outfitErr = $("#outfit-err"),
+    formErr = $("#form-err");
 
   outfitErr.removeClass();
   outfitErr.hide();
@@ -21,14 +21,19 @@
 
   outfitForm.submit(function (event) {
     try {
+      outfitErr.removeClass();
+      outfitErr.hide();
+      formErr.removeClass();
+      formErr.hide();
       if (outfitsArr.length < 2) {
-        throw "Please select atleast two clothing items for your outfit";
+        throw "Please select at least two clothing items for your outfit";
       }
       outfitsArr.forEach((element) => {
         let hiddenInput = document.createElement("input");
         hiddenInput.setAttribute("type", "hidden");
         hiddenInput.setAttribute("name", "outfits[]");
         hiddenInput.setAttribute("value", element);
+        hiddenInput.setAttribute("class", "outfit-element");
         outfitForm.append(hiddenInput);
       });
     } catch (e) {
@@ -45,8 +50,38 @@
         throw "Please enter a name for your outfit";
       }
     } catch (e) {
+      outfitForm.find(".outfit-element").remove();
+      nameInput.val("");
       formErr.empty();
       formErr.text(e);
+      formErr.show();
+      formErr.focus();
+      event.preventDefault();
+    }
+
+    try {
+      let setStyles = new Array();
+      let listStyles = stylesList[0].children;
+      for (let i = 0; i < listStyles.length; i++) {
+        const chip = listStyles[i].innerText.trim().toLowerCase();
+        if (setStyles.includes(chip)) {
+          throw "Styles cannot contain duplicates";
+        } else {
+          setStyles.push(chip);
+        }
+      }
+    } catch (e) {
+      outfitForm.find(".outfit-element").remove();
+      formErr.empty();
+      formErr.text(e);
+      formErr.show();
+      formErr.focus();
+      event.preventDefault();
+    }
+    if (stylesInput.val().trim() !== "") {
+      outfitForm.find(".outfit-element").remove();
+      formErr.empty();
+      formErr.text('Click "Add" to add Style to Clothing Item');
       formErr.show();
       formErr.focus();
       event.preventDefault();
@@ -89,6 +124,13 @@
   });
 
   stylesBtn.click(function () {
+    if (stylesInput.val().trim() === "") {
+      formErr.empty();
+      formErr.text("Empty styles cannot be added");
+      formErr.show();
+      formErr.focus();
+      return;
+    }
     addToList(stylesInput.val().trim(), stylesList, "styles[]");
     stylesInput.val("");
     stylesInput.focus();

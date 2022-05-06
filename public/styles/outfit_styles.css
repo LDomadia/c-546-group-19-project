@@ -1,3 +1,5 @@
-input[type=checkbox] {
-    color:rgb(9, 9, 9);
-  }
+p#form-err, p#outfit-err  {
+  color: red;
+  margin-top: 10px;
+  margin-bottom: 0;
+}
