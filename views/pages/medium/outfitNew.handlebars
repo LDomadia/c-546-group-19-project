@@ -2,11 +2,11 @@
 <link rel="stylesheet" href="/public/styles/outfit_styles.css">
 <h1>Add new outfit</h1>
 <div>
-    <div class="error-message">{{error}}</div>
+    <p class="page-error">{{error}}</p>
     <br>
     <form id="new-outfit-form" method="POST" action="/outfits/new">
     <div class="form-div">
-        <p class="outfit-err" tabindex="0" hidden></p>
+        <p id="outfit-err" tabindex="0"></p>
         {{#each clothingItems}}
         <div class="clothing-item-card">
             <img class="clothing-item-image" alt="{{name}}" src="/uploads/{{image}}">
@@ -21,7 +21,7 @@
         {{/each}}
     </div>
     <div class="form-div">
-        <p class="form-err" tabindex="0"></p>
+        <p id = "form-err" tabindex="0"></p>
         <div id="name-div">
             <label class="input-label" for="name-input">Outfit Name *</label>
             <input id="name-input" name="name" type="text" required>
@@ -46,8 +46,8 @@
             <ul id="styles-list"></ul>
         </div>
         <br>
-    <div><label class="input-label">Public</label>
-    <input type="checkbox" class="public-box" name="public" value="public">
+    <div><label for="public-chkbox" class="input-label">Public</label>
+    <input type="checkbox" id="public-chkbox" class="public-box" name="public" value="public">
     </div>
     </div><br>
     <button id="submit-btn" type="submit">Save</button>
