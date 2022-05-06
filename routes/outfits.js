@@ -4,10 +4,6 @@ const outfitValidation = require("../validation/outfit_validation");
 const gen_outfitData = require("../data/gen_outfit");
 const outfitsData = require("../data/outfits");
 const clothesData = require("../data/clothes");
-const multer = require("multer");
-const bcrypt = require("bcryptjs");
-
-const upload = multer({ dest: "uploads/" });
 
 //Middleware
 router.use("/", (req, res, next) => {
