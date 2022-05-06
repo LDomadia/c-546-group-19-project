@@ -1,5 +1,9 @@
 <h1>Calendar</h1>
 
+{{#if date}}
+<p>Date: {{date}}</p>
+{{/if}}
+
 <form id="calendar-form" method="POST" action="/calendar">
   <label for="birthday">Time:</label>
   <input type="date" id="birthday" name="birthday">
