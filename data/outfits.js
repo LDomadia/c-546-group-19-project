@@ -241,9 +241,9 @@ module.exports = {
     const outfitsCollection = await outfits();
     if (!outfitsCollection) throw "Error: could not retrieve outfits";
 
-    let clothes = await clothesData.getClothingItems(username);
+    let outfitsArr = await this.getUserOutfits(username);
 
-    if (clothes.length === 0)
+    if (outfitsArr.length === 0)
       throw "Error: user does not have any outfits to make public";
     const updateInfo = await outfitsCollection.updateMany(
       { creator: username },
