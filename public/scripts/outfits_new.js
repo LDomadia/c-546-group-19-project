@@ -78,6 +78,14 @@
       formErr.focus();
       event.preventDefault();
     }
+    if (stylesInput.val().trim() !== "") {
+      outfitForm.find(".outfit-element").remove();
+      formErr.empty();
+      formErr.text('Click "Add" to add Style to Clothing Item');
+      formErr.show();
+      formErr.focus();
+      event.preventDefault();
+    }
   });
   addBox.change(function () {
     outfitErr.empty().hide();
@@ -116,6 +124,13 @@
   });
 
   stylesBtn.click(function () {
+    if (stylesInput.val().trim() === "") {
+      formErr.empty();
+      formErr.text("Empty styles cannot be added");
+      formErr.show();
+      formErr.focus();
+      return;
+    }
     addToList(stylesInput.val().trim(), stylesList, "styles[]");
     stylesInput.val("");
     stylesInput.focus();
