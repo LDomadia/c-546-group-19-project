@@ -1,5 +1,6 @@
 const mongoCollections = require("../config/mongoCollections");
 const validation = require("../validation/account_validation");
+const outfitValidation = require("../validation/outfit_validation");
 const clothesData = require("../data/clothes");
 const outfits = mongoCollections.outfits;
 const users = mongoCollections.users;
@@ -157,6 +158,29 @@ module.exports = {
 
     return outfit_id;
   },
+  async getUserOutfits(username) {
+    username = validation.checkUsername(username);
+    const outfitsCollection = await outfits();
+    if (outfitsCollection) {
+      const userOutfits = await outfitsCollection
+        .find({ creator: username })
+        .toArray();
+      if (userOutfits) {
+        for (let outfit of userOutfits) {
+          outfit["clothingData"] = [];
+          for (let clothingId of outfit.clothes) {
+            // console.log(clothingId);
+            const clothingItem = await clothesData.getClothingItemById(
+              clothingId.toString()
+            );
+            if (clothingItem) outfit["clothingData"].push(clothingItem);
+            else throw "Error: Failed to find Clothing Item";
+          }
+        }
+      }
+      return userOutfits;
+    } else throw "Error: Failed to load outfits";
+  },
   async getAllOutfits() {
     const outfitsCollection = await outfits();
     if (outfitsCollection) {
@@ -182,5 +206,53 @@ module.exports = {
       return publicOutfits;
     }
     throw "Error: Failed to load outfits";
+  },
+
+
+  async delUserOutfit(username, outfitId) {
+    username = validation.checkUsername(username);
+    outfitId = ObjectId(outfitValidation.checkId(outfitId));
+
+    const usersCollection = await users();
+    const userUpdate = await usersCollection.updateOne(
+      { username: username },
+      {
+        $pull: { userOutfits: outfitId },
+      }
+    );
+    if (userUpdate.matchedCount == 0 || userUpdate.modifiedCount == 0) {
+      throw "Error: Failed to delete outfit from user";
+    }
+
+    const outfitsCollection = await outfits();
+    if (!outfitsCollection) throw "Error: could not retrieve outfits";
+    const deletionInfo = await outfitsCollection.findOneAndDelete({
+      _id: outfitId,
+      creator: username,
+    });
+
+    if (!deletionInfo) {
+      throw `Could not delete band with id of ${id}`;
+    }
+    return `${deletionInfo.value.outfitName} has been successfully deleted!`;
+  },
+  async makeAllOutfitsPublic(username) {
+    username = validation.checkUsername(username);
+    const outfitsCollection = await outfits();
+    if (!outfitsCollection) throw "Error: could not retrieve outfits";
+
+    let outfitsArr = await this.getUserOutfits(username);
+
+    if (outfitsArr.length === 0)
+      throw "Error: user does not have any outfits to make public";
+    const updateInfo = await outfitsCollection.updateMany(
+      { creator: username },
+      { $set: { status: "public" } }
+    );
+
+    if (!updateInfo.acknowledged || updateInfo.matchedCount == 0)
+      throw "Error: could not make outfits public";
+
+    return { updated: true };
   },
 };
