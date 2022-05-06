@@ -36,24 +36,6 @@
     return password;
   }
 
-  function checkId(id) {
-    if (!id) throw "must provide s";
-    if (typeof id !== "string") throw "invalid string input";
-    if (id.trim().length === 0)
-      throw "Id cannot be an empty string or just spaces";
-    id = id.trim();
-    if (!ObjectId.isValid(id)) throw "invalid object ID";
-
-    return id;
-  }
-
-  function checkString(string) {
-    if (!string) throw "must provide text input";
-    if (typeof string !== "string") throw "invalid string input";
-    if (string.trim().length === 0)
-      throw "string cannot be an empty string or just spaces";
-    return string;
-  }
 
   var signupForm = $(".user-sign-up"),
     usernameInput = $(".username-input"),
@@ -68,6 +50,7 @@
   pswError.empty();
 
   signupForm.submit(function (event) {
+    console.log("submit");
     event.preventDefault();
     usrError.hide();
     usrError.empty();

@@ -1,5 +1,6 @@
-<h1 class="right">Outfit Details</h1>
 <article class="main">
+
+    <h1 class="right">Outfit Details</h1>
 
     {{!-- image,username,likes,comments--}}
 
@@ -16,26 +17,29 @@
 
         <dt> Number of Likes </dt>
         <dd id="number_likes"> {{likes}}</dd>
-        {{!-- TODO should update each time user presses like --}}
+    </dl>
+    {{!-- TODO should update each time user presses like --}}
 
-        {{!--like button;;save button;;add comment button --}}
-        <a class="btn" id="like">Like</a>
-        <a class="btn" id="save">Save</a>
-        </br>
+    {{!--like button;;save button;;add comment button --}}
+    <a class="btn" id="like">Like</a>
+    <a class="btn" id="save">Save</a>
+    </br>
 
-        {{!-- TODO check comments length = 0 --}}
-
-        {{#if error}}
-        <p class="error">{{error}}</p>
-        {{/if}}
-
-        <p class="error" id="error"></p>
-
-
+    {{!-- TODO check comments length = 0 --}}
+    <dl>
         <dt>Comments</dt>
         <dd id="no_comments"></dd>
-        <dd id="comments"></dd>
+        <dd>
+            <ul id="comments"></ul>
+        </dd>
     </dl>
+
+
+    {{#if error}}
+    <p class="error">{{error}}</p>
+    {{/if}}
+
+    <p class="error" id="error"></p>
 
 
     <form id="commentForm" method="POST" action="/detailed/comment">

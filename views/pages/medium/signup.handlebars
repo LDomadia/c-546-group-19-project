@@ -1,9 +1,4 @@
-<!DOCTYPE html>
-<html lang = "en">
-<head>
-    <meta charset="utf-8">
-    <title>{{title}}</title>
-</head>
+
 <body>
     <article>
         <form action="/account/signup" method="POST" class="user-sign-up">
@@ -12,24 +7,24 @@
             <p>Please fill in this form to create an account.</p>
             <hr>
             {{#if dbErr}}
-                <p>{{error}}</p>
+                <p class = "error">{{error}}</p>
             {{/if}}
             {{#if usernameErr}}
-                <p>{{error}}</p>
+                <p class = "error">{{error}}</p>
             {{/if}}
-            <p class = "username-err" hidden></p>
+            <p class = "username-err"></p>
             <label for="username" class = "username-label">Username</label>
-            <input type="text" class="username-input"placeholder="Enter username (must have at least 2 characters)" value="{{username}}" name="username" required minlength="2">
+            <input id = "username" type="text" class="username-input"placeholder="Enter username (must have at least 2 characters)" value="{{username}}" name="username" required minlength="2">
             
             {{#if pswErr}}
-                <p>{{error}}</p>
+                <p class = "error">{{error}}</p>
             {{/if}}
-            <p class = "psw-err" hidden></p>
+            <p class = "psw-err"></p>
             <label for="psw" class = "psw-label">Password</label>
-            <input type="password" class="psw-input" placeholder="Enter Password (must have at least 8 characters)" name="psw" required minlength="8">
+            <input id = "psw" type="password" class="psw-input" placeholder="Enter Password (must have at least 8 characters)" name="psw" required minlength="8">
             
             <label for="psw-repeat" class="psw-confirm-label">Confirm Password</label>
-            <input type="password" class="psw-confirm" placeholder="Confirm Password" name="pswRepeat" required minlength="8">
+            <input id = "psw-repeat" type="password" class="psw-confirm" placeholder="Confirm Password" name="pswRepeat" required minlength="8">
             
             <div>
             <button type="submit" class="signupbtn">Sign Up</button>
@@ -44,4 +39,3 @@
     </script>
     <script src='/public/scripts/signup.js'></script>
 </body>
-</html>
