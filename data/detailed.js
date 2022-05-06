@@ -28,7 +28,27 @@ module.exports = {
         throw "error in getting outfits collection"
     },
 
+    //get all comments
+
+    async get_all_comments(id){
+        let outfit;
+
+        const outfitsCollection = await outfits();
+        if (outfitsCollection) {
+            outfit = await outfitsCollection.findOne({ status: 'public', _id: ObjectId(id) });
+
+            if (!outfit) {
+                throw "no user found";
+            }
+        }
+        //return an array 
+        console.log(outfit);
+        return outfit.comments;
+    },
+
+
     //update comments
+
 
     async add_comment(id, commenter, text) {
         //check id
@@ -44,7 +64,7 @@ module.exports = {
         }
 
         let newComment = {
-            _id: ObjectId().toString(),
+            _id: ObjectId(),
             commenter: commenter,
             text: text
         };
@@ -76,11 +96,8 @@ module.exports = {
         if (updatedInfo.modifiedCount === 0) {
             throw "Cout not comemnt successfully";
         };
-
-        const modifiedoutfit = await outfitsCollection.findOne({ _id: ObjectId(id) });
-
-        modifiedoutfit._id = modifiedoutfit._id.toString();
-        return modifiedoutfit;
+        
+        return newComment;
     }
 
 

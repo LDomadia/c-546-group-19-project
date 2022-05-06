@@ -18,6 +18,7 @@
         <dt> Creator </dt>
         <dd>{{creator}}</dd>
 
+
         <dt> Number of Likes </dt>
         <dd id="number_likes"> {{likes}}</dd>
         {{!-- TODO should update each time user presses like --}}
@@ -29,22 +30,22 @@
 
         {{!-- TODO check comments length = 0 --}}
 
-        {{!-- <dt>Comments</dt>
-        <dd>
-            {{#if condition}}
-            <p>No Comments Yet</p>
-            {{else}}
-            <ul>
-                {{#each comments}}
-                <li>{{this.commenter}}: {{this.text}}</li>
-                {{/each}}
-            </ul>
-            {{/if}}
-        </dd> --}}
-
         <dt>Comments</dt>
-        <dd id = comments></dd>
+        <dd id="no_comments"></dd>
+        <dd id="comments"></dd>
     </dl>
+
+
+    {{!-- {{#if condition}}
+    <p>No Comments Yet</p>
+    {{else}}
+    <ul>
+        {{#each comments}}
+        <li>{{this.commenter}}: {{this.text}}</li>
+        {{/each}}
+        {{/if}}
+    </ul>
+    --}}
 
 
     <form id="commentForm" method="POST" action="/detailed/comment">
