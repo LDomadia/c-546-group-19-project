@@ -105,9 +105,15 @@
 
     //add comment
     commentForm.submit(function (event) {
+
         event.preventDefault();
 
         var comment = commentInput.val();
+
+        //https://stackoverflow.com/questions/10633605/clear-form-values-after-submission-ajax
+        commentForm[0].reset();
+
+        //error check comment input 
         try {
             comment = checkString(comment);
         }
@@ -115,7 +121,7 @@
             errorDiv.empty();
             errorDiv.show();
             errorDiv.text(e);
-
+            return;
         }
 
         //deal with commenter in routes
@@ -130,11 +136,8 @@
         }
 
         $.ajax(requestConfig).then(function (responseMessage) {
+            //add comment successful
             if (responseMessage.success) {
-
-                //console.log(responseMessage.comment);
-                //display comments
-
                 //return singular new comment
                 let newComment = responseMessage.comment;
 
@@ -149,7 +152,12 @@
 
             }
             else{
-
+                //TODO test 
+                let e = responseMessage.error;
+                errorDiv.empty();
+                errorDiv.show();
+                errorDiv.text(e);
+                return;
             }
 
         })
