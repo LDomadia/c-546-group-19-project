@@ -4,6 +4,7 @@ const clothesData = require("../data/clothes");
 const multer = require("multer");
 const upload = multer({ dest: "uploads/" });
 const validate = require("../validation/clothes_validation");
+const { ObjectId } = require('mongodb');
 
 //Middleware
 router.use("/", (req, res, next) => {
@@ -36,6 +37,7 @@ router.route("/").get(async (req, res) => {
     res.status(500).render("pages/results/clothings", {
       title: "My Clothes",
       clothesPage: true,
+      stylesheet: "/public/styles/clothes_styles.css",
       error: e,
     });
   }
@@ -56,6 +58,7 @@ router
 
     try {
       if (!data) throw "Error: Nothing was entered";
+      if (!req.session.user) throw 'Error: No user is logged in';
       data.name = validate.checkTextInput(data.name, "Clothing Name");
       req.file.filename = validate.checkFileInput(req.file.filename, "Image");
       data.type = validate.checkSelectInput(data.type, "Type", [
@@ -125,6 +128,7 @@ router
   .route("/edit/:id")
   .get(async (req, res) => {
     try {
+      if (!ObjectId.isValid(req.params.id)) throw "Error: Clothing Item id is not valid";
       const clothingItem = await clothesData.getClothingItemById(req.params.id);
       if (clothingItem) {
         return res.status(200).render("pages/single/clothingEdit", {
@@ -150,6 +154,8 @@ router
 
     try {
       if (!data) throw "Error: Nothing was entered";
+      if (!req.session.user) throw 'Error: No user is logged in';
+      if (!ObjectId.isValid(req.params.id)) throw "Error: Clothing Item id is not valid";
       data.name = validate.checkTextInput(data.name, "Clothing Name");
       if (req.file)
         req.file.filename = validate.checkFileInput(req.file.filename, "Image");
@@ -256,6 +262,7 @@ router
 
 router.route("/view/:id").get(async (req, res) => {
   try {
+    if (!ObjectId.isValid(req.params.id)) throw "Error: Clothing Item id is not valid";
     const clothingItem = await clothesData.getClothingItemById(req.params.id);
     if (clothingItem) {
       return res.status(200).render("pages/single/clothingDetails", {
@@ -278,10 +285,17 @@ router.route("/view/:id").get(async (req, res) => {
 
 router.route("/delete/:id").delete(async (req, res) => {
   try {
-    console.log('id: ' + req.params.id);
-    return res.status(200).json({ result: 'success' });
+    if (!req.session.user) throw 'Error: No user is logged in';
+    if (!ObjectId.isValid(req.params.id)) throw "Error: Clothing Item id is not valid";
+    const result = await clothesData.deleteClothingItem(req.params.id, req.session.user.username);
+    if (result.result == 'success') {
+      return res.status(200).json({ result: 'success' });
+    }
+    else {
+      throw 'Error: An error occurred deleting the Clothing Item';
+    }
   } catch (e) {
-    return res.status(500).json({ result: 'error' });
+    return res.status(500).json({ result: e });
   }
 });
 
