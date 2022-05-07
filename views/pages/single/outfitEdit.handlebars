@@ -13,7 +13,7 @@
             <div class="clothing-item-details">
                 <h3 class="clothing-item-title">{{name}}</h3>
                 <p class="clothing-type">Type: {{type}}</p>
-               <label class ="add-label"><input type="checkbox" class="add-box">
+               <label class ="add-label"><input type="checkbox" {{#ifIdIn _id ../outfit.clothes}} checked {{/ifIdIn}} class="add-box">
                Add to outfit</label>
                 <br>
             </div>
@@ -24,30 +24,40 @@
         <p id = "form-err" tabindex="0"></p>
         <div id="name-div">
             <label class="input-label" for="name-input">Outfit Name *</label>
-            <input id="name-input" name="name" type="text" required>
+            <input id="name-input" name="name" type="text" value="{{outfit.outfitName}}" required>
         </div>
         <br>
         <div>
             <label class="input-label">Seasons</label>
-            <input id="winter-input" type="checkbox" name="season[]" value="winter">
+            <input id="winter-input" type="checkbox" name="season[]" value="winter" {{#ifIn 'winter' outfit.season}} checked {{/ifIn}}>
             <label for="winter-input">Winter</label>
-            <input id="spring-input" type="checkbox" name="season[]" value="spring">
+            <input id="spring-input" type="checkbox" name="season[]" value="spring" {{#ifIn 'spring' outfit.season}} checked {{/ifIn}}>
             <label for="spring-input">Spring</label>
-            <input id="summer-input" type="checkbox" name="season[]" value="summer">
+            <input id="summer-input" type="checkbox" name="season[]" value="summer" {{#ifIn 'summer' outfit.season}} checked {{/ifIn}}>
             <label for="summer-input">Summer</label>
-            <input id="fall-input" type="checkbox" name="season[]" value="fall">
+            <input id="fall-input" type="checkbox" name="season[]" value="fall" {{#ifIn 'fall' outfit.season}} checked {{/ifIn}}>
             <label for="fall-input">Fall</label>
         </div>
         <br>
-        <div>
+        <div id="styles-div">
             <label class="input-label" for="styles-input">Styles</label>
             <input id="styles-input" type="text">
             <button id="styles-btn" class="add-btn" type="button">Add</button><br>
-            <ul id="styles-list"></ul>
+            <ul id="styles-list">
+                {{#each outfit.style}}
+                    <li>
+                        {{this}}
+                        <input type="hidden" name="style[]" value="{{this}}">
+                        <button type="button" class="chip-btn" aria-label="delete {{this}}" title="delete {{this}}">
+                            <i class="fa-solid fa-circle-xmark"></i>
+                        </button>
+                    </li>
+                {{/each}}
+            </ul>
         </div>
         <br>
     <div><label for="public-chkbox" class="input-label">Public</label>
-    <input type="checkbox" id="public-chkbox" class="public-box" name="public" value="public">
+    <input type="checkbox" id="public-chkbox" class="public-box" name="public" value="public"  {{#equals 'public' outfit.status}} checked {{/equals}}>
     </div>
     </div><br>
     <button id="submit-btn" type="submit">Save</button>
