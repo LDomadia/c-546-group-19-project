@@ -3,6 +3,7 @@ const { clothes, outfits } = require("../data");
 const router = express.Router();
 const data = require("../data/detailed");
 const data2 = require("../data/clothes");
+const accountData = require('../data/account');
 //add in validation 
 const validation = require("../validation/outfits_validation");
 const validation2 = require("../validation/account_validation");
@@ -53,12 +54,14 @@ router.get("/:id", async (req, res) => {
       condition = true;
     }
 
+    const userId = await accountData.getUserIdByUserName(req.session.user.username);
+
     return res.render("pages/single/detailed", {
       //get cloths by data
+      outfitData: outfit,
       clothingData: clothes,
       creator: outfit.creator,
-      likes: outfit.likes,
-      comments: outfit.comments,
+      userId: userId,
       title: "Outfit Details",
       stylesheet: '/public/styles/detailed_styles.css',
       script: '/public/scripts/detailed.js',
@@ -138,56 +141,5 @@ router.post("/:id/comment", async (req, res) => {
   }
 
 });
-
-router.get("/:id/likes", async (req, res) => {
-
-  try {
-    //validate input
-    id = validation2.checkId(req.params.id);
-  }
-  catch (e) {
-    return res.status(400).json({ error: e });
-  }
-
-
-  try {
-    //get outfit
-    let outfit = await data.get_outfit_by_id(req.params.id);
-    //get likes for outfit
-    let likes = outfit.likes;
-
-    return res.json({ success: true, likes: likes });
-
-  }
-  catch (e) {
-    //TODO check over status code
-    return res.json({ error: e });
-
-  }
-
-});
-
-
-// router.post("/:id/likes", async (req, res) => {
-// //add one like
-
-//   try {
-//     let id = validation2.checkId(req.params.id);
-//     let num = await data.update_like(id);
-//     return res.json({ success: true, likes: num });
-//   }
-//   catch (e) {
-//     return res.status(500).render("pages/error/error", {
-//       title: "Error",
-//       stylesheet: '/public/styles/outfit_card_styles.css',
-//       error: e,
-//       code: 500
-//     });
-//   }
-
-// })
-
-
-
 
 module.exports = router;

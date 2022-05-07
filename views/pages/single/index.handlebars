@@ -38,8 +38,7 @@
                     <p class="outfit-creator">{{creator}}</p>
                     <p class="outfit-likes">{{likes.length}} likes</p>
                 </div>
-                
-                <a href ="/detailed/{{_id}}" class="card-btn">View</a>
+                <a href="/detailed/{{_id}}" class="card-btn">View</a>
                 <a class="like-btn icon-btn" href="home/like/{{_id}}">
                     {{#ifIn ../userId likes}}
                     <i class="fa-solid fa-heart"></i>
@@ -54,7 +53,6 @@
                     <i class="fa-regular fa-bookmark"></i>
                     {{/ifIn}}
                 </a>
-
             </div>
         </div>
     {{/each}}

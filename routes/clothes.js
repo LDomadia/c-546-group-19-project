@@ -55,7 +55,6 @@ router
   })
   .post(upload.single("img"), async (req, res) => {
     const data = req.body;
-
     try {
       if (!data) throw "Error: Nothing was entered";
       if (!req.session.user) throw 'Error: No user is logged in';
