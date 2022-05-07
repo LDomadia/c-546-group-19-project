@@ -8,7 +8,7 @@
 <body>
     <main>
     <h1 class = "stats-title">{{title}}</h1>
-    
+    <div class="error-message">{{error}}</div>
     <section class ="stats-sect">
         <figure>
             <figcaption class="stats-caption">Types</figcaption>
@@ -37,6 +37,30 @@
                 {{#each brands}}
                 <li class="stats-list capitalize">
                     {{@key}}: {{this}}
+                </li>
+                {{/each}}
+            </ul>
+        </figure>
+
+        <figure>
+            <figcaption class="stats-caption">Outfits Worn</figcaption>
+            <ul>
+                {{#each clothesWorn}}
+                <li class="stats-list capitalize">
+                    {{outfits}}: {{total}}
+                    <p class="id_tag">{{_id}}</p>
+                </li>
+                {{/each}}
+            </ul>
+        </figure>
+
+        <figure>
+            <figcaption class="stats-caption">Clothes Worn</figcaption>
+            <ul>
+                {{#each clothesWorn}}
+                <li class="stats-list capitalize">
+                    {{cloth}}: {{total}}
+                    <p class="id_tag">{{_id}}</p>
                 </li>
                 {{/each}}
             </ul>
