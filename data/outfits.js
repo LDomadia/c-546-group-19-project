@@ -503,7 +503,20 @@ module.exports = {
       throw `Error: Failed to load outfits on ${date}`
     }
     return userOutfits;
-  }
+  },
+  async getOutfitbyIds(ids) {
+    //TODO validate array
+    if(!ids.every(id => ObjectId.isValid(id))){
+      throw "Error: outfit ids contains invalid id"
+    }
+    let outfitItems = [];
+    const outfitsCollection = await outfits();
+    for (let i = 0; i < ids.length; i++) {
+      let outfitsDocument = await outfitsCollection.findOne({ _id: ids[i] });
+      if (outfitsDocument) outfitItems.push(outfitsDocument);
+    }
+    return outfitItems;
+  },
 
 
 };

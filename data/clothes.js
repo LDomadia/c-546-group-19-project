@@ -119,6 +119,9 @@ module.exports = {
   },
   async getClothingbyIds(ids) {
     //TODO validate array
+    if(!ids.every(id => ObjectId.isValid(id))){
+      throw "Error: clothes ids contains invalid id"
+    }
     let clothingItems = [];
     const clothesCollection = await clothes();
     for (let i = 0; i < ids.length; i++) {
