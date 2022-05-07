@@ -64,6 +64,7 @@ router
       if (!data) throw "Error: Nothing was entered";
       if (!data.name) throw "Error: Outfit Name is Required";
       if (!data.name.trim()) throw "Error: Outfit Name is Required";
+      if (!req.session.user) throw 'Error: User is not logged in';
     } catch (e) {
       return res.status(400).render("pages/medium/outfitGenerated", {
         title: "Generate Outfit",
@@ -78,7 +79,8 @@ router
       let result = await gen_outfitData.generateOutfit(
         data["colors-patterns"],
         data.season,
-        data.styles
+        data.styles,
+        req.session.user.username
       );
 
       let clothingItems = await clothesData.getClothingbyIds(

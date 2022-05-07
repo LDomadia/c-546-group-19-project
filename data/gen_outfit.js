@@ -1,5 +1,6 @@
 const mongoCollections = require("../config/mongoCollections");
 const clothes = mongoCollections.clothes;
+const clothesData = require('../data/clothes');
 
 //handle string errors and trim
 const errors_string = function(str, name){
@@ -36,7 +37,7 @@ const errors_string = function(str, name){
 
 
 //gets all occurances of specific cloth type in clothes db
-async function getClothType(collection, cloth_type){
+async function getClothType(collection, cloth_type, user){
     if(!collection){
       throw "Error: Could not get clothes database"
     }
@@ -45,6 +46,16 @@ async function getClothType(collection, cloth_type){
     if(cloth_names.indexOf(cloth_type)<0){
       throw "Error: invalid cloth type"
     }
+    let clothingItemsType = [];
+    let clothingItems = await clothesData.getClothingItems(user);
+
+    clothingItems.forEach(item => {
+      if (item.type.toLowerCase() == cloth_type.toLowerCase()) {
+        clothingItemsType.push(item);
+      }
+    })
+
+    return clothingItemsType;
 
     return await collection.find({
         type: { $regex: "^" + cloth_type + "$", $options: "i" },
@@ -74,8 +85,9 @@ function matchClothPreferences(prefs, cloth){
 //if similarites between each clothing piece match the preferences to a certain threshold, recommend the highest similarity
 //returns an object with the ID of each best matching cloth, can return nothing for a certain piece/s
 //assumption is pararmeters are all given (except optional threshold), and are valid based on the clothes db
-async function generateOutfit(colorPatterns, season, style, threshold=1.5){
+async function generateOutfit(colorPatterns, season, style, user, threshold=1.5,){
     //error handling
+    if (!user || !user.trim()) throw 'Error: User was not provided';
     let err = function(str){return `Error: ${str} was not provided`};
     let arg_names = ["colorPatterns", "season", "style"];
     for(let i = 0; i < arg_names.length; i++){
@@ -102,7 +114,7 @@ async function generateOutfit(colorPatterns, season, style, threshold=1.5){
     let existingClothes = {}
 
     for(let i = 0; i < cloth_names.length; i++){
-      existingClothes[cloth_names[i]] = await getClothType(clothesCollection, cloth_names[i])
+      existingClothes[cloth_names[i]] = await getClothType(clothesCollection, cloth_names[i], user)
     }
 
     const prefs = {
