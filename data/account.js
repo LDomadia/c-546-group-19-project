@@ -114,7 +114,7 @@ module.exports = {
     }
 
     if (compare) {
-      return { authenticated: true };
+      return user.username;
     } else throw "Either the username or password is invalid";
   },
 
@@ -157,6 +157,13 @@ module.exports = {
 
     return existingUser.statistics
     
-  }
+  },
 
+  async getUserIdByUserName(user) {
+    if (!user || !user.trim()) throw 'Error: User is empty';
+    const usersCollection = await users();
+    const userDoc = await usersCollection.findOne({ username: user });
+    if (!userDoc) throw 'Error: Failed to find User';
+    return userDoc._id;
+  }
 };

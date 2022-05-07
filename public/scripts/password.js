@@ -27,7 +27,6 @@
   
   
     passForm.submit(function (event) {
-        console.log("here");
       event.preventDefault();
       error.hide();
       error.empty();

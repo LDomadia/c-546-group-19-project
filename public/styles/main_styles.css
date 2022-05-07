@@ -1,23 +1,29 @@
+*:focus {
+  border: 1px solid blue !important;
+}
+
 body {
-    width: auto;
+    /* width: auto; */
     font-family: "Courier New";
-    padding: 1em;
+    /* padding: 1em; */
+    padding: 0;
+    margin: 0;
 
     background-color: #f5eef5;
   
-    /* Full height */
+    /* Full height
     height: 100%;
   
     /* Center and scale the image nicely */
-    background-position: center;
+    /* background-position: center;
     background-repeat: no-repeat;
-    background-size: cover;
+    background-size: cover; */
 
 }
 
 h1 {
     font-family: "Helvetica";
-    transform: translate(10px, 5px);
+    /* transform: translate(10px, 5px); */
 }
 
 .left {
@@ -41,6 +47,10 @@ header{
     color: #b80659;
 }
 
+main {
+  padding: 0 1em;
+}
+
 footer {
     text-align: right;
     color: #d813b7;
@@ -53,7 +63,7 @@ footer {
     overflow: hidden;
 
     /* fill top part of screen*/
-    position: absolute;
+    /* position: absolute; */
     top: 0;
     right: 0;
     left: 0;
@@ -138,4 +148,54 @@ dt {
 
 .profile label{
   font-weight:bold;
+}
+
+.capitalize {
+  text-transform: capitalize;
+}
+
+.button-44 {
+  background: #e62143;
+  border-radius: 11px;
+  box-sizing: border-box;
+  color: #fff;
+  cursor: pointer;
+  display: flex;
+  font-family: Mija,-apple-system,BlinkMacSystemFont,Roboto,"Roboto Slab","Droid Serif","Segoe UI",system-ui,Arial,sans-serif;
+  font-size: 1.15em;
+  font-weight: 700;
+  justify-content: center;
+  line-height: 33.4929px;
+  padding: .8em 1em;
+  text-align: center;
+  text-decoration: none;
+  text-decoration-skip-ink: auto;
+  text-shadow: rgba(0, 0, 0, .3) 1px 1px 1px;
+  text-underline-offset: 1px;
+  transition: all .2s ease-in-out;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  width: auto;
+  word-break: break-word;
+  border: 0;
+}
+
+.button-44:active,
+.button-44:focus {
+  border-bottom-style: none;
+  border-color: #dadada;
+  box-shadow: rgba(0, 0, 0, .3) 0 3px 3px inset;
+  outline: 0;
+}
+
+.button-44:hover {
+  border-bottom-style: none;
+  border-color: #dadada;
+}
+
+.icon-btn {
+  font-size: 20px;
+  color: #333;
+  border: 1px solid transparent;
 }

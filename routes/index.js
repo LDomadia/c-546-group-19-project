@@ -6,16 +6,19 @@ const statsRoutes = require("./stats");
 const accountRoutes = require("./account");
 const profileRoutes = require("./profile");
 const calRoutes = require("./calendar")
+const detailedRoutes = require("./detailed");
+const pubRoute = require("./publicize");
 
 const constructorMethod = (app) => {
   app.use("/account", accountRoutes);
-
+  app.use("/publicize", pubRoute);
   app.use("/home", homeRoutes);
   app.use("/clothes", clothesRoutes);
   app.use("/outfits", outfitsRoutes);
   app.use("/profile", profileRoutes);
   app.use("/stats", statsRoutes);
   app.use("/calendar",calRoutes);
+  app.use("/detailed",detailedRoutes);
 
   app.use("/", (req, res) => {
     res.redirect("/home");

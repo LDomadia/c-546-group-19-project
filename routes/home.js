@@ -1,31 +1,77 @@
 const express = require("express");
 const router = express.Router();
+const outfitsData = require('../data/outfits');
+const accountData = require('../data/account');
+const { ObjectId } = require('mongodb');
 
 //Middleware
 router.use("/", (req, res, next) => {
-  if (req.session.user) {
+  if (!req.session.user) {
     return res.render("pages/single/index", {
       title: "Digital Closet",
       homePage: true,
-      logged_in: true,
+      not_logged_in: true,
     });
   }
   next();
 });
 
 // GET /
-router.get("/", async (req, res) => {
+router.route('/').get( async (req, res) => {
   try {
-    let logged_in = false;
+    if (!req.session.user) throw 'Error: No user is logged in';
+    const publicOutfits = await outfitsData.getAllOutfits();
+    const userId = await accountData.getUserIdByUserName(req.session.user.username);
 
-    if (req.session.user) logged_in = true;
-    res.render("pages/single/index", {
+    res.status(200).render("pages/single/index", {
       title: "Digital Closet",
       homePage: true,
-      not_logged_in: !logged_in,
+      outfits: publicOutfits,
+      userId: userId,
+      stylesheet: '/public/styles/outfit_card_styles.css',
+      script: '/public/scripts/home_script.js'
     });
   } catch (e) {
-    res.sendStatus(500);
+    res.status(404).render("pages/single/index", {
+      title: "Digital Closet",
+      homePage: true,
+      stylesheet: '/public/styles/outfit_card_styles.css',
+      script: '/public/scripts/home_script.js',
+      error: e
+    });
+  }
+});
+
+router.route('/like/:id').post(async (req, res) => {
+  try {
+    if (!req.session.user) throw 'Error: No user is logged in';
+    if (!ObjectId.isValid(req.params.id)) throw "Error: Clothing Item id is not valid";
+    const result = await outfitsData.likeOutfit(req.params.id, req.session.user.username);
+    if (result.result == 'success') {
+      return res.json(result);
+    }
+    else {
+      throw 'Error: Failed to like/dislike Outfit';
+    }
+  } catch (e) {
+    return res.json({ result: e });
+  }
+});
+
+router.route('/save/:id').post(async (req, res) => {
+  try {
+    if (!req.session.user) throw 'Error: No user is logged in';
+    if (!ObjectId.isValid(req.params.id)) throw "Error: Clothing Item id is not valid";
+    const result = await outfitsData.saveOutfit(req.params.id, req.session.user.username);
+    if (result.result == 'success') {
+      return res.json(result);
+    }
+    else {
+      throw 'Error: Failed to save/unsave Outfit';
+    }
+  } catch (e) {
+    console.log(e)
+    return res.json({ result: e });
   }
 });
 

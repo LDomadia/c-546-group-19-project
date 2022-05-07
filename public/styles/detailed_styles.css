@@ -1,0 +1,38 @@
+/**for images**/
+
+img {
+    border-radius: 8px;
+    padding: 5px;
+    height: 400px;
+    width:auto;
+}
+
+btn {
+    display: inline-block;
+    padding: 6px 10px;
+    border-radius: 5px;
+    background-color: #333;
+    color: white;
+    border: none;
+    font-size: 14px;
+    text-decoration: none;
+}
+/**https://stackoverflow.com/questions/1713048/how-to-style-dt-and-dd-so-they-are-on-the-same-line**/
+dl.inline dd {
+    display: inline;
+    margin: 0;
+}
+
+dl.inline dd:after {
+    display: block;
+    content: '';
+}
+
+dl.inline dt {
+    display: inline-block;
+    min-width: 100px;
+}
+
+.error{
+    color:red;
+  }

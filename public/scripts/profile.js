@@ -51,6 +51,7 @@
     try {
       bio = checkString(bio);
     } catch (e) {
+      console.log("here");
       //alert(e);
       bioInput.empty();
       error.text(e);
@@ -70,7 +71,6 @@
     var storen = storeName.val();
     var storel = storeLink.val();
     try {
-
       storen = checkString(storen);
       storel = checkWebsite(storel);
     } catch (e) {
