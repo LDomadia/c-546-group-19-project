@@ -227,14 +227,14 @@ router.route("/edit/:id").get(async (req, res) => {
       title: "Edit Outfit",
       outfitsPage: true,
       clothingItems: clothingItems,
-      script: "/public/scripts/outfits.js",
+      script: "/public/scripts/outfit_edit.js",
       outfit: currentOutfit,
     });
   } catch (e) {
     res.status(400).render("pages/results/outfits", {
       title: "My Outfits",
       stylesheet: "/public/styles/outfit_card_styles.css",
-      script: "/public/scripts/outfit_edit.js",
+      script: "/public/scripts/outfits.js",
       outfitsPage: true,
       error: e,
     });
