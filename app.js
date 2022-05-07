@@ -14,10 +14,14 @@ app.set("view engine", "handlebars");
 
 var hbs = exphbs.create({});
 hbs.handlebars.registerHelper("ifIn", function (elem, list, options) {
-  if (list.indexOf(elem) > -1) {
-    return options.fn(this);
-  }
-  return options.inverse(this);
+  if (typeof list != 'object') return options.inverse(this);
+  let result = options.inverse(this);
+  list.forEach(e => {
+    if (e.toString() == elem.toString()) {
+      result = options.fn(this);
+    }
+  });
+  return result;
 });
 
 hbs.handlebars.registerHelper("equals", function (elem, target, options) {

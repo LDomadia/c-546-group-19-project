@@ -1,6 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const outfitsData = require('../data/outfits');
+const accountData = require('../data/account');
+const { ObjectId } = require('mongodb');
 
 //Middleware
 router.use("/", (req, res, next) => {
@@ -15,14 +17,17 @@ router.use("/", (req, res, next) => {
 });
 
 // GET /
-router.get("/", async (req, res) => {
+router.route('/').get( async (req, res) => {
   try {
-    const publicOutfits = await outfitsData.getAllOutfits(); 
+    if (!req.session.user) throw 'Error: No user is logged in';
+    const publicOutfits = await outfitsData.getAllOutfits();
+    const userId = await accountData.getUserIdByUserName(req.session.user.username);
 
     res.status(200).render("pages/single/index", {
       title: "Digital Closet",
       homePage: true,
       outfits: publicOutfits,
+      userId: userId,
       stylesheet: '/public/styles/outfit_card_styles.css',
       script: '/public/scripts/home_script.js'
     });
@@ -34,6 +39,39 @@ router.get("/", async (req, res) => {
       script: '/public/scripts/home_script.js',
       error: e
     });
+  }
+});
+
+router.route('/like/:id').post(async (req, res) => {
+  try {
+    if (!req.session.user) throw 'Error: No user is logged in';
+    if (!ObjectId.isValid(req.params.id)) throw "Error: Clothing Item id is not valid";
+    const result = await outfitsData.likeOutfit(req.params.id, req.session.user.username);
+    if (result.result == 'success') {
+      return res.json(result);
+    }
+    else {
+      throw 'Error: Failed to like/dislike Outfit';
+    }
+  } catch (e) {
+    return res.json({ result: e });
+  }
+});
+
+router.route('/save/:id').post(async (req, res) => {
+  try {
+    if (!req.session.user) throw 'Error: No user is logged in';
+    if (!ObjectId.isValid(req.params.id)) throw "Error: Clothing Item id is not valid";
+    const result = await outfitsData.saveOutfit(req.params.id, req.session.user.username);
+    if (result.result == 'success') {
+      return res.json(result);
+    }
+    else {
+      throw 'Error: Failed to save/unsave Outfit';
+    }
+  } catch (e) {
+    console.log(e)
+    return res.json({ result: e });
   }
 });
 
