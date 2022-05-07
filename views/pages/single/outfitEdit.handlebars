@@ -4,7 +4,7 @@
 <div>
     <p class="page-error">{{error}}</p>
     <br>
-    <form id="new-outfit-form" method="POST" action="/outfits/new">
+    <form class="edit-outfit-form" name"outfit-edit-form" method="POST" action="/outfits/edit/{{outfit._id}}">
     <div class="form-div">
         <p id="outfit-err" tabindex="0"></p>
         {{#each clothingItems}}
@@ -48,7 +48,7 @@
                     <li>
                         {{this}}
                         <input type="hidden" name="style[]" value="{{this}}">
-                        <button type="button" class="chip-btn" aria-label="delete {{this}}" title="delete {{this}}">
+                        <button type="button" name="{{this}}" class="chip-btn" aria-label="delete {{this}}" title="delete {{this}}">
                             <i class="fa-solid fa-circle-xmark"></i>
                         </button>
                     </li>
@@ -60,7 +60,7 @@
     <input type="checkbox" id="public-chkbox" class="public-box" name="public" value="public"  {{#equals 'public' outfit.status}} checked {{/equals}}>
     </div>
     </div><br>
-    <button id="submit-btn" type="submit">Save</button>
+    <button id="submit-btn" type="submit">Edit</button>
     </form>
     <br>
     <a href="/outfits">Go back</a>
