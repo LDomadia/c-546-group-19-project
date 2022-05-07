@@ -69,6 +69,7 @@ router.route("/log").get(async (req, res) => {
       stylesheet: "/public/styles/outfit_card_styles.css",
       script: "/public/scripts/outfits.js",
       outfits: outfitItems,
+      date: date
     });
   } catch (e) {
     return res.status(500).render("pages/medium/calendar_log", {
@@ -78,8 +79,8 @@ router.route("/log").get(async (req, res) => {
   }
 }).post(async (req, res) => {
   try {
-    const id = req.body
-    console.log(id)
+    const log_info = req.body
+    console.log(log_info)
 
     let outfitItems = await outfitsData.getUserOutfits(req.session.user.username)
 

@@ -36,7 +36,9 @@
             <!-- Carousel wrapper -->
             <div class="outfit-card-details">
                 <h3 class="outfit-title">{{outfitName}}</h3>
-                <a class="card-btn" href="/calendar">Log</a>
+                <form action="/calendar/log" method="POST">
+                <button name="log_info" value="{{_id}},{{../date}}">Log Outfits</button>
+                </form>
             </div>
         </div>
     {{/each}}
