@@ -58,17 +58,21 @@ router.route("/log").get(async (req, res) => {
     //before sending this, remove all outfits found in calendar for current date
       
     return res.render("pages/medium/calendar_log", {
-      title: "My Outfits",
+      title: "Log Outfits",
       outfitsPage: true,
       stylesheet: "/public/styles/outfit_card_styles.css",
       script: "/public/scripts/outfits.js",
       outfits: outfitItems,
-      msg: "",
     });
   } catch (e) {
-    return res.status(500).render("pages/medium/calendar_log", {title:"Log Outfits",
-                                                              outfitItems: outfitItems,
-                                                              error: e});
+    return res.status(500).render("pages/medium/calendar_log", {
+      title: "Log Outfits",
+      outfitsPage: true,
+      stylesheet: "/public/styles/outfit_card_styles.css",
+      script: "/public/scripts/outfits.js",
+      outfits: outfitItems,
+      error: e,
+    });
   }
 }).post(async (req, res) => {
   try {
