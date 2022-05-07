@@ -9,7 +9,9 @@
             <div class="outfit-item-details">
                 <h3 class="outfit-item-title">{{name}}</h3>
                 <p>Type: {{type}}</p>
-                <button>Log</button>
+                <form id="log-form" method="POST" action="/calendar/log">
+                    <input type="submit" id="log" value={{_id}} />
+                </form>
             </div>
         </div>
     {{/each}}

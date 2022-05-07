@@ -55,6 +55,19 @@ router.route("/").get(async (req, res) => {
 router.route("/log").get(async (req, res) => {
   try {
     let outfitItems = await outfitsData.getOutfitItems(req.session.user.username)
+    //before sending this, remove all outfits found in calendar for current date
+      
+    return res.render("pages/medium/calendar_log", {title:"Log Outfits",
+                                                    outfitItems: outfitItems});
+  } catch (e) {
+    return res.status(500).render("pages/medium/calendar_log", {title:"Log Outfits",
+                                                              outfitItems: outfitItems,
+                                                              error: e});
+  }
+}).post(async (req, res) => {
+  try {
+    const id = req.body
+    console.log(id)
 
       
     return res.render("pages/medium/calendar_log", {title:"Log Outfits",
@@ -64,6 +77,8 @@ router.route("/log").get(async (req, res) => {
                                                               outfitItems: outfitItems,
                                                               error: e});
   }
+
+
 });
 
 module.exports = router;

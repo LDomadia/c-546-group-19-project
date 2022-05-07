@@ -155,8 +155,6 @@ module.exports = {
     });
     if (!existingUser) throw "Error: could not find user";
 
-    console.log(existingUser)
-
     return existingUser.statistics
     
   }
