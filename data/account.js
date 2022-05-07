@@ -57,6 +57,8 @@ module.exports = {
         brands: {},
       },
       calendar: {},
+      bio: '', 
+      stores: []
     };
     const insertInfo = await userCollection.insertOne(newUser);
     if (!insertInfo.acknowledged || !insertInfo.insertedId)
