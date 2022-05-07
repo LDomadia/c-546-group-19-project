@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const accountData = require("../data/account");
+const outfitsData = require("../data/outfits");
 const validate = require('../validation/clothes_validation');
 
 //Middleware
@@ -33,12 +34,12 @@ router.route("/").get(async (req, res) => {
     }
 
     date_num = date.map(e => validate.checkNumericTextInput(e, "date", true))
-    console.log(date_num)
 
 
 
     mdy_format = `${date_obj["month"]}/${date_obj["day"]}/${date_obj["year"]}`
-    
+
+    const update_calendar = await accountData.updateCalendar(req.session.user.username);
 
 
    return res.render("pages/single/calendar", 
@@ -48,6 +49,20 @@ router.route("/").get(async (req, res) => {
     return res.status(500).render("pages/single/calendar", 
     {title:"Calendar",
      error: e});;
+  }
+});
+
+router.route("/log").get(async (req, res) => {
+  try {
+    let outfitItems = await outfitsData.getOutfitItems(req.session.user.username)
+
+      
+    return res.render("pages/medium/calendar_log", {title:"Log Outfits",
+                                                    outfitItems: outfitItems});
+  } catch (e) {
+    return res.status(500).render("pages/medium/calendar_log", {title:"Log Outfits",
+                                                              outfitItems: outfitItems,
+                                                              error: e});
   }
 });
 
