@@ -41,10 +41,16 @@ router.route("/").get(async (req, res) => {
 
     mdy_format = `${date_obj["month"]}-${date_obj["day"]}-${date_obj["year"]}`
 
+    let outfitItems = await outfitsData.getOutfitsOnDate(req.session.user.username, mdy_format)
+
 
    return res.render("pages/single/calendar", 
                      {title:"Calendar",
-                      date: mdy_format});
+                      outfitsPage: true,
+                      stylesheet: "/public/styles/outfit_card_styles.css",
+                      script: "/public/scripts/outfits.js",
+                      date: mdy_format,
+                      outfits: outfitItems});
   } catch (e) {
     return res.status(500).render("pages/single/calendar", 
     {title:"Calendar",
@@ -89,17 +95,10 @@ router.route("/log").get(async (req, res) => {
 
     if (!ObjectId.isValid(log_info.log_id)) throw "Error: Logged outfit id is not valid";
 
-    console.log(log_info)
-
     let e = await outfitsData.addOutfitToCalendar(log_info.log_id, log_info.log_date)
 
-    console.log(e)
-
-    let outfitItems = await outfitsData.getOutfitsOnDate(req.session.user.username, log_info.log_date)
-    console.log(outfitItems)
-
       
-    return res.render("pages/medium/calendar_log", {title:"Log Outfits"});
+    return res.redirect("/calendar");
   } catch (e) {
     return res.status(500).render("pages/medium/calendar_log", {title:"Log Outfits",
                                                               error: e});

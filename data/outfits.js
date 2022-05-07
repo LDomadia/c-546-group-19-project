@@ -429,7 +429,9 @@ module.exports = {
 
     let calendar = account.calendar[date]
 
-    if(!calendar) throw `Error: no outfits logged on ${date}`
+    if(!calendar){
+      calendar = []
+    }
 
     const outfitsCollection = await outfits();
 
@@ -442,7 +444,6 @@ module.exports = {
       for (let outfit of userOutfits) {
         outfit["clothingData"] = [];
         for (let clothingId of outfit.clothes) {
-          // console.log(clothingId);
           const clothingItem = await clothesData.getClothingItemById(
             clothingId.toString()
           );
