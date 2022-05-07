@@ -54,7 +54,7 @@ router.route("/").get(async (req, res) => {
 
 router.route("/log").get(async (req, res) => {
   try {
-    let outfitItems = await outfitsData.getOutfitItems(req.session.user.username)
+    let outfitItems = await outfitsData.getUserOutfits(req.session.user.username)
     //before sending this, remove all outfits found in calendar for current date
       
     return res.render("pages/medium/calendar_log", {
