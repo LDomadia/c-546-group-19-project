@@ -240,7 +240,50 @@ router.route("/edit/:id").get(async (req, res) => {
     });
   }
 });
-
+router.route("/edit/:id").post(async (req, res) => {
+  //need error checking
+  try {
+    let name = req.body.name;
+    let images = req.body.outfits;
+    let seasons = req.body.season ? req.body.season : [];
+    let status = req.body.public ? "public" : "private";
+    let styles = req.body.styles ? req.body.styles : [];
+    let id = outfitValidation.checkId(req.params.id);
+    styles = styles.map((style) => style.trim().toLowerCase());
+    if (!images || images.length < 2)
+      throw "Error: not enough clothes to make outfit";
+    let clothesIdArr = await clothesData.getClothingIdsByImages(images);
+    let updateInfo = await outfitsData.updateUserOutfit(
+      req.session.user.username,
+      id,
+      clothesIdArr,
+      status,
+      name,
+      seasons,
+      styles
+    );
+    if (!updateInfo.updated) throw "Error: could not update outfit";
+    let outfitItems = await outfitsData.getUserOutfits(
+      req.session.user.username
+    );
+    res.render("pages/results/outfits", {
+      title: "My Outfits",
+      outfitsPage: true,
+      stylesheet: "/public/styles/outfit_card_styles.css",
+      script: "/public/scripts/outfits.js",
+      outfits: outfitItems,
+      msg: "Outfit has successfuly been edited!",
+    });
+  } catch (e) {
+    res.status(400).render("pages/results/outfits", {
+      title: "My Outfits",
+      stylesheet: "/public/styles/outfit_card_styles.css",
+      script: "/public/scripts/outfits.js",
+      outfitsPage: true,
+      error: e,
+    });
+  }
+});
 router.route("/delete/:id").delete(async (req, res) => {
   let id;
   try {
