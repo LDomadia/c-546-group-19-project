@@ -99,6 +99,7 @@ module.exports = {
       creator: creator,
       clothes: clothes,
       likes: [],
+      likes_count: 0,
       status: status,
       outfitName: outfitName,
       season: season,
@@ -186,13 +187,10 @@ module.exports = {
     const outfitsCollection = await outfits();
     if (outfitsCollection) {
       const publicOutfits = await outfitsCollection
-        .find(
-          { status: "public" },
-          {
-            $orderby: { likes: 1 },
-          }
-        )
+        .find({ status: "public" })
+        .sort({ likes_count: -1 })
         .toArray();
+      
       if (publicOutfits) {
         for (let outfit of publicOutfits) {
           outfit["clothingData"] = [];
@@ -281,7 +279,8 @@ module.exports = {
         throw 'Error: Failed to remove like from User document';
 
       const theOutfit = await outfitsCollection.updateOne({ _id: id }, {
-        $pull: { likes: userDoc._id }
+        $pull: { likes: userDoc._id },
+        $inc: { likes_count: -1 }
       });
       if (theOutfit.matchedCount == 0 || theOutfit.modifiedCount == 0)
         throw 'Error: Failed to remove like from User document';
@@ -296,7 +295,8 @@ module.exports = {
         throw 'Error: Failed to add like to User document';
 
       const theOutfit = await outfitsCollection.updateOne({ _id: id }, {
-        $push: { likes: userDoc._id }
+        $push: { likes: userDoc._id },
+        $inc: { likes_count: 1 }
       });
       if (theOutfit.matchedCount == 0 || theOutfit.modifiedCount == 0)
         throw 'Error: Failed to add like to User document';
