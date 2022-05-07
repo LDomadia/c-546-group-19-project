@@ -37,8 +37,8 @@
                     }
                     else {
                         Swal.fire(
-                            'Oh no!',
-                            'An error occurred liking/disliking this outfit.',
+                            'Oh no! An error occurred.',
+                            result.result,
                             'error'
                         );
                     }
@@ -62,8 +62,8 @@
                     }
                     else {
                         Swal.fire(
-                            'Oh no!',
-                            'An error occurred saving/unsaving this outfit.',
+                            'Oh no! An error occurred.',
+                            result.result,
                             'error'
                         );
                     }
