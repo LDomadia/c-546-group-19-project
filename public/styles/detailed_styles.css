@@ -18,7 +18,7 @@ btn {
     text-decoration: none;
 }
 /**https://stackoverflow.com/questions/1713048/how-to-style-dt-and-dd-so-they-are-on-the-same-line**/
-dl.inline dd {
+/* dl.inline dd {
     display: inline;
     margin: 0;
 }
@@ -31,6 +31,49 @@ dl.inline dd:after {
 dl.inline dt {
     display: inline-block;
     min-width: 100px;
+} */
+
+dl {
+    display: grid;
+    grid-template-columns: max-content auto;
+    margin: 0;
+}
+
+dt {
+    width: 100px;
+    grid-column-start: 1;
+}
+
+dd {
+    grid-column-start: 2;
+}
+
+dl li {
+    list-style: none;
+    display: inline-flex;
+    border: 1px solid #333;
+    border-radius: 30px;
+    color: #333;
+    padding: 4px 10px;
+    /* margin: 0 4px; */
+}
+
+dl {
+    margin: 0 !important;
+}
+
+dl ul {
+    margin: 0;
+    padding: 0;
+}
+
+.likes-saves-div p, likes-saves-div a{
+    display: inline-block;
+}
+
+.icon-btn {
+    float: right;
+    padding: 0 3px;
 }
 
 .error{

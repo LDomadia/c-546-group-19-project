@@ -3,6 +3,7 @@ const { clothes, outfits } = require("../data");
 const router = express.Router();
 const data = require("../data/detailed");
 const data2 = require("../data/clothes");
+const accountData = require('../data/account');
 //add in validation 
 const validation = require("../validation/outfits_validation");
 const validation2 = require("../validation/account_validation");
@@ -53,12 +54,14 @@ router.get("/:id", async (req, res) => {
       condition = true;
     }
 
+    const userId = await accountData.getUserIdByUserName(req.session.user.username);
+
     return res.render("pages/single/detailed", {
       //get cloths by data
+      outfitData: outfit,
       clothingData: clothes,
       creator: outfit.creator,
-      likes: outfit.likes,
-      comments: outfit.comments,
+      userId: userId,
       title: "Outfit Details",
       stylesheet: '/public/styles/detailed_styles.css',
       script: '/public/scripts/detailed.js',

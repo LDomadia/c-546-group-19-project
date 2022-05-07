@@ -1,9 +1,28 @@
 <article class="main">
     <h1>Outfit Details</h1>
     <a href="/home">Back</a>
+    <br>
     <div class="form-div">
+        <h3>{{outfitData.outfitName}}</h3>
+        <div class="likes-saves-div">
+            <p class="outfit-likes">{{outfitData.likes.length}} likes</p>
+            <a class="save-btn icon-btn" href="home/save/{{outfitData._id}}">
+                {{#ifIn userId outfitData.saves}}
+                <i class="fa-solid fa-bookmark"></i>
+                {{else}}
+                <i class="fa-regular fa-bookmark"></i>
+                {{/ifIn}}
+            </a>
+            <a class="like-btn icon-btn" href="home/like/{{outfitData._id}}">
+                {{#ifIn userId outfitData.likes}}
+                <i class="fa-solid fa-heart"></i>
+                {{else}}
+                <i class="fa-regular fa-heart"></i>
+                {{/ifIn}}
+            </a>
+        </div>
         <div class="outfit-card">
-            <div id="a{{_id}}" class="carousel carousel-dark slide" data-mdb-ride="carousel" data-mdb-interval="false">
+            <div id="a{{outfitData._id}}" class="carousel carousel-dark slide" data-mdb-ride="carousel" data-mdb-interval="false">
                 <!-- Inner -->
                 <div class="carousel-inner">
                     {{#each clothingData}}
@@ -15,34 +34,57 @@
                 </div>
 
                 <!-- Controls -->
-                <button class="carousel-control-prev" type="button" data-mdb-target="#a{{_id}}" data-mdb-slide="prev">
+                <button class="carousel-control-prev" type="button" data-mdb-target="#a{{outfitData._id}}" data-mdb-slide="prev">
                     <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                     <span class="visually-hidden">Previous</span>
                 </button>
-                <button class="carousel-control-next" type="button" data-mdb-target="#a{{_id}}" data-mdb-slide="next">
+                <button class="carousel-control-next" type="button" data-mdb-target="#a{{outfitData._id}}" data-mdb-slide="next">
                     <span class="carousel-control-next-icon" aria-hidden="true"></span>
                     <span class="visually-hidden">Next</span>
                 </button>
             </div>
         </div>
-        <div class="outfit-details">
+        <dl>
+            <dt>Creator</dt>
+            <dd>{{outfitData.creator}}</dd>
+            <dt>Seasons</dt>
+            {{#if outfitData.season}}
+            <dd>
+                <ul>
+                    {{#each outfitData.season}}
+                    <li>{{this}}</li>
+                    {{/each}}
+                </ul>
+            </dd>
+            {{else}}
+            <dd>N/A</dd>
+            {{/if}}
+            <dt>Styles</dt>
+            {{#if outfitData.style}}
+            <dd>
+                <ul>
+                    {{#each outfitData.style}}
+                    <li>{{this}}</li>
+                    {{/each}}
+                </ul>
+            </dd>
+            {{else}}
+            <dd>N/A</dd>
+            {{/if}}
+        </dl>
+        {{!-- <div class="outfit-details">
             <p class="outfit-creator">Creator: {{creator}}</p>
-            <p class="outfit-likes">{{likes.length}} likes</p>
+            <p class="outfit-likes">{{outfitData.likes.length}} likes</p>
         </div>
         <a class="btn" id="like">Like</a>
-        <a class="btn" id="save">Save</a>
-        </br>
+        <a class="btn" id="save">Save</a> --}}
     </div>
     {{!-- TODO check comments length = 0 --}}
     <div class="form-div">
-        <dl>
-            <dt>Comments</dt>
-            <dd id="no_comments"></dd>
-            <dd>
-                <ul id="comments"></ul>
-            </dd>
-        </dl>
-        
+        <h4>Comments</h4>
+        <p id="no_comments"></p>
+        <ul id="comments"></ul>
+
         {{#if error}}
         <p class="error">{{error}}</p>
         {{/if}}
