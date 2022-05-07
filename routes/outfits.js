@@ -64,6 +64,7 @@ router
       if (!data) throw "Error: Nothing was entered";
       if (!data.name) throw "Error: Outfit Name is Required";
       if (!data.name.trim()) throw "Error: Outfit Name is Required";
+      if (!req.session.user) throw 'Error: User is not logged in';
     } catch (e) {
       return res.status(400).render("pages/medium/outfitGenerated", {
         title: "Generate Outfit",
@@ -78,7 +79,8 @@ router
       let result = await gen_outfitData.generateOutfit(
         data["colors-patterns"],
         data.season,
-        data.styles
+        data.styles,
+        req.session.user.username
       );
 
       let clothingItems = await clothesData.getClothingbyIds(
@@ -112,7 +114,7 @@ router
         throw "Error: Failed to Generate Outfit";
       }
     } catch (e) {
-      return res.status(500).render("pages/medium/outfitGenerated", {
+      return res.status(400).render("pages/medium/outfitGenerated", {
         title: "Generate Outfit",
         outfitsPage: true,
         stylesheet: "/public/styles/clothes_styles.css",
@@ -130,7 +132,9 @@ router.route("/new").get(async (req, res) => {
       req.session.user.username
     );
     if (clothingItems.length < 2) {
-      let outfitItems = 1;
+      let outfitItems = await outfitsData.getUserOutfits(
+        req.session.user.username
+      );
       return res.render("pages/results/outfits", {
         title: "My Outfits",
         outfitsPage: true,
@@ -187,7 +191,7 @@ router.route("/new").post(async (req, res) => {
       msg: "Outfit has successfuly been added!",
     });
   } catch (e) {
-    res.status(500).render("pages/results/outfits", {
+    res.status(400).render("pages/results/outfits", {
       title: "My Outfits",
       stylesheet: "/public/styles/outfit_card_styles.css",
       script: "/public/scripts/outfits.js",
@@ -197,6 +201,91 @@ router.route("/new").post(async (req, res) => {
   }
 });
 
+router.route("/edit/:id").get(async (req, res) => {
+  let id;
+  try {
+    id = outfitValidation.checkId(req.params.id);
+    let clothingItems = await clothesData.getClothingItems(
+      req.session.user.username
+    );
+    //change this to a redirect to outfits page, use session for msg
+    if (clothingItems.length < 2) {
+      let outfitItems = await outfitsData.getUserOutfits(
+        req.session.user.username
+      );
+      return res.render("pages/results/outfits", {
+        title: "My Outfits",
+        outfitsPage: true,
+        outfitItems: outfitItems,
+        msg: "You need more clothing items to edit this outfit",
+      });
+    }
+
+    let currentOutfit = await outfitsData.getUserOutfitById(
+      req.session.user.username,
+      id
+    );
+    return res.status(200).render("pages/single/outfitEdit", {
+      title: "Edit Outfit",
+      outfitsPage: true,
+      clothingItems: clothingItems,
+      script: "/public/scripts/outfit_edit.js",
+      outfit: currentOutfit,
+    });
+  } catch (e) {
+    res.status(400).render("pages/results/outfits", {
+      title: "My Outfits",
+      stylesheet: "/public/styles/outfit_card_styles.css",
+      script: "/public/scripts/outfits.js",
+      outfitsPage: true,
+      error: e,
+    });
+  }
+});
+router.route("/edit/:id").post(async (req, res) => {
+  //need error checking
+  try {
+    let name = req.body.name;
+    let images = req.body.outfits;
+    let seasons = req.body.season ? req.body.season : [];
+    let status = req.body.public ? "public" : "private";
+    let styles = req.body.styles ? req.body.styles : [];
+    let id = outfitValidation.checkId(req.params.id);
+    styles = styles.map((style) => style.trim().toLowerCase());
+    if (!images || images.length < 2)
+      throw "Error: not enough clothes to make outfit";
+    let clothesIdArr = await clothesData.getClothingIdsByImages(images);
+    let updateInfo = await outfitsData.updateUserOutfit(
+      req.session.user.username,
+      id,
+      clothesIdArr,
+      status,
+      name,
+      seasons,
+      styles
+    );
+    if (!updateInfo.updated) throw "Error: could not update outfit";
+    let outfitItems = await outfitsData.getUserOutfits(
+      req.session.user.username
+    );
+    res.render("pages/results/outfits", {
+      title: "My Outfits",
+      outfitsPage: true,
+      stylesheet: "/public/styles/outfit_card_styles.css",
+      script: "/public/scripts/outfits.js",
+      outfits: outfitItems,
+      msg: "Outfit has successfuly been edited!",
+    });
+  } catch (e) {
+    res.status(400).render("pages/results/outfits", {
+      title: "My Outfits",
+      stylesheet: "/public/styles/outfit_card_styles.css",
+      script: "/public/scripts/outfits.js",
+      outfitsPage: true,
+      error: e,
+    });
+  }
+});
 router.route("/delete/:id").delete(async (req, res) => {
   let id;
   try {

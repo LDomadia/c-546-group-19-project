@@ -23,6 +23,12 @@ hbs.handlebars.registerHelper("ifIn", function (elem, list, options) {
   });
   return result;
 });
+hbs.handlebars.registerHelper("ifIdIn", function (elem, list, options) {
+  for (var id of list) {
+    if (id.equals(elem)) return options.fn(this);
+  }
+  return options.inverse(this);
+});
 
 hbs.handlebars.registerHelper("equals", function (elem, target, options) {
   if (elem === target) {
