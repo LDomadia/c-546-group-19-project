@@ -138,27 +138,6 @@ module.exports = {
     return existingUser.statistics;
   },
 
-  async updateCalendar(username, date, cloth_id){
-    if (!username) throw "Error: username was not provided";
-    if (typeof username !== "string")
-      throw "Error: username should be a string";
-    if (username.indexOf(" ") >= 0)
-      throw "Error: username should not have any spaces";
-    username = username.trim();
-    if (!isAlphanumeric(username))
-      throw "Error: username should only have alphanumberic characters";
-    if (username.length < 2)
-      throw "Error: username must have at least two characters";
-    const userCollection = await users();
-    const existingUser = await userCollection.findOne({
-      username: { $regex: "^" + username + "$", $options: "i" },
-    });
-    if (!existingUser) throw "Error: could not find user";
-
-    return existingUser.statistics
-    
-  },
-
   async getUserIdByUserName(user) {
     if (!user || !user.trim()) throw 'Error: User is empty';
     const usersCollection = await users();
