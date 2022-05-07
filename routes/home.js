@@ -45,7 +45,7 @@ router.route('/').get( async (req, res) => {
 router.route('/like/:id').post(async (req, res) => {
   try {
     if (!req.session.user) throw 'Error: No user is logged in';
-    if (!ObjectId.isValid(req.params.id)) throw "Error: Clothing Item id is not valid";
+    if (!ObjectId.isValid(req.params.id)) throw "Error: Outfit id is not valid";
     const result = await outfitsData.likeOutfit(req.params.id, req.session.user.username);
     if (result.result == 'success') {
       return res.json(result);
@@ -61,7 +61,7 @@ router.route('/like/:id').post(async (req, res) => {
 router.route('/save/:id').post(async (req, res) => {
   try {
     if (!req.session.user) throw 'Error: No user is logged in';
-    if (!ObjectId.isValid(req.params.id)) throw "Error: Clothing Item id is not valid";
+    if (!ObjectId.isValid(req.params.id)) throw "Error: Outfit id is not valid";
     const result = await outfitsData.saveOutfit(req.params.id, req.session.user.username);
     if (result.result == 'success') {
       return res.json(result);
@@ -70,7 +70,6 @@ router.route('/save/:id').post(async (req, res) => {
       throw 'Error: Failed to save/unsave Outfit';
     }
   } catch (e) {
-    console.log(e)
     return res.json({ result: e });
   }
 });

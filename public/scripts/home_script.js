@@ -21,7 +21,6 @@
                 let parent = this.parentElement;
                 let likes = $(parent).find('.outfit-likes');
                 $.ajax(requestConfig).then(function(result) {
-                    console.log();
                     if (result.result == 'success') {
                         likes[0].innerText = result.likes + ' likes';
                         btn.innerHTML = result.icon;
@@ -29,7 +28,7 @@
                     else {
                         Swal.fire(
                             'Oh no!',
-                            'An error occurred liking this outfit.',
+                            'An error occurred liking/disliking this outfit.',
                             'error'
                         );
                     }
@@ -48,14 +47,13 @@
                 };
                 let btn = this;
                 $.ajax(requestConfig).then(function(result) {
-                    console.log();
                     if (result.result == 'success') {
                         btn.innerHTML = result.icon;
                     }
                     else {
                         Swal.fire(
                             'Oh no!',
-                            'An error occurred saving this outfit.',
+                            'An error occurred saving/unsaving this outfit.',
                             'error'
                         );
                     }

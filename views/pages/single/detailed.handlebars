@@ -6,14 +6,14 @@
         <h3>{{outfitData.outfitName}}</h3>
         <div class="likes-saves-div">
             <p class="outfit-likes">{{outfitData.likes.length}} likes</p>
-            <a class="save-btn icon-btn" href="home/save/{{outfitData._id}}">
+            <a class="save-btn icon-btn" href="/home/save/{{outfitData._id}}">
                 {{#ifIn userId outfitData.saves}}
                 <i class="fa-solid fa-bookmark"></i>
                 {{else}}
                 <i class="fa-regular fa-bookmark"></i>
                 {{/ifIn}}
             </a>
-            <a class="like-btn icon-btn" href="home/like/{{outfitData._id}}">
+            <a class="like-btn icon-btn" href="/home/like/{{outfitData._id}}">
                 {{#ifIn userId outfitData.likes}}
                 <i class="fa-solid fa-heart"></i>
                 {{else}}
