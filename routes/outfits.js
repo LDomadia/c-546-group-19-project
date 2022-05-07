@@ -211,29 +211,30 @@ router.route("/edit/:id").get(async (req, res) => {
       let outfitItems = await outfitsData.getUserOutfits(
         req.session.user.username
       );
-      let currentOutfit = await outfitsData.getUserOutfitById(
-        req.session.user.username,
-        id
-      );
       return res.render("pages/results/outfits", {
         title: "My Outfits",
         outfitsPage: true,
         outfitItems: outfitItems,
         msg: "You need more clothing items to edit this outfit",
-        outfit: currentOutfit,
       });
     }
 
-    res.status(200).render("pages/single/outfitEdit", {
+    let currentOutfit = await outfitsData.getUserOutfitById(
+      req.session.user.username,
+      id
+    );
+    return res.status(200).render("pages/single/outfitEdit", {
       title: "Edit Outfit",
       outfitsPage: true,
       clothingItems: clothingItems,
+      script: "/public/scripts/outfits.js",
+      outfit: currentOutfit,
     });
   } catch (e) {
     res.status(400).render("pages/results/outfits", {
       title: "My Outfits",
       stylesheet: "/public/styles/outfit_card_styles.css",
-      script: "/public/scripts/outfits.js",
+      script: "/public/scripts/outfit_edit.js",
       outfitsPage: true,
       error: e,
     });
