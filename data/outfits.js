@@ -421,9 +421,41 @@ module.exports = {
       $set: { "statistics.outfitsWorn": outfitsCounter}
     })
 
+    let clothes = outfit.clothes
+
+    if(clothes==null || !clothes){
+      clothes = []
+    }
+
+    let clothesCounter = account.statistics.clothesWorn
+    if(clothesCounter==null || !clothesCounter){
+      clothesCounter = {}
+    }
+
+    for(let i = 0; i < clothes.length; i++){
+      clothes_id = clothes[i]
+
+      if(!clothesCounter[clothes_id.toString()]){
+        clothesCounter[clothes_id.toString()] = 1
+      }
+      else{
+        clothesCounter[clothes_id.toString()]++;
+      }
+
+      accountUpdate = await accountCollection.updateOne({ username: creator }, {
+        $set: { "statistics.clothesWorn": clothesCounter}
+      })
+
+    }
+
+
     if (accountUpdate.matchedCount == 0 || accountUpdate.modifiedCount == 0) {
       throw "Error: Failed to add outfit to calendar";
     }
+
+    account = await accountCollection.findOne({ username: creator });
+
+    console.log(account)
 
     return {result: "success"}
 
