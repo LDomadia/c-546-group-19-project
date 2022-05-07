@@ -151,7 +151,6 @@ router
   })
   .post(upload.single("img"), async (req, res) => {
     const data = req.body;
-
     try {
       if (!data) throw "Error: Nothing was entered";
       if (!req.session.user) throw 'Error: No user is logged in';
@@ -289,13 +288,13 @@ router.route("/delete/:id").delete(async (req, res) => {
     if (!ObjectId.isValid(req.params.id)) throw "Error: Clothing Item id is not valid";
     const result = await clothesData.deleteClothingItem(req.params.id, req.session.user.username);
     if (result.result == 'success') {
-      return res.status(200).json({ result: 'success' });
+      return res.json(result);
     }
     else {
       throw 'Error: An error occurred deleting the Clothing Item';
     }
   } catch (e) {
-    return res.status(500).json({ result: e });
+    return res.json({ result: e });
   }
 });
 

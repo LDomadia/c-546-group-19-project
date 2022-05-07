@@ -98,12 +98,13 @@ module.exports = {
     let newOutfits = {
       creator: creator,
       clothes: clothes,
-      likes: 0,
+      likes: [],
       status: status,
       outfitName: outfitName,
       season: season,
       style: style,
       comments: [],
+      saves: []
     };
     const insertInfo = await outfitsCollection.insertOne(newOutfits);
     if (!insertInfo.acknowledged || !insertInfo.insertedId)
@@ -192,7 +193,6 @@ module.exports = {
           }
         )
         .toArray();
-      // console.log(publicOutfits);
       if (publicOutfits) {
         for (let outfit of publicOutfits) {
           outfit["clothingData"] = [];
@@ -255,4 +255,106 @@ module.exports = {
 
     return { updated: true };
   },
+  async likeOutfit(id, user) {
+    if (!id || !id.trim()) throw 'Error: Outfit id is empty';
+    if (!ObjectId.isValid(id)) throw 'Error: Outfit id is not valid';
+    id = ObjectId(id);
+    if (!user || !user.trim()) throw 'Error: User is empty';
+
+    const usersCollection = await users();
+    const userDoc = await usersCollection.findOne({ username: user });
+    if (!userDoc) throw 'Error: User does not exist';
+    const outfitsCollection = await outfits();
+    let isLiked = false;
+    let status = '';
+    userDoc.userLikes.forEach(outfit => {
+      if (outfit.toString() == id.toString()) {
+        isLiked = true;
+      }
+    });
+    if (isLiked) {
+      // unlike the outfit
+      const removeLike = await usersCollection.updateOne({ username: user }, {
+        $pull: { userLikes: id }
+      });
+      if (removeLike.matchedCount == 0 || removeLike.modifiedCount == 0)
+        throw 'Error: Failed to remove like from User document';
+
+      const theOutfit = await outfitsCollection.updateOne({ _id: id }, {
+        $pull: { likes: userDoc._id }
+      });
+      if (theOutfit.matchedCount == 0 || theOutfit.modifiedCount == 0)
+        throw 'Error: Failed to remove like from User document';
+      status = '<i class="fa-regular fa-heart"></i>'
+    }
+    else {
+      // like the outfit
+      const removeLike = await usersCollection.updateOne({ username: user }, {
+        $push: { userLikes: id }
+      });
+      if (removeLike.matchedCount == 0 || removeLike.modifiedCount == 0)
+        throw 'Error: Failed to add like to User document';
+
+      const theOutfit = await outfitsCollection.updateOne({ _id: id }, {
+        $push: { likes: userDoc._id }
+      });
+      if (theOutfit.matchedCount == 0 || theOutfit.modifiedCount == 0)
+        throw 'Error: Failed to add like to User document';
+      status = '<i class="fa-solid fa-heart"></i>'
+    }
+    const updatedOutfit = await outfitsCollection.findOne({ _id: id });
+    if (!updatedOutfit) throw 'Error: Failed to get updated Outfit';
+    return { result: 'success', likes: updatedOutfit.likes.length, icon: status };
+  },
+  async saveOutfit(id, user) {
+    if (!id || !id.trim()) throw 'Error: Outfit id is empty';
+    if (!ObjectId.isValid(id)) throw 'Error: Outfit id is not valid';
+    id = ObjectId(id);
+    if (!user || !user.trim()) throw 'Error: User is empty';
+
+    const usersCollection = await users();
+    const userDoc = await usersCollection.findOne({ username: user });
+    if (!userDoc) throw 'Error: User does not exist';
+    const outfitsCollection = await outfits();
+    let isSaved = false;
+    let status = '';
+    userDoc.userSaves.forEach(outfit => {
+      if (outfit.toString() == id.toString()) {
+        isSaved = true;
+      }
+    });
+    if (isSaved) {
+      // unlike the outfit
+      const removeLike = await usersCollection.updateOne({ username: user }, {
+        $pull: { userSaves: id }
+      });
+      if (removeLike.matchedCount == 0 || removeLike.modifiedCount == 0)
+        throw 'Error: Failed to remove save from User document';
+
+      const theOutfit = await outfitsCollection.updateOne({ _id: id }, {
+        $pull: { saves: userDoc._id }
+      });
+      if (theOutfit.matchedCount == 0 || theOutfit.modifiedCount == 0)
+        throw 'Error: Failed to remove save from User document';
+      status = '<i class="fa-regular fa-bookmark"></i>'
+    }
+    else {
+      // like the outfit
+      const removeLike = await usersCollection.updateOne({ username: user }, {
+        $push: { userSaves: id }
+      });
+      if (removeLike.matchedCount == 0 || removeLike.modifiedCount == 0)
+        throw 'Error: Failed to add save to User document';
+
+      const theOutfit = await outfitsCollection.updateOne({ _id: id }, {
+        $push: { saves: userDoc._id }
+      });
+      if (theOutfit.matchedCount == 0 || theOutfit.modifiedCount == 0)
+        throw 'Error: Failed to add save to User document';
+      status = '<i class="fa-solid fa-bookmark"></i>'
+    }
+    const updatedOutfit = await outfitsCollection.findOne({ _id: id });
+    if (!updatedOutfit) throw 'Error: Failed to get updated Outfit';
+    return { result: 'success', icon: status };
+  }
 };

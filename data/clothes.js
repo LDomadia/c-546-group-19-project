@@ -304,18 +304,52 @@ module.exports = {
     id = ObjectId(id);
     const clothesCollection = await clothes();
 
+    const clothingItem = await clothesCollection.findOne({ _id: id });
+    if (!clothingItem) {
+      throw 'Error: Failed to find Clothing Item';
+    }
+    
+    const usersCollection = await users();
+    const userDocument = await usersCollection.findOne({ username: user });
+    if (!userDocument) throw "Error: User does not exists";
+    let stats = userDocument.statistics;
+
+    if (clothingItem.type == "top") stats.type.tops -= 1;
+    else if (clothingItem.type == "bottom") stats.type.bottoms -= 1;
+    else if (clothingItem.type == "dress") stats.type.dresses -= 1;
+    else if (clothingItem.type == "shoes") stats.type.shoes -= 1;
+    else if (clothingItem.type == "accessory") stats.type.accessories -= 1;
+    else if (clothingItem.type == "outerwear") stats.type.outerwear -= 1;
+    else if (clothingItem.type == "socks") stats.type.socks -= 1;
+
+    if (clothingItem["colors-patterns"]) {
+      clothingItem["colors-patterns"].forEach((element) => {
+        if (stats["colors-patterns"][element])
+          stats["colors-patterns"][element] -= 1;
+        if (stats["colors-patterns"][element] == 0)
+          delete stats["colors-patterns"][element];
+      });
+    }
+
+    if (clothingItem.brand) {
+      if (stats["brands"][clothingItem.brand]) 
+        stats["brands"][clothingItem.brand] -= 1;
+      if (stats["brands"][clothingItem.brand] == 0) 
+        delete stats["brands"][clothingItem.brand];
+    }
+
     const deleteClothingItem = await clothesCollection.deleteOne({ _id: id });
     if (!deleteClothingItem.acknowledged || deleteClothingItem.deletedCount == 0) {
       throw 'Error: Failed to delete Clothing Item';
     }
 
-    const usersCollection = await users();
     const userUpdate = await usersCollection.updateOne({ username: user }, {
-      $pull: { userClothes: id }
+      $pull: { userClothes: id }, 
+      $set: { statistics: stats }
     })
     if (userUpdate.matchedCount == 0 || userUpdate.modifiedCount == 0) {
       throw "Error: Failed to delete Clothing Item from User";
-    } 
+    }
 
     const outfitsCollection = await outfits();
     const outfitUpdates = await outfitsCollection.updateMany({ clothes: id }, {
