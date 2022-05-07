@@ -294,11 +294,11 @@ router.post("/password", async (req, res) => {
 router.post("/password2", async (req, res) => {
 
 
-  let username = req.session.user.username;
-  let password1, password2;
+  let username,password1, password2;
 
   try {
     //verify both passwords
+    username = validation.checkUsername(req.session.user.username);
     password1 = validation.checkPassword(req.body.password);
     password2 = validation.checkPassword(req.body.password2);
   }

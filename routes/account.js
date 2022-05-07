@@ -39,6 +39,7 @@ router.get("/signup", async (req, res) => {
 
 // Signup - POST /
 router.post("/signup", async (req, res) => {
+
   let userInfo = req.body;
   let username = userInfo.username;
   let userPsw = userInfo.psw;
