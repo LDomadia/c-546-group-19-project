@@ -225,34 +225,6 @@ module.exports = {
             user.stores = null;
         }
 
-        // let updateUser = {
-        //     username: user.username,
-        //     hashedPassword: user.hashedPassword,
-        //     userClothes: user.userClothes,
-        //     userOutfits: user.userOutfits,
-        //     userLikes: user.userLikes,
-        //     userSaves: user.userSaves,
-        //     statistics: {
-        //         type: {
-        //             tops: user.statistics.type.tops,
-        //             bottoms: user.statistics.type.bottoms,
-        //             dresses: user.statistics.type.dresses,
-        //             shoes: user.statistics.type.shoes,
-        //             accessories: user.statistics.type.accessories,
-        //             outerwear: user.statistics.type.outerwear,
-        //             socks: user.statistics.type.socks,
-        //         },
-        //         //need to call something like user.statistics.colors-patterns
-        //         "colors-patterns": user.statistics["color-patterns"],
-        //         brands: user.statistics.brands,
-        //     },
-        //     calendar: user.calendar,
-        //     stores: user.stores,
-        //     bio: bio
-        //     //favstores
-        //     //bio
-        // };
-
         const updatedInfo = await userCollection.updateOne(
             { username: username },
             { $set: {bio: bio} }
@@ -305,49 +277,49 @@ module.exports = {
 
 
         //if no user liked store
-        if (!user.stores) {
-            //create new array
-            user.stores = [];
-        } else {
+        // if (!user.stores) {
+        //     //create new array
+        //     user.stores = [];
+        // } else {
 
-            for (let i = 0; i < user.stores.length; i++) {
-                if (user.stores[i].name.toLowerCase() == store.toLowerCase())
-                    throw "duplicate store names not allowed"
-            }
+        //     for (let i = 0; i < user.stores.length; i++) {
+        //         if (user.stores[i].name.toLowerCase() == store.toLowerCase())
+        //             throw "duplicate store names not allowed"
+        //     }
 
-        }
-        user.stores.push(newstore);
+        // }
+        // user.stores.push(newstore);
 
 
-        let updateUser = {
-            username: username,
-            hashedPassword: user.hashedPassword,
-            userClothes: user.userClothes,
-            userOutfits: user.userOutfits,
-            userLikes: user.userLikes,
-            userSaves: user.userSaves,
-            statistics: {
-                type: {
-                    tops: user.statistics.type.tops,
-                    bottoms: user.statistics.type.bottoms,
-                    dresses: user.statistics.type.dresses,
-                    shoes: user.statistics.type.shoes,
-                    accessories: user.statistics.type.accessories,
-                    outerwear: user.statistics.type.outerwear,
-                    socks: user.statistics.type.socks,
-                },
-                //need to call something like user.statistics.colors-patterns
-                "colors-patterns": user.statistics["color-patterns"],
-                brands: user.statistics.brands,
-            },
-            calendar: user.calendar,
-            bio: user.bio,
-            stores: user.stores
-        };
+        // let updateUser = {
+        //     username: username,
+        //     hashedPassword: user.hashedPassword,
+        //     userClothes: user.userClothes,
+        //     userOutfits: user.userOutfits,
+        //     userLikes: user.userLikes,
+        //     userSaves: user.userSaves,
+        //     statistics: {
+        //         type: {
+        //             tops: user.statistics.type.tops,
+        //             bottoms: user.statistics.type.bottoms,
+        //             dresses: user.statistics.type.dresses,
+        //             shoes: user.statistics.type.shoes,
+        //             accessories: user.statistics.type.accessories,
+        //             outerwear: user.statistics.type.outerwear,
+        //             socks: user.statistics.type.socks,
+        //         },
+        //         //need to call something like user.statistics.colors-patterns
+        //         "colors-patterns": user.statistics["color-patterns"],
+        //         brands: user.statistics.brands,
+        //     },
+        //     calendar: user.calendar,
+        //     bio: user.bio,
+        //     stores: user.stores
+        // };
 
         const updatedInfo = await userCollection.updateOne(
             { username: username },
-            { $set: updateUser }
+            { $push: { stores: newstore } }
         );
 
         const modifieduser = await userCollection.findOne({
