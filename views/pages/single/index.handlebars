@@ -46,7 +46,13 @@
                     <i class="fa-regular fa-heart"></i>
                     {{/ifIn}}
                 </a>
-                <a class="card-btn">Save</a>
+                <a class="save-btn icon-btn" href="home/save/{{_id}}">
+                    {{#ifIn ../userId saves}}
+                    <i class="fa-solid fa-bookmark"></i>
+                    {{else}}
+                    <i class="fa-regular fa-bookmark"></i>
+                    {{/ifIn}}
+                </a>
             </div>
         </div>
     {{/each}}
