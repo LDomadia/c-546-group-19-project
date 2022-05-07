@@ -1,7 +1,7 @@
 (function($) {
     const carouselImages = $('.carousel-inner');
     const likeBtns = $('.like-btn');
-    const saveBtns = $('.save-btn')
+    const saveBtns = $('.save-btn');
 
     if (carouselImages) {
         for (let i = 0; i < carouselImages.length; i++) {
