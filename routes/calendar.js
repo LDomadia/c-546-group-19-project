@@ -57,8 +57,14 @@ router.route("/log").get(async (req, res) => {
     let outfitItems = await outfitsData.getOutfitItems(req.session.user.username)
     //before sending this, remove all outfits found in calendar for current date
       
-    return res.render("pages/medium/calendar_log", {title:"Log Outfits",
-                                                    outfitItems: outfitItems});
+    return res.render("pages/medium/calendar_log", {
+      title: "My Outfits",
+      outfitsPage: true,
+      stylesheet: "/public/styles/outfit_card_styles.css",
+      script: "/public/scripts/outfits.js",
+      outfits: outfitItems,
+      msg: "",
+    });
   } catch (e) {
     return res.status(500).render("pages/medium/calendar_log", {title:"Log Outfits",
                                                               outfitItems: outfitItems,
