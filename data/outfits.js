@@ -255,9 +255,10 @@ module.exports = {
     return { updated: true };
   },
   async likeOutfit(id, user) {
+    if (!id || !id.trim()) throw 'Error: Outfit id is empty';
     if (!ObjectId.isValid(id)) throw 'Error: Outfit id is not valid';
     id = ObjectId(id);
-    if (!user || !user.trim()) throw 'Error: User is not logged in';
+    if (!user || !user.trim()) throw 'Error: User is empty';
 
     const usersCollection = await users();
     const userDoc = await usersCollection.findOne({ username: user });
@@ -283,7 +284,7 @@ module.exports = {
       });
       if (theOutfit.matchedCount == 0 || theOutfit.modifiedCount == 0)
         throw 'Error: Failed to remove like from User document';
-      status = 'Like'
+      status = '<i class="fa-regular fa-heart"></i>'
     }
     else {
       // like the outfit
@@ -298,10 +299,10 @@ module.exports = {
       });
       if (theOutfit.matchedCount == 0 || theOutfit.modifiedCount == 0)
         throw 'Error: Failed to add like to User document';
-      status = 'Unlike'
+      status = '<i class="fa-solid fa-heart"></i>'
     }
     const updatedOutfit = await outfitsCollection.findOne({ _id: id });
     if (!updatedOutfit) throw 'Error: Failed to get updated Outfit';
-    return { result: 'success', likes: updatedOutfit.likes.length, status: status };
+    return { result: 'success', likes: updatedOutfit.likes.length, icon: status };
   }
 };

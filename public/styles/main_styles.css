@@ -193,3 +193,8 @@ dt {
   border-bottom-style: none;
   border-color: #dadada;
 }
+
+.icon-btn {
+  font-size: 20px;
+  color: #333;
+}

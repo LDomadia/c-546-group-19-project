@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const outfitsData = require('../data/outfits');
+const accountData = require('../data/account');
 const { ObjectId } = require('mongodb');
 
 //Middleware
@@ -18,12 +19,15 @@ router.use("/", (req, res, next) => {
 // GET /
 router.route('/').get( async (req, res) => {
   try {
-    const publicOutfits = await outfitsData.getAllOutfits(); 
+    if (!req.session.user) throw 'Error: No user is logged in';
+    const publicOutfits = await outfitsData.getAllOutfits();
+    const userId = await accountData.getUserIdByUserName(req.session.user.username);
 
     res.status(200).render("pages/single/index", {
       title: "Digital Closet",
       homePage: true,
       outfits: publicOutfits,
+      userId: userId,
       stylesheet: '/public/styles/outfit_card_styles.css',
       script: '/public/scripts/home_script.js'
     });

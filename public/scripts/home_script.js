@@ -23,7 +23,7 @@
                     console.log();
                     if (result.result == 'success') {
                         likes[0].innerText = result.likes + ' likes';
-                        btn.innerText = result.status;
+                        btn.innerHTML = result.icon;
                     }
                     else {
                         Swal.fire(
