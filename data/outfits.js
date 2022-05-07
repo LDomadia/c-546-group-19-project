@@ -209,7 +209,69 @@ module.exports = {
     }
     throw "Error: Failed to load outfits";
   },
+  async updateUserOutfit(
+    creator,
+    outfitId,
+    clothes,
+    status,
+    outfitName,
+    season,
+    style
+  ) {
+    creator = validation.checkUsername(creator);
+    outfitId = ObjectId(outfitValidation.checkId(outfitId));
+    let err = function (str) {
+      return `Error: ${str} was not provided`;
+    };
+    let arg_names = ["clothes", "status", "outfitName", "season", "style"];
+    for (let i = 0; i < arg_names.length; i++) {
+      if (!arguments[i]) {
+        throw err(arg_names[i]);
+      }
+    }
 
+    if (
+      typeof status !== "string" ||
+      (status.localeCompare("public") !== 0 &&
+        status.localeCompare("private") !== 0)
+    ) {
+      throw "Error: status should be a string that is public or private";
+    }
+    outfitName = outfitName.trim();
+    if (typeof outfitName !== "string" || outfitName.length === 0) {
+      throw "Error: outfit name should be a nonempty string";
+    }
+
+    status = errors_string(status, "status");
+    outfitName = errors_string(outfitName, "outfitName");
+
+    season = errors_strlist(season, "season");
+    style = errors_strlist(style, "style");
+    clothes = errors_clothes(clothes, "clothes");
+    if (clothes.length < 2)
+      throw "Error: 2 clothing items are need to create an outfit";
+    style = style.map((s) => s.trim().toLowerCase());
+    creator = validation.checkUsername(creator);
+    const outfitsCollection = await outfits();
+    const updateInfo = await outfitsCollection.updateOne(
+      {
+        creator: creator,
+        _id: outfitId,
+      },
+      {
+        $set: {
+          clothes: clothes,
+          status: status,
+          outfitName: outfitName,
+          season: season,
+          style: style,
+        },
+      }
+    );
+    if (updateInfo.matchedCount == 0 || updateInfo.modifiedCount == 0)
+      throw "Error: Failed to edit outfit";
+    return { updated: true };
+  },
   async delUserOutfit(username, outfitId) {
     username = validation.checkUsername(username);
     outfitId = ObjectId(outfitValidation.checkId(outfitId));
