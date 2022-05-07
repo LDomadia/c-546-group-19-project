@@ -3,7 +3,9 @@
 
 {{#if date}}
 <p>Date: {{date}}</p>
-<a href="/calendar/log">Log Outfits</a>
+<form action="/calendar/log" method="GET">
+    <button name="date" value={{date}}>Log Outfits</button>
+</form>
 {{/if}}
 
 <form id="calendar-form" method="POST" action="/calendar">

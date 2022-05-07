@@ -1,4 +1,5 @@
 const express = require("express");
+const moment = require("moment");
 const router = express.Router();
 const accountData = require("../data/account");
 const outfitsData = require("../data/outfits");
@@ -37,7 +38,7 @@ router.route("/").get(async (req, res) => {
 
 
 
-    mdy_format = `${date_obj["month"]}/${date_obj["day"]}/${date_obj["year"]}`
+    mdy_format = `${date_obj["month"]}-${date_obj["day"]}-${date_obj["year"]}`
 
     const update_calendar = await accountData.updateCalendar(req.session.user.username);
 
@@ -53,9 +54,14 @@ router.route("/").get(async (req, res) => {
 });
 
 router.route("/log").get(async (req, res) => {
+  
+
   try {
     let outfitItems = await outfitsData.getUserOutfits(req.session.user.username)
-    //before sending this, remove all outfits found in calendar for current date
+    let date = req.query.date
+    if(!moment(date,"MM-DD-YYYY", true).isValid()){
+      throw `Cannot log invalid date ${date}`
+    }
       
     return res.render("pages/medium/calendar_log", {
       title: "Log Outfits",
@@ -67,17 +73,15 @@ router.route("/log").get(async (req, res) => {
   } catch (e) {
     return res.status(500).render("pages/medium/calendar_log", {
       title: "Log Outfits",
-      outfitsPage: true,
-      stylesheet: "/public/styles/outfit_card_styles.css",
-      script: "/public/scripts/outfits.js",
-      outfits: outfitItems,
-      error: e,
-    });
+      error: e
+    });;
   }
 }).post(async (req, res) => {
   try {
     const id = req.body
     console.log(id)
+
+    let outfitItems = await outfitsData.getUserOutfits(req.session.user.username)
 
       
     return res.render("pages/medium/calendar_log", {title:"Log Outfits",

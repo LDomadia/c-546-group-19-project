@@ -2,6 +2,9 @@
 <div>
     <div class="error-message">{{error}}</div>
     <p class="success">{{msg}}</p>
+    {{#if error}}
+    <a href="/calendar">Go Back to Calendar</a>
+    {{/if}}
     
     <br>
 <article class="main">
