@@ -355,7 +355,7 @@ module.exports = {
     const outfitUpdates = await outfitsCollection.updateMany({ clothes: id }, {
       $pull: { clothes: id }
     })
-    if (outfitUpdates.matchedCount != 0 && outfitUpdates.modifiedCount == 0) {
+    if (outfitUpdates.matchedCount != outfitUpdates.modifiedCount) {
       throw 'Error: Failed to delete Clothing Item from Outfits';
     }
 
