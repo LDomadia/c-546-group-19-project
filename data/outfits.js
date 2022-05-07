@@ -2,9 +2,11 @@ const mongoCollections = require("../config/mongoCollections");
 const validation = require("../validation/account_validation");
 const outfitValidation = require("../validation/outfit_validation");
 const clothesData = require("../data/clothes");
+const accountData = require("../data/account");
 const outfits = mongoCollections.outfits;
 const users = mongoCollections.users;
 const { ObjectId } = require("mongodb");
+const moment = require("moment");
 
 const errors_string = function (str, name) {
   if (!str || str == null) {
@@ -356,5 +358,104 @@ module.exports = {
     const updatedOutfit = await outfitsCollection.findOne({ _id: id });
     if (!updatedOutfit) throw 'Error: Failed to get updated Outfit';
     return { result: 'success', icon: status };
+  },
+
+  async addOutfitToCalendar(id, date){
+    if (!id || !id.trim()) throw 'Error: Outfit id is empty';
+    if (!ObjectId.isValid(id)) throw 'Error: Outfit id is not valid';
+    id = ObjectId(id);
+
+    if(!moment(date,"MM-DD-YYYY", true).isValid()){
+      throw `Cannot log invalid date ${date}`
+    }
+
+    const outfitsCollection = await outfits();
+
+    let outfit = await outfitsCollection.findOne({ _id: id });
+
+    if(!outfit) throw `Error: Could not find outfit with id`
+
+    let creator = outfit.creator
+
+    if(!creator) throw `Error: undefined creator name`
+
+    const accountCollection = await users();
+
+    let account = await accountCollection.findOne({ username: creator });
+
+    if(!account) throw `Error: Could not find account with username`
+
+    let newCalendar = account.calendar
+
+    if(newCalendar==null || !newCalendar){
+      newCalendar = {}
+    }
+
+    //add id to calendar date
+    if(!newCalendar[date]){
+      newCalendar[date] = [id]
+    }
+    else{
+      if(!newCalendar[date].every(outfit => outfit.toString() != id)){
+        throw `Error: Outfit already added to calendar on ${date}`
+      }
+      newCalendar[date].push(id)
+    }
+
+    const accountUpdate = await accountCollection.updateOne({ username: creator }, {
+      $set: { calendar: newCalendar }
+    })
+
+    if (accountUpdate.matchedCount == 0 || accountUpdate.modifiedCount == 0) {
+      throw "Error: Failed to add outfit to calendar";
+    }
+
+    return {result: "success"}
+
+  },
+
+  async getOutfitsOnDate(username, date){
+
+    if(!username) throw `Error: Invalid username`
+
+    if(!moment(date,"MM-DD-YYYY", true).isValid()){
+      throw `Cannot log invalid date ${date}`
+    }
+
+    const accountCollection = await users();
+    let account = await accountCollection.findOne({ username: username });
+
+    if(!account) throw `Error: Could not find account with username`
+
+    let calendar = account.calendar[date]
+
+    if(!calendar) throw `Error: no outfits logged on ${date}`
+
+    const outfitsCollection = await outfits();
+
+    let userOutfits = [];
+    for(let i = 0; i < calendar.length; i++){
+      userOutfits.push(await outfitsCollection.findOne({ _id: calendar[i] }))
+    }
+
+    if (userOutfits) {
+      for (let outfit of userOutfits) {
+        outfit["clothingData"] = [];
+        for (let clothingId of outfit.clothes) {
+          // console.log(clothingId);
+          const clothingItem = await clothesData.getClothingItemById(
+            clothingId.toString()
+          );
+          if (clothingItem) outfit["clothingData"].push(clothingItem);
+          else throw "Error: Failed to find Clothing Item";
+        }
+      }
+    }
+    else{
+      throw `Error: Failed to load outfits on ${date}`
+    }
+    return userOutfits;
   }
+
+
 };

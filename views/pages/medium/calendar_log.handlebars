@@ -37,7 +37,8 @@
             <div class="outfit-card-details">
                 <h3 class="outfit-title">{{outfitName}}</h3>
                 <form action="/calendar/log" method="POST">
-                <button name="log_info" value="{{_id}},{{../date}}">Log Outfits</button>
+                <input name="log_id" type="hidden" value={{_id}}></input>
+                <button name="log_date" value="{{../date}}">Log Outfit</button>
                 </form>
             </div>
         </div>

@@ -1,5 +1,6 @@
 const express = require("express");
 const moment = require("moment");
+const { ObjectId } = require("mongodb");
 const router = express.Router();
 const accountData = require("../data/account");
 const outfitsData = require("../data/outfits");
@@ -40,8 +41,6 @@ router.route("/").get(async (req, res) => {
 
     mdy_format = `${date_obj["month"]}-${date_obj["day"]}-${date_obj["year"]}`
 
-    const update_calendar = await accountData.updateCalendar(req.session.user.username);
-
 
    return res.render("pages/single/calendar", 
                      {title:"Calendar",
@@ -80,16 +79,29 @@ router.route("/log").get(async (req, res) => {
 }).post(async (req, res) => {
   try {
     const log_info = req.body
+
+    if(!log_info) throw "Could not get logging information";
+
+    //validate log info
+    if(!moment(log_info.log_date,"MM-DD-YYYY", true).isValid()){
+      throw `Cannot log invalid date ${log_info.log_date}`
+    }
+
+    if (!ObjectId.isValid(log_info.log_id)) throw "Error: Logged outfit id is not valid";
+
     console.log(log_info)
 
-    let outfitItems = await outfitsData.getUserOutfits(req.session.user.username)
+    let e = await outfitsData.addOutfitToCalendar(log_info.log_id, log_info.log_date)
+
+    console.log(e)
+
+    let outfitItems = await outfitsData.getOutfitsOnDate(req.session.user.username, log_info.log_date)
+    console.log(outfitItems)
 
       
-    return res.render("pages/medium/calendar_log", {title:"Log Outfits",
-                                                    outfitItems: outfitItems});
+    return res.render("pages/medium/calendar_log", {title:"Log Outfits"});
   } catch (e) {
     return res.status(500).render("pages/medium/calendar_log", {title:"Log Outfits",
-                                                              outfitItems: outfitItems,
                                                               error: e});
   }
 
