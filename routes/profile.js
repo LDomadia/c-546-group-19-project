@@ -1,6 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const data = require("../data/profile");
+const clothesdata = require("../data/clothes");
+const deletedata = require("../data/delete");
 const validation = require("../validation/account_validation")
 
 //Middleware
@@ -180,7 +182,7 @@ router.post("/", async (req, res) => {
         username: req.session.user.username,
         bio: user.bio,
         stores: user.stores,
-        noStore:err,
+        noStore: err,
         E: true,
         error: e
       });
@@ -198,7 +200,7 @@ router.post("/", async (req, res) => {
         bio: user.bio,
         stores: user.stores,
         E: true,
-        noStore:err,
+        noStore: err,
         error: e
       });
       return;
@@ -208,14 +210,14 @@ router.post("/", async (req, res) => {
     //update page
     try {
       req.session.user.stores = user.stores;
-      err=false;
+      err = false;
 
       return res.render("pages/single/profile", {
         title: "Profile",
         username: username,
         bio: user.bio,
         stores: user.stores,
-        noStore:err,
+        noStore: err,
         E: false,
       });
     }
@@ -225,19 +227,19 @@ router.post("/", async (req, res) => {
         username: req.session.user.username,
         bio: user.bio,
         stores: user.stores,
-        noStore:err,
+        noStore: err,
         E: true,
         error: e
       });
     }
   }
-  else{
+  else {
     return res.render("pages/single/profile", {
       title: "Profile",
       username: req.session.user.username,
       bio: bio,
       stores: stores,
-      noStore:err,
+      noStore: err,
       E: true,
       error: "Must provide input in the textbox"
     });
@@ -250,7 +252,7 @@ router.post("/", async (req, res) => {
 router.get("/password", async (req, res) => {
 
   try {
-    return res.render("pages/single/changepassword", {title:"Change Password"});
+    return res.render("pages/single/changepassword", { title: "Change Password" });
   }
   catch (e) {
     return res.status(500).render("pages/error/error", { code: 500, error: e });
@@ -269,7 +271,7 @@ router.post("/password", async (req, res) => {
   }
   catch (e) {
     //error
-    return res.render("pages/single/changepassword", { title: "Change Password",passwordE: true, error: e })
+    return res.render("pages/single/changepassword", { title: "Change Password", passwordE: true, error: e })
   }
 
   try {
@@ -283,7 +285,7 @@ router.post("/password", async (req, res) => {
   }
 
   try {
-    return res.render("pages/single/changepassword2", {title: "Change Password"});
+    return res.render("pages/single/changepassword2", { title: "Change Password" });
   }
   catch (e) {
     return res.status(500).render("pages/error/error", { code: 500, error: e });
@@ -294,7 +296,7 @@ router.post("/password", async (req, res) => {
 router.post("/password2", async (req, res) => {
 
 
-  let username,password1, password2;
+  let username, password1, password2;
 
   try {
     //verify both passwords
@@ -304,7 +306,7 @@ router.post("/password2", async (req, res) => {
   }
   catch (e) {
     //error
-    return res.render("pages/single/changepassword2", { title: "Change Password",passwordE: true, error: e })
+    return res.render("pages/single/changepassword2", { title: "Change Password", passwordE: true, error: e })
   }
 
 
@@ -321,7 +323,7 @@ router.post("/password2", async (req, res) => {
   try {
     req.session.destroy();
 
-    return res.render("pages/single/changepassword3", {title: "Password Changed", not_logged_in: true, });
+    return res.render("pages/single/changepassword3", { title: "Password Changed", not_logged_in: true, });
   }
   catch (e) {
     return res.status(500).render("pages/error/error", { code: 500, error: e });
@@ -332,20 +334,52 @@ router.post("/password2", async (req, res) => {
 
 //get profile if signed in 
 router.get("/delete", async (req, res) => {
-  res.render("pages/medium/delete", {title:"Delete Account"});
+  res.render("pages/medium/delete", { title: "Delete Account",stylesheet: '/public/styles/outfit_card_styles.css', });
 });
 
 router.post("/delete", async (req, res) => {
 
+  //error checking 
+  if (!req.session.user) {
+    return res.redirect("/account/login");
+  }
+
   try {
+    validation.checkUsername(req.session.user.username);
+  }
+  catch (e) {
+    return res.status(400).render("pages/medium/delete", {
+      title: "Delete Account",
+      error: e,
+      deleteE: true
+    });
+  }
+
+
+  try{
+    await deletedata.deleteUserClothes(req.session.user.username);
+    await deletedata.deleteUserOutfits(req.session.user.username);
+  }
+  catch (e) {
+    return res.status(404).render("pages/medium/delete", {
+      title: "Delete Account",
+      error: e,
+      deleteE: true
+    });
+  }
+
+  try {
+
     await data.removeAccount(req.session.user.username);
+    //remove clothes
     req.session.destroy();
-    return res.redirect("/home");
+    //return res.json({deleted:true});
+    return res.render("pages/medium/confirmdeletion", { title: "Account Deleted", not_logged_in: true, });
   }
 
   catch (e) {
-    res.render("pages/medium/delete", {
-      title:"Delete Account",
+    res.status(404).render("pages/medium/delete", {
+      title: "Delete Account",
       error: e,
       deleteE: true
     });

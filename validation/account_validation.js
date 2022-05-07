@@ -40,7 +40,7 @@ module.exports = {
   
     checkId(id) {
         if (!id) throw "must provide s"
-        if (typeof id !== 'string') throw 'invalid string input';
+        if (typeof id !== 'string') throw 'id is not a string';
         if (id.trim().length === 0)
             throw 'Id cannot be an empty string or just spaces';
         id = id.trim();
