@@ -1,5 +1,5 @@
 (function ($) {
-  const outfitForm = $("#new-outfit-form"),
+  const outfitForm = $(".edit-outfit-form"),
     nameDiv = $("#name-div"),
     nameInput = $("#name-input"),
     outfitsList = $("#outfits-list"),
@@ -42,6 +42,7 @@
       outfitErr.show();
       outfitErr.focus();
       event.preventDefault();
+      return;
     }
 
     try {
@@ -57,6 +58,7 @@
       formErr.show();
       formErr.focus();
       event.preventDefault();
+      return;
     }
 
     try {
@@ -77,6 +79,7 @@
       formErr.show();
       formErr.focus();
       event.preventDefault();
+      return;
     }
     if (stylesInput.val().trim() !== "") {
       outfitForm.find(".outfit-element").remove();
@@ -85,6 +88,7 @@
       formErr.show();
       formErr.focus();
       event.preventDefault();
+      return;
     }
   });
   $(".add-box:checked").each(function () {
@@ -114,11 +118,51 @@
   });
 
   $(".add-box:not(:checked)").each(function () {
+    let image_name = $(this)
+      .parent()
+      .parent()
+      .siblings(".clothing-item-image")
+      .attr("src")
+      .split("/")[2];
     let type = $(this).parent().siblings(".clothing-type").text();
     let index = outfitsArr.indexOf(image_name);
     if (index !== -1) {
       outfitsArr.splice(index, 1);
-      typesDict[type] = 0;
+      typesDict[type]--;
+    }
+  });
+
+  addBox.change(function () {
+    outfitErr.empty().hide();
+    let image_name = $(this)
+      .parent()
+      .parent()
+      .siblings(".clothing-item-image")
+      .attr("src")
+      .split("/")[2];
+    let type = $(this).parent().siblings(".clothing-type").text();
+    if ($(this).is(":checked")) {
+      outfitsArr.push(image_name);
+      if (!typesDict[type] || typesDict[type] <= 0) {
+        typesDict[type] = 1;
+      } else if (type !== "Type: Accessory") {
+        outfitErr.empty();
+        outfitErr.text(
+          "You cannot have multiple of the same types (except for accessories) in an outfit"
+        );
+        outfitErr.show();
+        outfitErr.focus();
+        $(this).prop("checked", false);
+        outfitsArr.splice(outfitsArr.indexOf(image_name), 1);
+      } else {
+        typesDict[type]++;
+      }
+    } else {
+      let index = outfitsArr.indexOf(image_name);
+      if (index !== -1) {
+        outfitsArr.splice(index, 1);
+        typesDict[type]--;
+      }
     }
   });
 
@@ -142,7 +186,10 @@
       stylesInput.focus();
     }
   });
-
+  $(".chip-btn").each(function (btn) {
+    this.addEventListener("click", removeFromList);
+    // addToList($(this).attr("name").trim(), stylesList, "styles[]");
+  });
   function addToList(inputValue, list, listName) {
     if (inputValue) {
       let btn = document.createElement("button");
