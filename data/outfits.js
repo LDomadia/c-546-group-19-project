@@ -402,8 +402,23 @@ module.exports = {
       newCalendar[date].push(id)
     }
 
-    const accountUpdate = await accountCollection.updateOne({ username: creator }, {
+    let outfitsCounter = account.statistics.outfitsWorn
+    if(outfitsCounter==null || !outfitsCounter){
+      outfitsCounter = {}
+    }
+
+    if(!outfitsCounter[id.toString()]){
+      outfitsCounter[id.toString()] = 1
+    }
+    else{
+      outfitsCounter[id.toString()]++;
+    }
+
+    let accountUpdate = await accountCollection.updateOne({ username: creator }, {
       $set: { calendar: newCalendar }
+    })
+    accountUpdate = await accountCollection.updateOne({ username: creator }, {
+      $set: { "statistics.outfitsWorn": outfitsCounter}
     })
 
     if (accountUpdate.matchedCount == 0 || accountUpdate.modifiedCount == 0) {
