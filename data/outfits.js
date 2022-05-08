@@ -7,6 +7,7 @@ const outfits = mongoCollections.outfits;
 const users = mongoCollections.users;
 const { ObjectId } = require("mongodb");
 const moment = require("moment");
+const { checkId } = require("../validation/account_validation");
 
 const errors_string = function (str, name) {
   if (!str || str == null) {
@@ -60,41 +61,14 @@ module.exports = {
     const userDocument = await usersCollection.findOne({ username: username });
     return userDocument.userOutfits;
   },
-  async addNewOutfits(creator, clothes, status, outfitName, season, style) {
-    let err = function (str) {
-      return `Error: ${str} was not provided`;
-    };
-    let arg_names = [
-      "creator",
-      "clothes",
-      "status",
-      "outfitName",
-      "season",
-      "style",
-    ];
-    for (let i = 0; i < arg_names.length; i++) {
-      if (!arguments[i]) {
-        throw err(arg_names[i]);
-      }
-    }
-    if (typeof creator !== "string") {
-      throw "Error: creator should be a string";
-    }
-    if (typeof status !== "string") {
-      throw "Error: status should be a string";
-    }
-    if (typeof outfitName !== "string") {
-      throw "Error: outfit name should be a string";
-    }
-    creator = errors_string(creator, "creator");
-    status = errors_string(status, "status");
-    outfitName = errors_string(outfitName, "outfitName");
+  async addNewOutfits(creator, clothes, status, outfitName, seasons, styles) {
+    creator = validation.checkUsername(creator);
+    outfitName = outfitValidation.checkOutfitName(outfitName);
+    seasons = outfitValidation.checkSeasons(seasons);
+    status = outfitValidation.checkStatus(status);
+    styles = outfitValidation.checkStyles(styles);
+    clothes = outfitValidation.checkIdArrays(clothes);
 
-    season = errors_strlist(season, "season");
-    style = errors_strlist(style, "style");
-    clothes = errors_clothes(clothes, "clothes");
-
-    style = style.map((s) => s.trim().toLowerCase());
     let validOutfit = clothesData.checkTypes(clothes);
     const outfitsCollection = await outfits();
     let newOutfits = {
@@ -104,8 +78,8 @@ module.exports = {
       likes_count: 0,
       status: status,
       outfitName: outfitName,
-      season: season,
-      style: style,
+      season: seasons,
+      style: styles,
       comments: [],
       saves: [],
     };
@@ -303,10 +277,8 @@ module.exports = {
     return { updated: true };
   },
   async likeOutfit(id, user) {
-    if (!id || !id.trim()) throw "Error: Outfit id is empty";
-    if (!ObjectId.isValid(id)) throw "Error: Outfit id is not valid";
-    id = ObjectId(id);
-    if (!user || !user.trim()) throw "Error: User is empty";
+    id = validation.checkId(id);
+    user = validation.checkUsername(user);
 
     const usersCollection = await users();
     const userDoc = await usersCollection.findOne({ username: user });
@@ -371,10 +343,8 @@ module.exports = {
     };
   },
   async saveOutfit(id, user) {
-    if (!id || !id.trim()) throw "Error: Outfit id is empty";
-    if (!ObjectId.isValid(id)) throw "Error: Outfit id is not valid";
-    id = ObjectId(id);
-    if (!user || !user.trim()) throw "Error: User is empty";
+    id = validation.checkId(id);
+    user = validation.checkUsername(user);
 
     const usersCollection = await users();
     const userDoc = await usersCollection.findOne({ username: user });
@@ -434,9 +404,7 @@ module.exports = {
   },
 
   async addOutfitToCalendar(id, date) {
-    if (!id || !id.trim()) throw "Error: Outfit id is empty";
-    if (!ObjectId.isValid(id)) throw "Error: Outfit id is not valid";
-    id = ObjectId(id);
+    id = outfitValidation.checkId(id);
 
     if (!moment(date, "MM-DD-YYYY", true).isValid()) {
       throw `Cannot log invalid date ${date}`;
@@ -539,7 +507,7 @@ module.exports = {
 
   async getOutfitsOnDate(username, date) {
     if (!username) throw `Error: Invalid username`;
-    username = outfitValidation.checkUsername(username);
+    username = validation.checkUsername(username);
     if (!moment(date, "MM-DD-YYYY", true).isValid()) {
       throw `Cannot log invalid date ${date}`;
     }
@@ -579,10 +547,7 @@ module.exports = {
     return userOutfits;
   },
   async getOutfitbyIds(ids) {
-    //TODO validate array
-    if (!ids.every((id) => ObjectId.isValid(id))) {
-      throw "Error: outfit ids contains invalid id";
-    }
+    ids = outfitValidation.checkOutfitIds(ids);
     let outfitItems = [];
     const outfitsCollection = await outfits();
     for (let i = 0; i < ids.length; i++) {
