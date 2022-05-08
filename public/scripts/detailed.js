@@ -30,7 +30,6 @@
                 let parent = this.parentElement;
                 let likes = $(parent).find('.outfit-likes');
                 $.ajax(requestConfig).then(function(result) {
-                    console.log(result);
                     if (result.result == 'success') {
                         likes[0].innerText = result.likes + ' likes';
                         btn.innerHTML = result.icon;

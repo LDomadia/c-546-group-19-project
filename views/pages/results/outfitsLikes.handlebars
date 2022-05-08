@@ -36,14 +36,14 @@
                     <p class="outfit-likes">{{likes.length}} likes</p>
                 </div>
                 <a href="/detailed/{{_id}}" class="card-btn">View</a>
-                <a class="like-btn icon-btn" href="home/like/{{_id}}">
+                <a class="like-btn icon-btn" href="/home/like/{{_id}}">
                     {{#ifIn ../userId likes}}
                     <i class="fa-solid fa-heart"></i>
                     {{else}}
                     <i class="fa-regular fa-heart"></i>
                     {{/ifIn}}
                 </a>
-                <a class="save-btn icon-btn" href="home/save/{{_id}}">
+                <a class="save-btn icon-btn" href="/home/save/{{_id}}">
                     {{#ifIn ../userId saves}}
                     <i class="fa-solid fa-bookmark"></i>
                     {{else}}
