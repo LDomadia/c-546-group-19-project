@@ -36,7 +36,6 @@
     return password;
   }
 
-
   var signupForm = $(".user-sign-up"),
     usernameInput = $(".username-input"),
     pswInput = $(".psw-input"),
@@ -56,6 +55,10 @@
     usrError.empty();
     pswError.hide();
     pswError.empty();
+    if ($("#server-err")) {
+      $("#server-err").hide();
+      $("#server-err").empty();
+    }
     var username = usernameInput.val();
     try {
       username = checkUsername(username);
