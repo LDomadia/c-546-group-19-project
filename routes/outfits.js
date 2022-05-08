@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const outfitValidation = require("../validation/outfit_validation");
+const clothesValidation = require("../validation/clothes_validation");
 const gen_outfitData = require("../data/gen_outfit");
 const outfitsData = require("../data/outfits");
 const clothesData = require("../data/clothes");
@@ -60,9 +61,9 @@ router
   }) //TODO - add error checking here
   .post(async (req, res) => {
     const data = req.body;
-    let seasons = outfitValidation.checkSeasons(data.season);
 
     try {
+      
       if (!data) throw "Error: Nothing was entered";
       if (!data.name) throw "Error: Outfit Name is Required";
       if (!data.name.trim()) throw "Error: Outfit Name is Required";
@@ -77,10 +78,14 @@ router
     }
 
     try {
+      let seasons = outfitValidation.checkSeasons(data.season);
+      let styles = outfitValidation.checkStyles(data.styles)
+      let color_patterns = clothesValidation.checkListInput(data["colors-patterns"], "color-patterns")
+      
       let result = await gen_outfitData.generateOutfit(
-        data["colors-patterns"],
+        color_patterns,
         seasons,
-        data.styles,
+        styles,
         req.session.user.username
       );
 
