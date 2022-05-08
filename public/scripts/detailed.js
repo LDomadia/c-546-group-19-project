@@ -100,29 +100,32 @@
         //add each comment to the list
         let l = $("<li></li>");
         let s = comments[i].commenter + ": " + comments[i].text;
-        deleteBtn = $("<button><i class=material-icons>delete</i></button>");
         l.attr("id", comments[i]._id);
-        deleteBtn.attr("class", "delete-comment-btn");
-        deleteBtn.on("click", function (event) {
-          var requestConfig = {
-            method: "DELETE",
-            url: window.location.href + "/comment",
-            data: { commentId: comments[i]._id },
-          };
-          $.ajax(requestConfig).then(function (responseMessage) {
-            if (responseMessage.success) {
-              errorDiv.text("Comment has been successfully deleted");
-              $("#" + comments[i]._id).remove();
-            } else if (responseMessage.error) {
-              errorDiv.text(responseMessage.error);
-            } else {
-              errorDiv.text("Error: comment deletion failed");
-            }
-            errorDiv.show();
-          });
-        });
         l.append(s);
-        l.append(deleteBtn);
+        if (responseMessage.admin) {
+          deleteBtn = $("<button><i class=material-icons>delete</i></button>");
+          deleteBtn.attr("class", "delete-comment-btn");
+          deleteBtn.on("click", function (event) {
+            var requestConfig = {
+              method: "DELETE",
+              url: window.location.href + "/comment",
+              data: { commentId: comments[i]._id },
+            };
+            $.ajax(requestConfig).then(function (responseMessage) {
+              if (responseMessage.success) {
+                errorDiv.text("Comment has been successfully deleted");
+                $("#" + comments[i]._id).remove();
+              } else if (responseMessage.error) {
+                errorDiv.text(responseMessage.error);
+              } else {
+                errorDiv.text("Error: comment deletion failed");
+              }
+              errorDiv.show();
+            });
+          });
+          l.append(deleteBtn);
+        }
+
         //need to empty
         commentList.append(l);
         commentList.show();
@@ -167,30 +170,31 @@
 
         let l = $("<li></li>");
         let s = newComment.commenter + ": " + newComment.text;
-
-        deleteBtn = $("<button><i class=material-icons>delete</i></button>");
         l.attr("id", newComment._id);
-        deleteBtn.attr("class", "delete-comment-btn");
-        deleteBtn.on("click", function (event) {
-          var requestConfig = {
-            method: "DELETE",
-            url: window.location.href + "/comment",
-            data: { commentId: newComment._id },
-          };
-          $.ajax(requestConfig).then(function (responseMessage) {
-            if (responseMessage.success) {
-              errorDiv.text("Comment has been successfully deleted");
-              $("#" + newComment._id).remove();
-            } else if (responseMessage.error) {
-              errorDiv.text(responseMessage.error);
-            } else {
-              errorDiv.text("Error: comment deletion failed");
-            }
-            errorDiv.show();
-          });
-        });
         l.append(s);
-        l.append(deleteBtn);
+        if (responseMessage.admin) {
+          deleteBtn = $("<button><i class=material-icons>delete</i></button>");
+          deleteBtn.attr("class", "delete-comment-btn");
+          deleteBtn.on("click", function (event) {
+            var requestConfig = {
+              method: "DELETE",
+              url: window.location.href + "/comment",
+              data: { commentId: newComment._id },
+            };
+            $.ajax(requestConfig).then(function (responseMessage) {
+              if (responseMessage.success) {
+                errorDiv.text("Comment has been successfully deleted");
+                $("#" + newComment._id).remove();
+              } else if (responseMessage.error) {
+                errorDiv.text(responseMessage.error);
+              } else {
+                errorDiv.text("Error: comment deletion failed");
+              }
+              errorDiv.show();
+            });
+          });
+          l.append(deleteBtn);
+        }
         //need to empty
         commentList.append(l);
         commentList.show();
