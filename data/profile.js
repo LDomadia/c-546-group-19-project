@@ -10,66 +10,12 @@ const validation = require('../validation/account_validation');
 
 module.exports = {
 
-    //change username
-    async changeUsername(original, username) {
-        //check id 
-        //see lab6 
-
-        username = validation.checkUsername(username);
-        //id=validation.checkId(id);
-        original = validation.checkUsername(original);
-        const userCollection = await users();
-        //get the user
-        const user = await userCollection.findOne({
-            username: { $regex: "^" + original + "$", $options: "i" },
-        });
-
-        if (!user) {
-            throw "invalid username";
-        }
-
-        if (!user.bio) {
-            user.bio = null;
-        }
-        if (!user.stores) {
-            user.stores = null;
-        }
-
-
-        const user2 = await userCollection.findOne({
-            username: { $regex: "^" + username + "$", $options: "i" },
-        });
-
-        if (user2) {
-            throw "Error: username taken";
-        }
-
-        const updatedInfo = await userCollection.updateOne(
-            { username: original },
-            { $set: { username: username } }
-        );
-
-        if (updatedInfo.modifiedCount === 0) {
-            throw 'Make sure your username is different from the previous one';
-        };
-
-        const modifieduser = await userCollection.findOne({
-            username: { $regex: "^" + username + "$", $options: "i" },
-        });
-
-        modifieduser._id = modifieduser._id.toString();
-        return modifieduser;
-    },
-
-    
   async checkPassword(username, password) {
 
     username = validation.checkUsername(username);
     password = validation.checkPassword(password);
     //check for alphnumeric
     //https://stackoverflow.com/questions/4434076/best-way-to-alphanumeric-check-in-javascript
-
-
     username = username.toLowerCase();
 
     const userCollection = await users();
@@ -97,10 +43,10 @@ module.exports = {
         //check id 
         //see lab6 
 
-      
         username = validation.checkUsername(username);
         password = validation.checkPassword(password);
         password2 = validation.checkPassword(password2);
+        username=username.toLowerCase();
 
         if(password!==password2) throw "passwords do not match"
 
@@ -158,6 +104,7 @@ module.exports = {
         bio = validation.checkString(bio);
         bio = bio.trim();
         username = validation.checkUsername(username);
+        username=username.toLowerCase();
         const userCollection = await users();
 
         const user = await userCollection.findOne({
@@ -199,6 +146,7 @@ module.exports = {
         store = validation.checkString(storename);
         website = validation.checkWebsite(storelink);
         username = validation.checkUsername(username);
+        username=username.toLowerCase();
         const userCollection = await users();
 
         const user = await userCollection.findOne({
@@ -254,6 +202,7 @@ module.exports = {
 
     async get(username) {
         username = validation.checkUsername(username);
+        username=username.toLowerCase();
         const userCollection = await users();
 
         //get the user
@@ -272,6 +221,7 @@ module.exports = {
 
     async removeAccount(username) {
         username = validation.checkUsername(username);
+        username=username.toLowerCase();
         const userCollection = await users();
 
         

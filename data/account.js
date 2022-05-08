@@ -1,12 +1,12 @@
 const mongoCollections = require("../config/mongoCollections");
 const users = mongoCollections.users;
+const admin = mongoCollections.admin;
 const { ObjectId } = require("mongodb");
 //const { use } = require("../routes/account");
 const bcrypt = require("bcryptjs");
 const saltRounds = 16;
 const isAlphanumeric = require("is-alphanumeric");
-
-//const validation = require("../validation");
+const validation = require("../validation/account_validation");
 
 module.exports = {
   async addNewUser(username, password) {
@@ -55,10 +55,12 @@ module.exports = {
         },
         "colors-patterns": {},
         brands: {},
+        clothesWorn: {},
+        outftisWorn: {},
       },
       calendar: {},
-      bio: '', 
-      stores: []
+      bio: "",
+      stores: [],
     };
     const insertInfo = await userCollection.insertOne(newUser);
     if (!insertInfo.acknowledged || !insertInfo.insertedId)
@@ -97,7 +99,7 @@ module.exports = {
     if (!isAlphanumeric(username))
       throw "Error: username should only have alphanumberic characters";
 
-    username = username.toLowerCase();
+    // username = username.toLowerCase();
 
     const userCollection = await users();
     const user = await userCollection.findOne({
@@ -119,16 +121,7 @@ module.exports = {
   },
 
   async getStats(username) {
-    if (!username) throw "Error: username was not provided";
-    if (typeof username !== "string")
-      throw "Error: username should be a string";
-    if (username.indexOf(" ") >= 0)
-      throw "Error: username should not have any spaces";
-    username = username.trim();
-    if (!isAlphanumeric(username))
-      throw "Error: username should only have alphanumberic characters";
-    if (username.length < 2)
-      throw "Error: username must have at least two characters";
+    username = validation.checkUsername(username);
     const userCollection = await users();
     const existingUser = await userCollection.findOne({
       username: { $regex: "^" + username + "$", $options: "i" },
@@ -137,11 +130,26 @@ module.exports = {
 
     return existingUser.statistics;
   },
+
+  async isUserAdmin(username) {
+    username = validation.checkUsername(username);
+    const adminCollection = await admin();
+    const existingAdmin = await adminCollection.findOne({
+      username: { $regex: "^" + username + "$", $options: "i" },
+    });
+    if (!existingAdmin)
+      return {
+        administrator: false,
+      };
+
+    return { administrator: true };
+  },
+
   async getUserIdByUserName(user) {
-    if (!user || !user.trim()) throw 'Error: User is empty';
+    user = validation.checkUsername(user);
     const usersCollection = await users();
     const userDoc = await usersCollection.findOne({ username: user });
-    if (!userDoc) throw 'Error: Failed to find User';
+    if (!userDoc) throw "Error: Failed to find User";
     return userDoc._id;
-  }
+  },
 };
