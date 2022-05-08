@@ -1,10 +1,12 @@
 const { ObjectId } = require("mongodb");
+const sanitizer = require('sanitizer');
 
 module.exports = {
   checkId(id, varName) {
     if (!id) throw `Error: You must provide a ${varName}`;
     if (typeof id !== "string") throw `Error:${varName} must be a string`;
     id = id.trim();
+    id = sanitizer.sanitize(id)
     if (id.length === 0)
       throw `Error: ${varName} cannot be an empty string or just spaces`;
     if (!ObjectId.isValid(id)) throw `Error: ${varName} invalid object ID`;
@@ -15,6 +17,7 @@ module.exports = {
     if (!strVal) throw `Error: You must supply a ${varName}!`;
     if (typeof strVal !== "string") throw `Error: ${varName} must be a string!`;
     strVal = strVal.trim();
+    strVal = sanitizer.sanitize(strVal)
     if (strVal.length === 0)
       throw `Error: ${varName} cannot be an empty string or string with just spaces`;
     if (!isNaN(strVal))
@@ -34,6 +37,7 @@ module.exports = {
         break;
       }
       arr[i] = arr[i].trim();
+      arr[i] = sanitizer.sanitize(arr[i])
     }
     if (arrayInvalidFlag)
       throw `One or more elements in ${varName} array is not a string or is an empty string`;

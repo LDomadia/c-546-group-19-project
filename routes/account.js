@@ -1,4 +1,5 @@
 const express = require("express");
+const sanitizer = require('sanitizer');
 const router = express.Router();
 const data = require("../data");
 const accountData = data.account;
@@ -50,6 +51,7 @@ router.post("/signup", async (req, res) => {
     if (typeof username !== "string")
       throw "Error: username should be a string";
     username = username.trim();
+    username = sanitizer.sanitize(username)
     if (username.length < 2)
       throw "Error: username must have at least two characters";
   } catch (e) {
@@ -69,7 +71,9 @@ router.post("/signup", async (req, res) => {
       throw "Error: confirm password should be a string";
 
     userPsw = userPsw.trim();
+    userPsw = sanitizer.sanitize(userPsw)
     pswRepeat = pswRepeat.trim();
+    pswRepeat = sanitizer.sanitize(pswRepeat)
 
     if (userPsw.length < 8)
       throw "Error: password must have at least eight characters";
@@ -121,6 +125,7 @@ router.post("/login", async (req, res) => {
     if (typeof username !== "string")
       throw "Error: username should be a string";
     username = username.trim();
+    username = sanitizer.sanitize(username)
     if (username.length < 2)
       throw "Error: username must have at least two characters";
   } catch (e) {
@@ -136,6 +141,7 @@ router.post("/login", async (req, res) => {
     if (typeof userPsw !== "string") throw "Error: password should be a string";
 
     userPsw = userPsw.trim();
+    userPsw = sanitizer.sanitize(userPsw)
 
     if (userPsw.length < 8)
       throw "Error: Password must be at least eight characters";

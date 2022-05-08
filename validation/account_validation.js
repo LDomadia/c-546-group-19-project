@@ -1,5 +1,5 @@
 const { ObjectId } = require('mongodb');
-
+const sanitizer = require('sanitizer');
 
 module.exports = {
     checkUsername(username) {
@@ -9,6 +9,7 @@ module.exports = {
         if (username.indexOf(" ") >= 0)
             throw "Error: username should not have any spaces";
         username = username.trim();
+        username = sanitizer.sanitize(username)
         if (username.length < 2)
             throw "Error: username must have at least two characters";
         //check for alphnumeric 
@@ -33,6 +34,7 @@ module.exports = {
         if (password.indexOf(" ") >= 0)
             throw "Error: password should not have any spaces";
         password = password.trim();
+        password = sanitizer.sanitize(password)
         if (password.length < 8)
             throw "Error: password must have at least eight characters";
         return password;
@@ -55,6 +57,7 @@ module.exports = {
         if (typeof string !== 'string') throw 'invalid string input';
         if (string.trim().length === 0)
             throw 'string cannot be an empty string or just spaces';
+        string = sanitizer.sanitize(string)
         return string;
     },
 
@@ -63,6 +66,7 @@ module.exports = {
         if (typeof website !== 'string') throw 'invalid website input';
         if (website.trim().length === 0)
             throw 'Id cannot be an empty website or just spaces';
+        website = sanitizer.sanitize(website)
         if (!website.includes('https://www.') && !(website.includes('http://www.')) ) throw 'invalid website'
         //end
 

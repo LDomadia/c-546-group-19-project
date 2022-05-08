@@ -4,6 +4,7 @@ const outfitValidation = require("../validation/outfit_validation");
 const gen_outfitData = require("../data/gen_outfit");
 const outfitsData = require("../data/outfits");
 const clothesData = require("../data/clothes");
+const sanitizer = require('sanitizer');
 
 //Middleware
 router.use("/", (req, res, next) => {
@@ -64,6 +65,7 @@ router
       if (!data) throw "Error: Nothing was entered";
       if (!data.name) throw "Error: Outfit Name is Required";
       if (!data.name.trim()) throw "Error: Outfit Name is Required";
+      data.name = sanitizer.sanitize(data.name.trim())
       if (!req.session.user) throw 'Error: User is not logged in';
     } catch (e) {
       return res.status(400).render("pages/medium/outfitGenerated", {
