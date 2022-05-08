@@ -4,7 +4,7 @@ const outfitValidation = require("../validation/outfit_validation");
 const gen_outfitData = require("../data/gen_outfit");
 const outfitsData = require("../data/outfits");
 const clothesData = require("../data/clothes");
-const accountData = require('../data/account');
+const accountData = require("../data/account");
 
 //Middleware
 router.use("/", (req, res, next) => {
@@ -65,7 +65,7 @@ router
       if (!data) throw "Error: Nothing was entered";
       if (!data.name) throw "Error: Outfit Name is Required";
       if (!data.name.trim()) throw "Error: Outfit Name is Required";
-      if (!req.session.user) throw 'Error: User is not logged in';
+      if (!req.session.user) throw "Error: User is not logged in";
     } catch (e) {
       return res.status(400).render("pages/medium/outfitGenerated", {
         title: "Generate Outfit",
@@ -140,7 +140,7 @@ router.route("/new").get(async (req, res) => {
         title: "My Outfits",
         outfitsPage: true,
         outfitItems: outfitItems,
-        msg: "You need atleast two clothing items before you can make an outfit",
+        msg: "You need at least two clothing items before you can make an outfit",
       });
     }
     res.status(200).render("pages/medium/outfitNew", {
@@ -189,7 +189,7 @@ router.route("/new").post(async (req, res) => {
       stylesheet: "/public/styles/outfit_card_styles.css",
       script: "/public/scripts/outfits.js",
       outfits: outfitItems,
-      msg: "Outfit has successfuly been added!",
+      msg: "Outfit has successfully been added!",
     });
   } catch (e) {
     res.status(400).render("pages/results/outfits", {
@@ -275,7 +275,7 @@ router.route("/edit/:id").post(async (req, res) => {
       stylesheet: "/public/styles/outfit_card_styles.css",
       script: "/public/scripts/outfits.js",
       outfits: outfitItems,
-      msg: "Outfit has successfuly been edited!",
+      msg: "Outfit has successfully been edited!",
     });
   } catch (e) {
     res.status(400).render("pages/results/outfits", {
@@ -302,47 +302,55 @@ router.route("/delete/:id").delete(async (req, res) => {
     return res.json({ error: e });
   }
 });
-router.route('/likes').get(async (req, res) => {
+router.route("/likes").get(async (req, res) => {
   try {
-    if (!req.session.user) throw 'Error: User is not logged in';
-    const outfitLikes = await outfitsData.getUserLikedOutfits(req.session.user.username);
-    const userId = await accountData.getUserIdByUserName(req.session.user.username);
-    return res.status(200).render('pages/results/outfitsLikes', {
-      title: 'My Liked Outfits',
+    if (!req.session.user) throw "Error: User is not logged in";
+    const outfitLikes = await outfitsData.getUserLikedOutfits(
+      req.session.user.username
+    );
+    const userId = await accountData.getUserIdByUserName(
+      req.session.user.username
+    );
+    return res.status(200).render("pages/results/outfitsLikes", {
+      title: "My Liked Outfits",
       outfitsPage: true,
       outfits: outfitLikes,
       userId: userId,
-      stylesheet: '/public/styles/outfit_card_styles.css',
-      script: '/public/scripts/home_script.js'
+      stylesheet: "/public/styles/outfit_card_styles.css",
+      script: "/public/scripts/home_script.js",
     });
   } catch (e) {
-    return res.status(404).render('pages/results/outfitsLikes', {
-      title: 'My Liked Outfits',
+    return res.status(404).render("pages/results/outfitsLikes", {
+      title: "My Liked Outfits",
       outfitsPage: true,
-      stylesheet: '/public/styles/outfit_card_styles.css',
-      error: e
+      stylesheet: "/public/styles/outfit_card_styles.css",
+      error: e,
     });
   }
 });
-router.route('/saves').get(async (req, res) => {
+router.route("/saves").get(async (req, res) => {
   try {
-    if (!req.session.user) throw 'Error: User is not logged in';
-    const outfitSaves = await outfitsData.getUserSavedOutfits(req.session.user.username);
-    const userId = await accountData.getUserIdByUserName(req.session.user.username);
-    return res.status(200).render('pages/results/outfitsSaves', {
-      title: 'My Saved Outfits',
+    if (!req.session.user) throw "Error: User is not logged in";
+    const outfitSaves = await outfitsData.getUserSavedOutfits(
+      req.session.user.username
+    );
+    const userId = await accountData.getUserIdByUserName(
+      req.session.user.username
+    );
+    return res.status(200).render("pages/results/outfitsSaves", {
+      title: "My Saved Outfits",
       outfitsPage: true,
       outfits: outfitSaves,
       userId: userId,
-      stylesheet: '/public/styles/outfit_card_styles.css',
-      script: '/public/scripts/home_script.js'
+      stylesheet: "/public/styles/outfit_card_styles.css",
+      script: "/public/scripts/home_script.js",
     });
   } catch (e) {
-    return res.status(404).render('pages/results/outfitsSaves', {
-      title: 'My Saved Outfits',
+    return res.status(404).render("pages/results/outfitsSaves", {
+      title: "My Saved Outfits",
       outfitsPage: true,
-      stylesheet: '/public/styles/outfit_card_styles.css',
-      error: e
+      stylesheet: "/public/styles/outfit_card_styles.css",
+      error: e,
     });
   }
 });

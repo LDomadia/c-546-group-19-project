@@ -41,7 +41,7 @@ router.get("/:id", async (req, res) => {
     outfit = await data.get_outfit_by_id(req.params.id);
     if (!outfit) throw "not a public outfit";
 
-    //array of clothing datas
+    //array of clothing data
     clothes = await data2.getClothingbyIds(outfit.clothes);
     if (!clothes) throw "no clothes found";
 
