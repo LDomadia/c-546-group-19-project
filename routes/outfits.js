@@ -1,7 +1,6 @@
 const express = require("express");
 const router = express.Router();
 const outfitValidation = require("../validation/outfit_validation");
-const clothesValidation = require("../validation/clothes_validation");
 const gen_outfitData = require("../data/gen_outfit");
 const outfitsData = require("../data/outfits");
 const clothesData = require("../data/clothes");
@@ -57,7 +56,7 @@ router
       stylesheet: "/public/styles/clothes_styles.css",
       script: "/public/scripts/gen_outfit_script.js",
     });
-  })
+  }) //TODO - add error checking here
   .post(async (req, res) => {
     const data = req.body;
 
@@ -157,20 +156,28 @@ router.route("/new").get(async (req, res) => {
 });
 
 router.route("/new").post(async (req, res) => {
-  //need error checking
-  try {
-    let name = req.body.name;
-    let images = req.body.outfits;
-    let seasons = req.body.season ? req.body.season : [];
-    let status = req.body.public ? "public" : "private";
-    let styles = req.body.styles ? req.body.styles : [];
+  let name = req.body.name;
+  let images = req.body.outfits;
+  let seasons = req.body.season ? req.body.season : [];
+  let status = req.body.public ? "public" : "private";
+  let styles = req.body.styles ? req.body.styles : [];
 
+  try {
     name = outfitValidation.checkOutfitName(name);
     images = outfitValidation.checkImages(images);
     seasons = outfitValidation.checkSeasons(seasons);
     status = outfitValidation.checkStatus(status);
     styles = outfitValidation.checkStyles(styles);
-
+  } catch (e) {
+    res.status(400).render("pages/results/outfits", {
+      title: "My Outfits",
+      stylesheet: "/public/styles/outfit_card_styles.css",
+      script: "/public/scripts/outfits.js",
+      outfitsPage: true,
+      error: e,
+    });
+  }
+  try {
     let clothesIdArr = await clothesData.getClothingIdsByImages(images);
     let isValid = await clothesData.checkTypes(clothesIdArr);
     let newOutfit = await outfitsData.addNewOutfits(
@@ -185,7 +192,7 @@ router.route("/new").post(async (req, res) => {
     let outfitItems = await outfitsData.getUserOutfits(
       req.session.user.username
     );
-    res.render("pages/results/outfits", {
+    res.status(200).render("pages/results/outfits", {
       title: "My Outfits",
       outfitsPage: true,
       stylesheet: "/public/styles/outfit_card_styles.css",
@@ -194,7 +201,7 @@ router.route("/new").post(async (req, res) => {
       msg: "Outfit has successfuly been added!",
     });
   } catch (e) {
-    res.status(400).render("pages/results/outfits", {
+    res.status(500).render("pages/results/outfits", {
       title: "My Outfits",
       stylesheet: "/public/styles/outfit_card_styles.css",
       script: "/public/scripts/outfits.js",
@@ -216,7 +223,7 @@ router.route("/edit/:id").get(async (req, res) => {
       let outfitItems = await outfitsData.getUserOutfits(
         req.session.user.username
       );
-      return res.render("pages/results/outfits", {
+      return res.status(403).render("pages/results/outfits", {
         title: "My Outfits",
         outfitsPage: true,
         outfitItems: outfitItems,
@@ -246,21 +253,28 @@ router.route("/edit/:id").get(async (req, res) => {
   }
 });
 router.route("/edit/:id").post(async (req, res) => {
-  //need error checking
+  let name = req.body.name;
+  let images = req.body.outfits;
+  let seasons = req.body.season ? req.body.season : [];
+  let status = req.body.public ? "public" : "private";
+  let styles = req.body.styles ? req.body.styles : [];
+  let id = outfitValidation.checkId(req.params.id);
   try {
-    let name = req.body.name;
-    let images = req.body.outfits;
-    let seasons = req.body.season ? req.body.season : [];
-    let status = req.body.public ? "public" : "private";
-    let styles = req.body.styles ? req.body.styles : [];
-    let id = outfitValidation.checkId(req.params.id);
-
     name = outfitValidation.checkOutfitName(name);
     images = outfitValidation.checkImages(images);
     seasons = outfitValidation.checkSeasons(seasons);
     status = outfitValidation.checkStatus(status);
     styles = outfitValidation.checkStyles(styles);
-
+  } catch (e) {
+    res.status(400).render("pages/results/outfits", {
+      title: "My Outfits",
+      stylesheet: "/public/styles/outfit_card_styles.css",
+      script: "/public/scripts/outfits.js",
+      outfitsPage: true,
+      error: e,
+    });
+  }
+  try {
     let clothesIdArr = await clothesData.getClothingIdsByImages(images);
     let updateInfo = await outfitsData.updateUserOutfit(
       req.session.user.username,
@@ -275,7 +289,7 @@ router.route("/edit/:id").post(async (req, res) => {
     let outfitItems = await outfitsData.getUserOutfits(
       req.session.user.username
     );
-    res.render("pages/results/outfits", {
+    res.status(200).render("pages/results/outfits", {
       title: "My Outfits",
       outfitsPage: true,
       stylesheet: "/public/styles/outfit_card_styles.css",
