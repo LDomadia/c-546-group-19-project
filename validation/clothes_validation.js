@@ -6,6 +6,25 @@ function checkTextInput(input, inputName) {
     return input;
 }
 
+function checkNumericTextInput(input, inputName, convert) {
+    if (!input) throw `Error: ${inputName} is required`;
+    if (typeof input !== 'string') throw `Error: ${inputName} must be a string`;
+    input = input.trim();
+    if (!input) throw `Error: ${inputName} is empty`;
+
+    parse_input = parseInt(input)
+
+    if(isNaN(parse_input) || !Number.isInteger(parse_input)){
+        throw `Error ${inputName} cannot be converted to an integer`
+    }
+    if(!convert){
+        return input
+    }
+    else{
+        return parse_input;
+    }
+}
+
 function checkFileInput(input, inputName) {
     if (!input) throw `Error: ${inputName} is required`;
     if (typeof input !== 'string') throw `Error: ${inputName} must be a string`;
@@ -53,4 +72,5 @@ module.exports = {
     checkListInput,
     checkSelectInput,
     checkTextInput,
+    checkNumericTextInput
 }

@@ -55,6 +55,8 @@ module.exports = {
         },
         "colors-patterns": {},
         brands: {},
+        clothesWorn: {},
+        outftisWorn: {},
       },
       calendar: {},
       bio: "",
@@ -128,6 +130,7 @@ module.exports = {
 
     return existingUser.statistics;
   },
+
   async isUserAdmin(username) {
     username = validation.checkUsername(username);
     const adminCollection = await admin();
@@ -141,6 +144,7 @@ module.exports = {
 
     return { administrator: true };
   },
+
   async getUserIdByUserName(user) {
     user = validation.checkUsername(user);
     const usersCollection = await users();
