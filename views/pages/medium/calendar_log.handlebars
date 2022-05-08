@@ -11,7 +11,6 @@
     {{/if}}
     
     <br/>
-<article class="main">
     {{#each outfits}}
         <div class="outfit-card">
             <!-- Carousel wrapper -->
@@ -41,14 +40,13 @@
             <div class="outfit-card-details">
                 <h2 class="outfit-title">{{outfitName}}</h2>
                 <form action="/calendar/log" method="POST">
-                <input name="log_id" type="hidden" value={{_id}}></input>
+                <input name="log_id" type="hidden" value={{_id}}>
                 <button name="log_date" value="{{../date}}">Log Outfit</button>
                 </form>
             </div>
         </div>
     {{/each}}
 </div>
-</article>
  <script
       src="https://code.jquery.com/jquery-3.5.1.js"
       integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
