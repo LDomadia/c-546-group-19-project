@@ -19,7 +19,7 @@ function errors_clothes(lst, name) {
     throw `${name} is not initialized`;
   }
 
-  return lst.map((a) => errors_clothing(xss(a)));
+  return lst.map((a) => errors_clothing((a)));
 }
 
 module.exports = {

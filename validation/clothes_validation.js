@@ -52,22 +52,22 @@ function checkListInput(input, inputName) {
     })
     const setInput = [...new Set(input)];
     if (setInput.length != input.length) throw `Error: ${inputName} contains duplicates`;
-    for (const element of input) {
+    for (let element of input) {
         if (!element) throw `Error: ${inputName} contains empty elements`;
         element = xss(element);
     }
-    return (input);
+    return input;
 }
 
 function checkCheckboxInput(input, inputName, acceptableValues) {
     if (!input) throw `Error: ${inputName} is empty`;
     if (!Array.isArray(input)) throw `Error: ${inputName} must be an array`;
-    for (const element of input) {
+    for (let element of input) {
         element = element.trim().toLowerCase();
         if (!acceptableValues.includes(element)) throw `Error: ${inputName} contains invalid inputs.`;
         element = xss(element);
     }
-    return (input);
+    return input;
 }
 
 module.exports = {

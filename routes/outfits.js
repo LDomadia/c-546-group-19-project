@@ -78,14 +78,15 @@ router
 
     try {
       let result = await gen_outfitData.generateOutfit(
-        xss(data["colors-patterns"]),
-        xss(data.season),
-        xss(data.styles),
+        (data["colors-patterns"]),
+        (data.seasons),
+        (data.styles),
         xss(req.session.user.username)
       );
-
+        result = result.map((res) => res._id);
+        console.log(result);
       let clothingItems = await clothesData.getClothingbyIds(
-        result.map((res) => xss(res._id))
+        result
       );
 
       if (clothingItems.length < 2) {
@@ -179,8 +180,8 @@ router.route("/new").post(async (req, res) => {
     });
   }
   try {
-    let clothesIdArr = await clothesData.getClothingIdsByImages(xss(images));
-    let isValid = await clothesData.checkTypes(xss(clothesIdArr));
+    let clothesIdArr = await clothesData.getClothingIdsByImages((images));
+    let isValid = await clothesData.checkTypes((clothesIdArr));
     let newOutfit = await outfitsData.addNewOutfits(
       xss(req.session.user.username),
       xss(clothesIdArr),
@@ -276,7 +277,7 @@ router.route("/edit/:id").post(async (req, res) => {
     });
   }
   try {
-    let clothesIdArr = await clothesData.getClothingIdsByImages(xss(images));
+    let clothesIdArr = await clothesData.getClothingIdsByImages((images));
     let updateInfo = await outfitsData.updateUserOutfit(
       xss(req.session.user.username),
       xss(id),
