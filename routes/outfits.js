@@ -184,7 +184,7 @@ router.route("/new").post(async (req, res) => {
     let isValid = await clothesData.checkTypes((clothesIdArr));
     let newOutfit = await outfitsData.addNewOutfits(
       xss(req.session.user.username),
-      xss(clothesIdArr),
+      (clothesIdArr),
       xss(status),
       xss(name),
       (seasons),

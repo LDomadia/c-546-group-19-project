@@ -10,8 +10,8 @@ function errors_clothing(id, name) {
 
   if (!ObjectId.isValid(id)) throw `${name} must be a valid mongo id`;
 
-  id = ObjectId(id);
-  return xss(id);
+  id = ObjectId(xss(id));
+  return (id);
 }
 
 function errors_clothes(lst, name) {
@@ -19,7 +19,11 @@ function errors_clothes(lst, name) {
     throw `${name} is not initialized`;
   }
 
-  return lst.map((a) => errors_clothing((a)));
+  // return lst.map((a) => errors_clothing((a)));
+  for (let id of lst) {
+    id = errors_clothing(id);
+  }
+  return lst;
 }
 
 module.exports = {
