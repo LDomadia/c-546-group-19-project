@@ -54,7 +54,7 @@ router.get("/", async (req, res) => {
     else {
       bio = user.bio;
     }
-    if (!user.stores || user.stores == null) {
+    if (!user.stores || user.stores == null||user.stores.length==0) {
       stores = "N/A";
       noStore = true;
     }
@@ -114,7 +114,7 @@ router.post("/", async (req, res) => {
   else {
     bio = user.bio;
   }
-  if (!user.stores || user.stores == null) {
+  if (!user.stores || user.stores == null||user.stores==[]) {
     stores = "N/A";
     err = true;
   }
@@ -294,9 +294,7 @@ router.post("/password", async (req, res) => {
   }
   catch (e) {
     //error
-
     return res.status(400).render("pages/single/changepassword", { title: "Change Password", passwordE: true, error: e })
-
   }
 
   
