@@ -24,7 +24,6 @@
     
     try {
       url = new URL(string);
-      console.log(url);
     } catch (e) {
       throw e;
     }
