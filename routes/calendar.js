@@ -25,9 +25,9 @@ router.route("/").get(async (req, res) => {
   }
 }).post(async (req, res) => {
   let data = req.body
+  let bday = data.birthday
 
-  try {
-
+  try{
     let bday = data.birthday
 
     if(!moment(bday).isValid()){
@@ -40,7 +40,15 @@ router.route("/").get(async (req, res) => {
 
     if(moment(bday).isBefore("2022-01-01", "year")){
       throw "Cannot log date before 2022!"
-    }
+    }  
+  }
+  catch(e){
+    return res.status(400).render("pages/single/calendar", 
+    {title:"Calendar",
+     error: e});;
+  }
+
+  try {
 
     date = data.birthday.split("-")
     date = date.map(e => validate.checkNumericTextInput(e, "date"))
