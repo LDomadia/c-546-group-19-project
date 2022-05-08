@@ -99,7 +99,7 @@ module.exports = {
 
     if (updateInfo.matchedCount == 0 || updateInfo.modifiedCount == 0)
       throw "Error: Failed to update User";
-    return { result: "success" };
+    return { result: "success", id: insertInfo.insertedId };
   },
   async getClothingItems(user) {
     let clothingItems = [];

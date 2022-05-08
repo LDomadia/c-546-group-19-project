@@ -89,12 +89,12 @@
   });
   addBox.change(function () {
     outfitErr.empty().hide();
-    let image_name = $(this)
+      let image_name = $(this)
       .parent()
       .parent()
       .siblings(".clothing-item-image")
       .attr("src")
-      .split("/")[2];
+      .replace('/uploads/', '');
     let type = $(this).parent().siblings(".clothing-type").text();
     if ($(this).is(":checked")) {
       outfitsArr.push(image_name);
