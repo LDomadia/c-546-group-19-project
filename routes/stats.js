@@ -33,7 +33,7 @@ router.route("/").get(async (req, res) => {
   
       let cloth_ids = Object.keys(stats_clothes).map(id => ObjectId(id))
   
-      clothes = await clothesData.getClothingbyIds(xss(cloth_ids))
+      clothes = await clothesData.getClothingbyIds((cloth_ids))
   
       clothes = clothes.map(cloth => cloth.name)
   
@@ -47,7 +47,7 @@ router.route("/").get(async (req, res) => {
       }
   
       let outfit_ids = Object.keys(stats_outfits).map(id => ObjectId(id))
-      outfits = await outfitsData.getOutfitbyIds(xss(outfit_ids))
+      outfits = await outfitsData.getOutfitbyIds((outfit_ids))
       outfits = outfits.map(outfit => outfit.outfitName)
   
       outfits_obj = []

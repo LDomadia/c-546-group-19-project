@@ -31,7 +31,7 @@ module.exports = {
     return clothesValidation.checkTextInput(xss(outfitName), "Outfit Name");
   },
   checkStyles(styles) {
-    return clothesValidation.checkListInput(xss(styles), "Styles Array");
+    return clothesValidation.checkListInput((styles), "Styles Array");
   },
   checkStatus(status) {
     if (!status || typeof status !== "string")
@@ -42,7 +42,7 @@ module.exports = {
       status.localeCompare("public") !== 0
     )
       throw "Error: status must be public or private";
-    return xss(status);
+    return (status);
   },
   checkId(id, varName) {
     if (!id) throw `Error: You must provide a ${varName}`;
@@ -54,7 +54,7 @@ module.exports = {
     return xss(id);
   },
   checkSeasons(seasons) {
-    return clothesValidation.checkCheckboxInput(xss(seasons), "seasons", [
+    return clothesValidation.checkCheckboxInput((seasons), "seasons", [
       "winter",
       "spring",
       "summer",
@@ -62,17 +62,17 @@ module.exports = {
     ]);
   },
   checkImages(images) {
-    images = clothesValidation.checkListInput(xss(images), "Images Array");
+    images = clothesValidation.checkListInput((images), "Images Array");
     if (images.length < 2) throw "Error: not enough clothes to make outfit";
-    return xss(images);
+    return (images);
   },
   checkIdArrays(ids) {
     if (ids.length < 2) {
       throw "Error: 2 clothing items are need to create an outfit";
     }
-    return errors_clothes(xss(ids), "Id Array");
+    return errors_clothes((ids), "Id Array");
   },
   checkOutfitIds(ids) {
-    return errors_clothes(xss(ids), "Outfit ids");
+    return errors_clothes((ids), "Outfit ids");
   },
 };

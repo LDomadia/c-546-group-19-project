@@ -40,9 +40,8 @@ router.get("/:id", async (req, res) => {
     //public only
     outfit = await data.get_outfit_by_id(xss(req.params.id));
     if (!outfit) throw "not a public outfit";
-
     //array of clothing datas
-    clothes = await data2.getClothingbyIds(xss(outfit.clothes));
+    clothes = await data2.getClothingbyIds(outfit.clothes);
     if (!clothes) throw "no clothes found";
 
     if (!outfit.comments || outfit.comments.length == 0) {

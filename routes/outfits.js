@@ -97,8 +97,8 @@ router
         result.map((res) => xss(res._id.toString())),
         xss("private"),
         xss(data.name),
-        xss(data.season),
-        xss(data.styles)
+        (data.season),
+        (data.styles)
       );
 
       if (result) {
@@ -186,8 +186,8 @@ router.route("/new").post(async (req, res) => {
       xss(clothesIdArr),
       xss(status),
       xss(name),
-      xss(seasons),
-      xss(styles)
+      (seasons),
+      (styles)
     );
     if (!newOutfit) throw "Error: could not create new outfit";
     let outfitItems = await outfitsData.getUserOutfits(
@@ -283,8 +283,8 @@ router.route("/edit/:id").post(async (req, res) => {
       xss(clothesIdArr),
       xss(status),
       xss(name),
-      xss(seasons),
-      xss(styles)
+      (seasons),
+      (styles)
     );
     if (!updateInfo.updated) throw "Error: could not update outfit";
     let outfitItems = await outfitsData.getUserOutfits(

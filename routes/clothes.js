@@ -102,9 +102,9 @@ router
         xss(req.file.filename),
         xss(data.type),
         xss(data.size),
-        xss(data["colors-patterns"]),
-        xss(data.seasons),
-        xss(data.styles),
+        (data["colors-patterns"]),
+        (data.seasons),
+        (data.styles),
         xss(data.brand),
         xss(req.session.user.username)
       );
@@ -212,9 +212,9 @@ router
           xss(req.file.filename),
           xss(data.type),
           xss(data.size),
-          xss(data["colors-patterns"]),
-          xss(data.seasons),
-          xss(data.styles),
+          (data["colors-patterns"]),
+          (data.seasons),
+          (data.styles),
           xss(data.brand),
           xss(req.session.user.username)
         );
@@ -225,9 +225,9 @@ router
           null,
           xss(data.type),
           xss(data.size),
-          xss(data["colors-patterns"]),
-          xss(data.seasons),
-          xss(data.styles),
+          (data["colors-patterns"]),
+          (data.seasons),
+          (data.styles),
           xss(data.brand),
           xss(req.session.user.username)
         );

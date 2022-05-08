@@ -56,7 +56,7 @@ function checkListInput(input, inputName) {
         if (!element) throw `Error: ${inputName} contains empty elements`;
         element = xss(element);
     }
-    return xss(input);
+    return (input);
 }
 
 function checkCheckboxInput(input, inputName, acceptableValues) {
@@ -67,7 +67,7 @@ function checkCheckboxInput(input, inputName, acceptableValues) {
         if (!acceptableValues.includes(element)) throw `Error: ${inputName} contains invalid inputs.`;
         element = xss(element);
     }
-    return xss(input);
+    return (input);
 }
 
 module.exports = {
