@@ -1,5 +1,6 @@
 const { ObjectId } = require("mongodb");
 const clothesValidation = require("./clothes_validation");
+const accountValidation = require("./account_validation");
 
 function errors_clothing(id, name) {
   if (!id || id == null) {
@@ -21,6 +22,9 @@ function errors_clothes(lst, name) {
 }
 
 module.exports = {
+  checkUsername(user) {
+    return accountValidation.checkUsername(user);
+  },
   checkOutfitName(outfitName) {
     outfitName = outfitName.trim();
     return clothesValidation.checkTextInput(outfitName, "Outfit Name");
@@ -66,5 +70,8 @@ module.exports = {
       throw "Error: 2 clothing items are need to create an outfit";
     }
     return errors_clothes(ids, "Id Array");
+  },
+  checkOutfitIds(ids) {
+    return errors_clothes(ids, "Outfit ids");
   },
 };
