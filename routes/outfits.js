@@ -4,7 +4,7 @@ const outfitValidation = require("../validation/outfit_validation");
 const gen_outfitData = require("../data/gen_outfit");
 const outfitsData = require("../data/outfits");
 const clothesData = require("../data/clothes");
-const accountData = require('../data/account');
+const accountData = require("../data/account");
 
 //Middleware
 router.use("/", (req, res, next) => {
@@ -21,7 +21,7 @@ router.route("/").get(async (req, res) => {
     );
     if (req.session.outfitDeletion) {
       req.session.outfitDeletion = false;
-      return res.render("pages/results/outfits", {
+      return res.status(200).render("pages/results/outfits", {
         title: "My Outfits",
         outfitsPage: true,
         stylesheet: "/public/styles/outfit_card_styles.css",
@@ -31,7 +31,7 @@ router.route("/").get(async (req, res) => {
       });
     }
 
-    return res.render("pages/results/outfits", {
+    return res.status(200).render("pages/results/outfits", {
       title: "My Outfits",
       outfitsPage: true,
       stylesheet: "/public/styles/outfit_card_styles.css",
@@ -318,52 +318,60 @@ router.route("/delete/:id").delete(async (req, res) => {
     );
     if (!deletionInfo) throw "Error: could not delete outfit";
     req.session.outfitDeletion = true;
-    return res.json({ redirect: true });
+    return res.status(303).json({ redirect: true });
   } catch (e) {
-    return res.json({ error: e });
+    return res.status(400).json({ error: e });
   }
 });
-router.route('/likes').get(async (req, res) => {
+router.route("/likes").get(async (req, res) => {
   try {
-    if (!req.session.user) throw 'Error: User is not logged in';
-    const outfitLikes = await outfitsData.getUserLikedOutfits(req.session.user.username);
-    const userId = await accountData.getUserIdByUserName(req.session.user.username);
-    return res.status(200).render('pages/results/outfitsLikes', {
-      title: 'My Liked Outfits',
+    if (!req.session.user) throw "Error: User is not logged in";
+    const outfitLikes = await outfitsData.getUserLikedOutfits(
+      req.session.user.username
+    );
+    const userId = await accountData.getUserIdByUserName(
+      req.session.user.username
+    );
+    return res.status(200).render("pages/results/outfitsLikes", {
+      title: "My Liked Outfits",
       outfitsPage: true,
       outfits: outfitLikes,
       userId: userId,
-      stylesheet: '/public/styles/outfit_card_styles.css',
-      script: '/public/scripts/home_script.js'
+      stylesheet: "/public/styles/outfit_card_styles.css",
+      script: "/public/scripts/home_script.js",
     });
   } catch (e) {
-    return res.status(404).render('pages/results/outfitsLikes', {
-      title: 'My Liked Outfits',
+    return res.status(404).render("pages/results/outfitsLikes", {
+      title: "My Liked Outfits",
       outfitsPage: true,
-      stylesheet: '/public/styles/outfit_card_styles.css',
-      error: e
+      stylesheet: "/public/styles/outfit_card_styles.css",
+      error: e,
     });
   }
 });
-router.route('/saves').get(async (req, res) => {
+router.route("/saves").get(async (req, res) => {
   try {
-    if (!req.session.user) throw 'Error: User is not logged in';
-    const outfitSaves = await outfitsData.getUserSavedOutfits(req.session.user.username);
-    const userId = await accountData.getUserIdByUserName(req.session.user.username);
-    return res.status(200).render('pages/results/outfitsSaves', {
-      title: 'My Saved Outfits',
+    if (!req.session.user) throw "Error: User is not logged in";
+    const outfitSaves = await outfitsData.getUserSavedOutfits(
+      req.session.user.username
+    );
+    const userId = await accountData.getUserIdByUserName(
+      req.session.user.username
+    );
+    return res.status(200).render("pages/results/outfitsSaves", {
+      title: "My Saved Outfits",
       outfitsPage: true,
       outfits: outfitSaves,
       userId: userId,
-      stylesheet: '/public/styles/outfit_card_styles.css',
-      script: '/public/scripts/home_script.js'
+      stylesheet: "/public/styles/outfit_card_styles.css",
+      script: "/public/scripts/home_script.js",
     });
   } catch (e) {
-    return res.status(404).render('pages/results/outfitsSaves', {
-      title: 'My Saved Outfits',
+    return res.status(404).render("pages/results/outfitsSaves", {
+      title: "My Saved Outfits",
       outfitsPage: true,
-      stylesheet: '/public/styles/outfit_card_styles.css',
-      error: e
+      stylesheet: "/public/styles/outfit_card_styles.css",
+      error: e,
     });
   }
 });

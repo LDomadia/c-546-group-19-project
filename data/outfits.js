@@ -277,7 +277,7 @@ module.exports = {
     return { updated: true };
   },
   async likeOutfit(id, user) {
-    id = validation.checkId(id);
+    id = ObjectId(validation.checkId(id));
     user = validation.checkUsername(user);
 
     const usersCollection = await users();
@@ -343,7 +343,7 @@ module.exports = {
     };
   },
   async saveOutfit(id, user) {
-    id = validation.checkId(id);
+    id = ObjectId(validation.checkId(id));
     user = validation.checkUsername(user);
 
     const usersCollection = await users();
