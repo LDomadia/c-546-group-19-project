@@ -247,13 +247,13 @@ router.route("/edit/:id").get(async (req, res) => {
 router.route("/edit/:id").post(async (req, res) => {
   //need error checking
   try {
-    let name = req.body.name;
-    let images = req.body.outfits;
-    let seasons = req.body.season ? req.body.season : [];
+    let name = outfitValidation.checkString(req.body.name, "name");
+    let images = outfitValidation.checkString(req.body.outfits, "outfits");
+    let seasons = req.body.season ? outfitValidation.checkStringArray(req.body.season, "season") : [];
     let status = req.body.public ? "public" : "private";
-    let styles = req.body.styles ? req.body.styles : [];
+    let styles = req.body.styles ? outfitValidation.checkStringArray(req.body.styles, "styles") : [];
     let id = outfitValidation.checkId(req.params.id);
-    styles = styles.map((style) => style.trim().toLowerCase());
+    styles = styles.map((style) => style.toLowerCase());
     if (!images || images.length < 2)
       throw "Error: not enough clothes to make outfit";
     let clothesIdArr = await clothesData.getClothingIdsByImages(images);

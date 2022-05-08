@@ -43,9 +43,10 @@ module.exports = {
     checkId(id) {
         if (!id) throw "must provide s"
         if (typeof id !== 'string') throw 'invalid string input';
-        if (id.trim().length === 0)
+        id = string.trim()
+        id = sanitizer.sanitize(id)
+        if (id.length === 0)
             throw 'Id cannot be an empty string or just spaces';
-        id = id.trim();
         if (!ObjectId.isValid(id)) throw 'invalid object ID';
 
         return id;
@@ -55,18 +56,20 @@ module.exports = {
     checkString(string) {
         if (!string) throw "must provide text input"
         if (typeof string !== 'string') throw 'invalid string input';
+        string = string.trim()
+        string = sanitizer.sanitize(string)
         if (string.trim().length === 0)
             throw 'string cannot be an empty string or just spaces';
-        string = sanitizer.sanitize(string)
         return string;
     },
 
     checkWebsite(website) {
         if (!website) throw "must provide store link"
         if (typeof website !== 'string') throw 'invalid website input';
-        if (website.trim().length === 0)
-            throw 'Id cannot be an empty website or just spaces';
+        website = string.trim()
         website = sanitizer.sanitize(website)
+        if (website.length === 0)
+            throw 'Id cannot be an empty website or just spaces';
         if (!website.includes('https://www.') && !(website.includes('http://www.')) ) throw 'invalid website'
         //end
 

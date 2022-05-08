@@ -108,6 +108,7 @@ router.post("/", async (req, res) => {
       bio = validation.checkString(req.body.bio);
     }
     catch (e) {
+      bio = "No bio"
       res.render("pages/single/profile", {
         title: "Profile",
         username: req.session.user.username,
