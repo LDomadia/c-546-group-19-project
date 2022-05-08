@@ -27,6 +27,7 @@
     "is-alphanumeric": "^1.0.0",
     "is-url": "^1.2.4",
     "jquery": "^3.6.0",
+    "moment": "^2.29.3",
     "mongodb": "^4.4.1",
     "multer": "^1.4.4",
     "valid-url": "^1.0.9",

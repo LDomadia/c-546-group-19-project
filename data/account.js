@@ -55,8 +55,12 @@ module.exports = {
         },
         "colors-patterns": {},
         brands: {},
+        clothesWorn: {},
+        outftisWorn: {},
       },
       calendar: {},
+      bio: '', 
+      stores: []
     };
     const insertInfo = await userCollection.insertOne(newUser);
     if (!insertInfo.acknowledged || !insertInfo.insertedId)
@@ -135,6 +139,7 @@ module.exports = {
 
     return existingUser.statistics;
   },
+
   async getUserIdByUserName(user) {
     if (!user || !user.trim()) throw 'Error: User is empty';
     const usersCollection = await users();

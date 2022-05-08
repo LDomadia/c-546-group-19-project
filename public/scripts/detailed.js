@@ -2,14 +2,75 @@
     // Let's start writing AJAX calls!
     //page load
     var
-        number_likes = $('#number_likes'),
-        saveButton = $('#save'),
-        likeButton = $('#like'),
         commentList = $('#comments'),
         commentForm = $('#commentForm'),
         commentInput = $('#comment_term'),
         errorDiv = $('#error'),
         noComment = $('#no_comments')
+
+    const carouselImages = $('.carousel-inner');
+    const likeBtns = $('.like-btn');
+    const saveBtns = $('.save-btn');
+
+    if (carouselImages) {
+        for (let i = 0; i < carouselImages.length; i++) {
+            carouselImages[i].firstElementChild.classList.add('active');
+        }
+    }
+
+    if (likeBtns) {
+        for (let i = 0; i < likeBtns.length; i++) {
+            likeBtns[i].addEventListener('click', function(event) {
+                event.preventDefault();
+                const requestConfig = {
+                    method: 'POST', 
+                    url: this
+                };
+                let btn = this;
+                let parent = this.parentElement;
+                let likes = $(parent).find('.outfit-likes');
+                $.ajax(requestConfig).then(function(result) {
+                    console.log(result);
+                    if (result.result == 'success') {
+                        likes[0].innerText = result.likes + ' likes';
+                        btn.innerHTML = result.icon;
+                    }
+                    else {
+                        Swal.fire(
+                            'Oh no! An error occurred.',
+                            result.result,
+                            'error'
+                        );
+                    }
+                });
+            });
+        }
+    }
+
+    if (saveBtns) {
+        for (let i = 0; i < saveBtns.length; i++) {
+            saveBtns[i].addEventListener('click', function(event) {
+                event.preventDefault();
+                const requestConfig = {
+                    method: 'POST', 
+                    url: this
+                };
+                let btn = this;
+                $.ajax(requestConfig).then(function(result) {
+                    if (result.result == 'success') {
+                        btn.innerHTML = result.icon;
+                    }
+                    else {
+                        Swal.fire(
+                            'Oh no! An error occurred.',
+                            result.result,
+                            'error'
+                        );
+                    }
+                });
+            });
+        }
+    }
 
     function checkString(string) {
         if (!string) throw "must provide text input"
@@ -19,50 +80,7 @@
         return string;
     }
 
-
-    //get likes
-    var getLikes = {
-        method: "GET",
-        //https://stackoverflow.com/questions/1696429/get-the-current-url-but-without-the-http-part-bookmarklet
-        //equivalent to geting /detailed/:id/comment
-        url: window.location.pathname + '/likes',
-    }
-    $.ajax(getLikes).then(function (responseMessage) {
-        //get likes
-        let likes = responseMessage.likes;
-        number_likes.text = likes;
-        number_likes.show;
-    })
-
-    //copy 
-    likeButton.click(function (event) {
-        console.log("here");
-        event.preventDefault();
-        //dont do anything if user already likes the outfit
-
-        var addLike = {
-            method: "POST",
-            //https://stackoverflow.com/questions/1696429/get-the-current-url-but-without-the-http-part-bookmarklet
-            //equivalent to geting /detailed/:id/comment
-            url: window.location.pathname + '/likes',
-        }
-
-        $.ajax(addLike).then(function (responseMessage) {
-            //get likes
-
-            let likes = responseMessage.likes;
-            console.log(likes);
-            number_likes.text = likes;
-            number_likes.show;
-        })
-
-    })
-
-
-
     //get all comments
-
-
     var allComments = {
         method: "GET",
         //https://stackoverflow.com/questions/1696429/get-the-current-url-but-without-the-http-part-bookmarklet
