@@ -20,6 +20,8 @@
     event.preventDefault();
   });
   delOutfitBtn.on("click", function (event) {
+    $("#server-error").text("");
+    $("#server-error").hide("");
     document.getElementById("delete-modal").style.display = "none";
     var requestConfig = {
       method: "DELETE",
@@ -38,6 +40,8 @@
   });
 
   confirmBtn.on("click", function (event) {
+    $("#server-error").text("");
+    $("#server-error").hide("");
     if ($(".outfit-card").length === 0)
       outfitMsg.text("Error: user does not have outfits to make public");
 
