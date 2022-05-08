@@ -61,7 +61,6 @@ router
   }) //TODO - add error checking here
   .post(async (req, res) => {
     const data = req.body;
-
     try {
       if (!data) throw "Error: Nothing was entered";
       if (!data.name) throw "Error: Outfit Name is Required";
@@ -79,12 +78,11 @@ router
     try {
       let result = await gen_outfitData.generateOutfit(
         (data["colors-patterns"]),
-        (data.seasons),
+        (data.season),
         (data.styles),
         xss(req.session.user.username)
       );
-        result = result.map((res) => res._id);
-        console.log(result);
+      result = result.map((res) => res._id);
       let clothingItems = await clothesData.getClothingbyIds(
         result
       );
@@ -95,14 +93,14 @@ router
 
       const new_outfit = await outfitsData.addNewOutfits(
         xss(req.session.user.username),
-        result.map((res) => xss(res._id.toString())),
+        result,
         xss("private"),
         xss(data.name),
         (data.season),
         (data.styles)
       );
 
-      if (result) {
+      if (new_outfit) {
         res.status(200).render("pages/medium/outfitGenerated", {
           title: "Generate Outfit",
           outfitsPage: true,
