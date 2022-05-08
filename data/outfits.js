@@ -434,7 +434,58 @@ module.exports = {
     if (!updatedOutfit) throw 'Error: Failed to get updated Outfit';
     return { result: 'success', icon: status };
   },
-
+  async getUserLikedOutfits(user) {
+    if (!user || !user.trim()) throw 'Error: User was not provided';
+    const usersCollection = await users();
+    const userDoc = await usersCollection.findOne({ username: user });
+    if (!userDoc) throw 'Error: Could not find User document';
+    const outfitsCollection = await outfits();
+    const outfitLikes = [];
+    for (const likeId of userDoc.userLikes) {
+      const outfitData = await outfitsCollection.findOne({ _id: likeId });
+      if (!outfitData) throw 'Error: Could not find Outfit document';
+      outfitLikes.push(outfitData);
+    }
+    if (outfitLikes) {
+      for (let outfit of outfitLikes) {
+        outfit["clothingData"] = [];
+        for (let clothingId of outfit.clothes) {
+          const clothingItem = await clothesData.getClothingItemById(
+            clothingId.toString()
+          );
+          if (clothingItem) outfit["clothingData"].push(clothingItem);
+          else throw "Error: Failed to find Clothing Item";
+        }
+      }
+    }
+    return outfitLikes;
+  },
+  async getUserSavedOutfits(user) {
+    if (!user || !user.trim()) throw 'Error: User was not provided';
+    const usersCollection = await users();
+    const userDoc = await usersCollection.findOne({ username: user });
+    if (!userDoc) throw 'Error: Could not find User document';
+    const outfitsCollection = await outfits();
+    const outfitSaves = [];
+    for (const saveId of userDoc.userSaves) {
+      const outfitData = await outfitsCollection.findOne({ _id: saveId });
+      if (!outfitData) throw 'Error: Could not find Outfit document';
+      outfitSaves.push(outfitData);
+    }
+    if (outfitSaves) {
+      for (let outfit of outfitSaves) {
+        outfit["clothingData"] = [];
+        for (let clothingId of outfit.clothes) {
+          const clothingItem = await clothesData.getClothingItemById(
+            clothingId.toString()
+          );
+          if (clothingItem) outfit["clothingData"].push(clothingItem);
+          else throw "Error: Failed to find Clothing Item";
+        }
+      }
+    }
+    return outfitSaves;
+  },
   async addOutfitToCalendar(id, date){
     if (!id || !id.trim()) throw 'Error: Outfit id is empty';
     if (!ObjectId.isValid(id)) throw 'Error: Outfit id is not valid';
@@ -592,6 +643,4 @@ module.exports = {
     }
     return outfitItems;
   },
-
-
 };
