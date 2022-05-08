@@ -3,6 +3,7 @@ const router = express.Router();
 const data = require("../data");
 const account_validation = require("../validation/account_validation");
 const accountData = data.account;
+const xss = require('xss');
 
 //Middleware
 router.use("/signup", (req, res, next) => {
@@ -70,7 +71,7 @@ router.post("/signup", async (req, res) => {
   }
 
   try {
-    await accountData.addNewUser(username, userPsw);
+    await accountData.addNewUser(xss(username), xss(userPsw));
   } catch (e) {
     return res.status(500).render("pages/medium/signup", {
       error: e,
@@ -124,9 +125,9 @@ router.post("/login", async (req, res) => {
   }
 
   try {
-    let existingUser = await accountData.login(username, userPsw);
+    let existingUser = await accountData.login(xss(username), xss(userPsw));
     if (!existingUser) throw "Error: could not login";
-    let isAdmin = await accountData.isUserAdmin(username);
+    let isAdmin = await accountData.isUserAdmin(xss(username));
     req.session.user = { username: existingUser };
     if (isAdmin.administrator) req.session.admin = true;
     return res.redirect("/home");

@@ -6,6 +6,7 @@ const gen_outfitData = require("../data/gen_outfit");
 const outfitsData = require("../data/outfits");
 const clothesData = require("../data/clothes");
 const accountData = require("../data/account");
+const xss = require('xss');
 
 //Middleware
 router.use("/", (req, res, next) => {
@@ -18,7 +19,7 @@ router.use("/", (req, res, next) => {
 router.route("/").get(async (req, res) => {
   try {
     let outfitItems = await outfitsData.getUserOutfits(
-      req.session.user.username
+      xss(req.session.user.username)
     );
     if (req.session.outfitDeletion) {
       req.session.outfitDeletion = false;
@@ -61,7 +62,6 @@ router
   }) //TODO - add error checking here
   .post(async (req, res) => {
     const data = req.body;
-
     try {
       
       if (!data) throw "Error: Nothing was entered";
@@ -83,14 +83,14 @@ router
       let color_patterns = clothesValidation.checkListInput(data["colors-patterns"], "color-patterns")
       
       let result = await gen_outfitData.generateOutfit(
-        color_patterns,
-        seasons,
-        styles,
-        req.session.user.username
+        (data["colors-patterns"]),
+        (data.season),
+        (data.styles),
+        xss(req.session.user.username)
       );
-
+      result = result.map((res) => res._id);
       let clothingItems = await clothesData.getClothingbyIds(
-        result.map((res) => res._id)
+        result
       );
 
       if (clothingItems.length < 2) {
@@ -98,15 +98,15 @@ router
       }
 
       const new_outfit = await outfitsData.addNewOutfits(
-        req.session.user.username,
-        result.map((res) => res._id.toString()),
-        "private",
-        data.name,
-        seasons,
-        data.styles
+        xss(req.session.user.username),
+        result,
+        xss("private"),
+        xss(data.name),
+        (data.season),
+        (data.styles)
       );
 
-      if (result) {
+      if (new_outfit) {
         res.status(200).render("pages/medium/outfitGenerated", {
           title: "Generate Outfit",
           outfitsPage: true,
@@ -134,11 +134,11 @@ module.exports = router;
 router.route("/new").get(async (req, res) => {
   try {
     let clothingItems = await clothesData.getClothingItems(
-      req.session.user.username
+      xss(req.session.user.username)
     );
     if (clothingItems.length < 2) {
       let outfitItems = await outfitsData.getUserOutfits(
-        req.session.user.username
+        xss(req.session.user.username)
       );
       return res.render("pages/results/outfits", {
         title: "My Outfits",
@@ -184,19 +184,19 @@ router.route("/new").post(async (req, res) => {
     });
   }
   try {
-    let clothesIdArr = await clothesData.getClothingIdsByImages(images);
-    let isValid = await clothesData.checkTypes(clothesIdArr);
+    let clothesIdArr = await clothesData.getClothingIdsByImages((images));
+    let isValid = await clothesData.checkTypes((clothesIdArr));
     let newOutfit = await outfitsData.addNewOutfits(
-      req.session.user.username,
-      clothesIdArr,
-      status,
-      name,
-      seasons,
-      styles
+      xss(req.session.user.username),
+      (clothesIdArr),
+      xss(status),
+      xss(name),
+      (seasons),
+      (styles)
     );
     if (!newOutfit) throw "Error: could not create new outfit";
     let outfitItems = await outfitsData.getUserOutfits(
-      req.session.user.username
+      xss(req.session.user.username)
     );
     res.status(200).render("pages/results/outfits", {
       title: "My Outfits",
@@ -222,12 +222,12 @@ router.route("/edit/:id").get(async (req, res) => {
   try {
     id = outfitValidation.checkId(req.params.id);
     let clothingItems = await clothesData.getClothingItems(
-      req.session.user.username
+      xss(req.session.user.username)
     );
     //change this to a redirect to outfits page, use session for msg
     if (clothingItems.length < 2) {
       let outfitItems = await outfitsData.getUserOutfits(
-        req.session.user.username
+        xss(req.session.user.username)
       );
       return res.status(403).render("pages/results/outfits", {
         title: "My Outfits",
@@ -238,8 +238,8 @@ router.route("/edit/:id").get(async (req, res) => {
     }
 
     let currentOutfit = await outfitsData.getUserOutfitById(
-      req.session.user.username,
-      id
+      xss(req.session.user.username),
+      xss(id)
     );
     return res.status(200).render("pages/single/outfitEdit", {
       title: "Edit Outfit",
@@ -281,19 +281,19 @@ router.route("/edit/:id").post(async (req, res) => {
     });
   }
   try {
-    let clothesIdArr = await clothesData.getClothingIdsByImages(images);
+    let clothesIdArr = await clothesData.getClothingIdsByImages((images));
     let updateInfo = await outfitsData.updateUserOutfit(
-      req.session.user.username,
-      id,
-      clothesIdArr,
-      status,
-      name,
-      seasons,
-      styles
+      xss(req.session.user.username),
+      xss(id),
+      (clothesIdArr),
+      xss(status),
+      xss(name),
+      (seasons),
+      (styles)
     );
     if (!updateInfo.updated) throw "Error: could not update outfit";
     let outfitItems = await outfitsData.getUserOutfits(
-      req.session.user.username
+      xss(req.session.user.username)
     );
     res.status(200).render("pages/results/outfits", {
       title: "My Outfits",
@@ -318,8 +318,8 @@ router.route("/delete/:id").delete(async (req, res) => {
   try {
     id = outfitValidation.checkId(req.params.id);
     let deletionInfo = await outfitsData.delUserOutfit(
-      req.session.user.username,
-      id
+      xss(req.session.user.username),
+      xss(id)
     );
     if (!deletionInfo) throw "Error: could not delete outfit";
     req.session.outfitDeletion = true;
@@ -332,10 +332,10 @@ router.route("/likes").get(async (req, res) => {
   try {
     if (!req.session.user) throw "Error: User is not logged in";
     const outfitLikes = await outfitsData.getUserLikedOutfits(
-      req.session.user.username
+      xss(req.session.user.username)
     );
     const userId = await accountData.getUserIdByUserName(
-      req.session.user.username
+      xss(req.session.user.username)
     );
     return res.status(200).render("pages/results/outfitsLikes", {
       title: "My Liked Outfits",
@@ -358,10 +358,10 @@ router.route("/saves").get(async (req, res) => {
   try {
     if (!req.session.user) throw "Error: User is not logged in";
     const outfitSaves = await outfitsData.getUserSavedOutfits(
-      req.session.user.username
+      xss(req.session.user.username)
     );
     const userId = await accountData.getUserIdByUserName(
-      req.session.user.username
+      xss(req.session.user.username)
     );
     return res.status(200).render("pages/results/outfitsSaves", {
       title: "My Saved Outfits",

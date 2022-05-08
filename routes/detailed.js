@@ -38,9 +38,8 @@ router.get("/:id", async (req, res) => {
 
   try {
     //public only
-    outfit = await data.get_outfit_by_id(req.params.id);
+    outfit = await data.get_outfit_by_id(xss(req.params.id));
     if (!outfit) throw "not a public outfit";
-
     //array of clothing datas
     clothes = await data2.getClothingbyIds(outfit.clothes);
     if (!clothes) throw "no clothes found";
@@ -50,7 +49,7 @@ router.get("/:id", async (req, res) => {
     }
 
     const userId = await accountData.getUserIdByUserName(
-      req.session.user.username
+      xss(req.session.user.username)
     );
 
     return res.render("pages/single/detailed", {
@@ -93,7 +92,7 @@ router.get("/:id/comment", async (req, res) => {
 
   try {
     //get all the comments
-    let comments = await data.get_all_comments(id);
+    let comments = await data.get_all_comments(xss(id));
     let admin = req.session.admin ? true : false;
     return res.json({ success: true, comments: comments, admin: admin });
   } catch (e) {
@@ -114,7 +113,7 @@ router.post("/:id/comment", async (req, res) => {
     return res.status(400).json({ error: e });
   }
   try {
-    newComment = await data.add_comment(id, username, comment);
+    newComment = await data.add_comment(xss(id), xss(username), xss(comment));
 
     //return all outfit comments
     let admin = req.session.admin ? true : false;
@@ -147,7 +146,7 @@ router.delete("/:id/comment", async (req, res) => {
     });
   }
   try {
-    let deletionInfo = await data.deleteComment(outfitId, commentId);
+    let deletionInfo = await data.deleteComment(xss(outfitId), xss(commentId));
     if (!deletionInfo.deleted) throw "Error: could not delete comment";
     return res.status(200).json({ success: true });
   } catch (e) {

@@ -1,6 +1,7 @@
 const { ObjectId } = require("mongodb");
 const clothesValidation = require("./clothes_validation");
 const accountValidation = require("./account_validation");
+const xss = require('xss');
 
 function errors_clothing(id, name) {
   if (!id || id == null) {
@@ -9,8 +10,8 @@ function errors_clothing(id, name) {
 
   if (!ObjectId.isValid(id)) throw `${name} must be a valid mongo id`;
 
-  id = ObjectId(id);
-  return id;
+  id = ObjectId(xss(id));
+  return (id);
 }
 
 function errors_clothes(lst, name) {
@@ -18,19 +19,23 @@ function errors_clothes(lst, name) {
     throw `${name} is not initialized`;
   }
 
-  return lst.map((a) => errors_clothing(a));
+  // return lst.map((a) => errors_clothing((a)));
+  for (let id of lst) {
+    id = errors_clothing(id, name);
+  }
+  return lst;
 }
 
 module.exports = {
   checkUsername(user) {
-    return accountValidation.checkUsername(user);
+    return accountValidation.checkUsername(xss(user));
   },
   checkOutfitName(outfitName) {
     outfitName = outfitName.trim();
-    return clothesValidation.checkTextInput(outfitName, "Outfit Name");
+    return clothesValidation.checkTextInput(xss(outfitName), "Outfit Name");
   },
   checkStyles(styles) {
-    return clothesValidation.checkListInput(styles, "Styles Array");
+    return clothesValidation.checkListInput((styles), "Styles Array");
   },
   checkStatus(status) {
     if (!status || typeof status !== "string")
@@ -41,7 +46,7 @@ module.exports = {
       status.localeCompare("public") !== 0
     )
       throw "Error: status must be public or private";
-    return status;
+    return (status);
   },
   checkId(id, varName) {
     if (!id) throw `Error: You must provide a ${varName}`;
@@ -50,10 +55,10 @@ module.exports = {
     if (id.length === 0)
       throw `Error: ${varName} cannot be an empty string or just spaces`;
     if (!ObjectId.isValid(id)) throw `Error: ${varName} invalid object ID`;
-    return id;
+    return xss(id);
   },
   checkSeasons(seasons) {
-    return clothesValidation.checkCheckboxInput(seasons, "seasons", [
+    return clothesValidation.checkCheckboxInput((seasons), "seasons", [
       "winter",
       "spring",
       "summer",
@@ -61,17 +66,17 @@ module.exports = {
     ]);
   },
   checkImages(images) {
-    images = clothesValidation.checkListInput(images, "Images Array");
+    images = clothesValidation.checkListInput((images), "Images Array");
     if (images.length < 2) throw "Error: not enough clothes to make outfit";
-    return images;
+    return (images);
   },
   checkIdArrays(ids) {
     if (ids.length < 2) {
       throw "Error: 2 clothing items are need to create an outfit";
     }
-    return errors_clothes(ids, "Id Array");
+    return errors_clothes((ids), "Id Array");
   },
   checkOutfitIds(ids) {
-    return errors_clothes(ids, "Outfit ids");
+    return errors_clothes((ids), "Outfit ids");
   },
 };
