@@ -21,6 +21,19 @@
     return website;
   }
 
+  function isValidHttpUrl(string) {
+    let url;
+    
+    try {
+      url = new URL(string);
+      console.log(url);
+    } catch (e) {
+      throw e;
+    }
+  
+    return string;
+  }
+
 
   //two forms 
 
@@ -44,7 +57,6 @@
     try {
       bio = checkString(bio);
     } catch (e) {
-      console.log("here");
       //alert(e);
       bioInput.empty();
       error.text(e);
@@ -66,6 +78,7 @@
     try {
       storen = checkString(storen);
       storel = checkWebsite(storel);
+      storel = isValidHttpUrl(storel);
     } catch (e) {
       //alert(e);
       storeName.empty();
