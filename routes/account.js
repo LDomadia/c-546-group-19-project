@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const data = require("../data");
+const account_validation = require("../validation/account_validation");
 const accountData = data.account;
 
 //Middleware
@@ -45,12 +46,7 @@ router.post("/signup", async (req, res) => {
   let pswRepeat = userInfo.pswRepeat;
 
   try {
-    if (!username) throw "Error: username was not provided";
-    if (typeof username !== "string")
-      throw "Error: username should be a string";
-    username = username.trim();
-    if (username.length < 2)
-      throw "Error: username must have at least two characters";
+    username = account_validation.checkUsername(username);
   } catch (e) {
     return res.status(400).render("pages/medium/signup", {
       error: e,
@@ -60,18 +56,8 @@ router.post("/signup", async (req, res) => {
   }
 
   try {
-    if (!userPsw) throw "Error: password was not provided";
-    if (!pswRepeat) throw "Error: no entry for confirm password";
-
-    if (typeof userPsw !== "string") throw "Error: password should be a string";
-    if (typeof pswRepeat !== "string")
-      throw "Error: confirm password should be a string";
-
-    userPsw = userPsw.trim();
-    pswRepeat = pswRepeat.trim();
-
-    if (userPsw.length < 8)
-      throw "Error: password must have at least eight characters";
+    userPsw = account_validation.checkPassword(userPsw);
+    pswRepeat = account_validation.checkPassword(pswRepeat);
     if (userPsw.localeCompare(pswRepeat) !== 0)
       throw "Error: password and confirm password fields must match";
   } catch (e) {
@@ -116,12 +102,7 @@ router.post("/login", async (req, res) => {
 
   //error checking
   try {
-    if (!username) throw "Error: username was not provided";
-    if (typeof username !== "string")
-      throw "Error: username should be a string";
-    username = username.trim();
-    if (username.length < 2)
-      throw "Error: username must have at least two characters";
+    username = account_validation.checkUsername(username);
   } catch (e) {
     return res.status(400).render("pages/medium/login", {
       error: e,
@@ -131,13 +112,7 @@ router.post("/login", async (req, res) => {
   }
 
   try {
-    if (!userPsw) throw "Error: password was not provided";
-    if (typeof userPsw !== "string") throw "Error: password should be a string";
-
-    userPsw = userPsw.trim();
-
-    if (userPsw.length < 8)
-      throw "Error: Password must be at least eight characters";
+    userPsw = account_validation.checkPassword(userPsw);
   } catch (e) {
     return res.status(400).render("pages/medium/login", {
       error: e,
@@ -150,7 +125,7 @@ router.post("/login", async (req, res) => {
 
   try {
     let existingUser = await accountData.login(username, userPsw);
-    if (!existingUser) throw "Eror: could not login";
+    if (!existingUser) throw "Error: could not login";
     let isAdmin = await accountData.isUserAdmin(username);
     req.session.user = { username: existingUser };
     if (isAdmin.administrator) req.session.admin = true;
