@@ -55,6 +55,8 @@ module.exports = {
         },
         "colors-patterns": {},
         brands: {},
+        clothesWorn: {},
+        outftisWorn: {},
       },
       calendar: {},
       bio: '', 
@@ -137,6 +139,7 @@ module.exports = {
 
     return existingUser.statistics;
   },
+
   async getUserIdByUserName(user) {
     if (!user || !user.trim()) throw 'Error: User is empty';
     const usersCollection = await users();
