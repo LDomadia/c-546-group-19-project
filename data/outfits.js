@@ -173,7 +173,6 @@ module.exports = {
         for (let outfit of userOutfits) {
           outfit["clothingData"] = [];
           for (let clothingId of outfit.clothes) {
-            // console.log(clothingId);
             const clothingItem = await clothesData.getClothingItemById(
               clothingId.toString()
             );
