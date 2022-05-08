@@ -1,11 +1,12 @@
 const express = require("express");
-const { sendStatus } = require("express/lib/response");
 const { ObjectId } = require("mongodb");
 const router = express.Router();
 const data = require("../data");
 const accountData = data.account;
 const clothesData = data.clothes;
 const outfitsData = data.outfits;
+const xss = require('xss');
+
 //Middleware
 router.use("/", (req, res, next) => {
   if (!req.session.user) {
@@ -17,7 +18,7 @@ router.use("/", (req, res, next) => {
 router.route("/").get(async (req, res) => {
 
   try {
-    const statistics = await accountData.getStats(req.session.user.username);
+    const statistics = await accountData.getStats(xss(req.session.user.username));
     try{
       let stats_clothes = statistics.clothesWorn
       let stats_outfits = statistics.outfitsWorn
@@ -32,7 +33,7 @@ router.route("/").get(async (req, res) => {
   
       let cloth_ids = Object.keys(stats_clothes).map(id => ObjectId(id))
   
-      clothes = await clothesData.getClothingbyIds(cloth_ids)
+      clothes = await clothesData.getClothingbyIds(xss(cloth_ids))
   
       clothes = clothes.map(cloth => cloth.name)
   
@@ -46,7 +47,7 @@ router.route("/").get(async (req, res) => {
       }
   
       let outfit_ids = Object.keys(stats_outfits).map(id => ObjectId(id))
-      outfits = await outfitsData.getOutfitbyIds(outfit_ids)
+      outfits = await outfitsData.getOutfitbyIds(xss(outfit_ids))
       outfits = outfits.map(outfit => outfit.outfitName)
   
       outfits_obj = []
