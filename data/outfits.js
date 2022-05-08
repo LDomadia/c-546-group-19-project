@@ -581,8 +581,6 @@ module.exports = {
 
     account = await accountCollection.findOne({ username: creator });
 
-    console.log(account)
-
     return {result: "success"}
 
   },

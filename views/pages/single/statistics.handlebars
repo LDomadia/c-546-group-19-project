@@ -8,7 +8,9 @@
 <body>
     <main>
     <h1 class = "stats-title">{{title}}</h1>
+    {{#if error}}
     <div class="error-message">{{error}}</div>
+    {{/if}}
     <section class ="stats-sect">
         <figure>
             <figcaption class="stats-caption">Types</figcaption>
