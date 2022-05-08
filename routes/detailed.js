@@ -5,9 +5,7 @@ const data = require("../data/detailed");
 const data2 = require("../data/clothes");
 const accountData = require('../data/account');
 //add in validation 
-const validation = require("../validation/outfits_validation");
 const validation2 = require("../validation/account_validation");
-const xss = require('xss');
 const { ObjectId } = require('mongodb');
 
 
@@ -30,7 +28,7 @@ router.get("/:id", async (req, res) => {
   let condition;
 
   try {
-    validation2.checkId(req.params.id);
+    req.params.id = validation2.checkId(req.params.id);
   }
   catch (e) {
     return res.status(400).render("pages/error/error", {
