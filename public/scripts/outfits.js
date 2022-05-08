@@ -9,9 +9,10 @@
     formDel = $("#form-delete");
 
   const carouselImages = $(".carousel-inner");
-
   carouselImages.each(function () {
-    let doc = $(this)[0].firstElementChild.classList.add("active");
+    if ($(this)[0].firstElementChild !== null) {
+      let doc = $(this)[0].firstElementChild.classList.add("active");
+    }
   });
 
   deleteLink.click(function (event) {

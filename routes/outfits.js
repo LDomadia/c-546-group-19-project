@@ -325,7 +325,7 @@ router.route("/delete/:id").delete(async (req, res) => {
     req.session.outfitDeletion = true;
     return res.json({ redirect: true });
   } catch (e) {
-    return res.status(400).json({ error: e });
+    return res.json({ error: e });
   }
 });
 router.route("/likes").get(async (req, res) => {
