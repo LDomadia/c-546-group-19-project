@@ -107,7 +107,6 @@ router
           outfitsPage: true,
           stylesheet: "/public/styles/clothes_styles.css",
           script: "/public/scripts/gen_outfit_script.js",
-          error: "outfit generated",
           savePage: true,
           results: clothingItems,
         });
