@@ -181,6 +181,15 @@ router.route("/log").get(async (req, res) => {
   try {
     //both 500
     let e = await outfitsData.addOutfitToCalendar(xss(log_info.log_id), xss(log_info.log_date))
+  }
+  catch (e) {
+    return res.status(400).render("pages/medium/calendar_log", {
+      calPage: true,
+      title: "Log Outfits",
+      error: e
+    });
+  }
+  try {
     return res.redirect("/calendar");
   } catch (e) {
     return res.status(500).render("pages/medium/calendar_log", {

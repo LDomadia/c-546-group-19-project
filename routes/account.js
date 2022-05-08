@@ -73,7 +73,7 @@ router.post("/signup", async (req, res) => {
   try {
     await accountData.addNewUser(xss(username), xss(userPsw));
   } catch (e) {
-    return res.status(500).render("pages/medium/signup", {
+    return res.status(400).render("pages/medium/signup", {
       error: e,
       dbErr: true,
       username: username,
