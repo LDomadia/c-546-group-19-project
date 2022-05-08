@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const outfitValidation = require("../validation/outfit_validation");
+const clothesValidation = require("../validation/clothes_validation");
 const gen_outfitData = require("../data/gen_outfit");
 const outfitsData = require("../data/outfits");
 const clothesData = require("../data/clothes");
@@ -64,7 +65,6 @@ router
       if (!data) throw "Error: Nothing was entered";
       if (!data.name) throw "Error: Outfit Name is Required";
       if (!data.name.trim()) throw "Error: Outfit Name is Required";
-      if (!req.session.user) throw 'Error: User is not logged in';
     } catch (e) {
       return res.status(400).render("pages/medium/outfitGenerated", {
         title: "Generate Outfit",
@@ -165,11 +165,14 @@ router.route("/new").post(async (req, res) => {
     let status = req.body.public ? "public" : "private";
     let styles = req.body.styles ? req.body.styles : [];
 
-    styles = styles.map((style) => style.trim().toLowerCase());
-    if (!images || images.length < 2)
-      throw "Error: not enough clothes to make outfit";
+    name = outfitValidation.checkOutfitName(name);
+    images = outfitValidation.checkImages(images);
+    seasons = outfitValidation.checkSeasons(seasons);
+    status = outfitValidation.checkStatus(status);
+    styles = outfitValidation.checkStyles(styles);
 
     let clothesIdArr = await clothesData.getClothingIdsByImages(images);
+    let isValid = await clothesData.checkTypes(clothesIdArr);
     let newOutfit = await outfitsData.addNewOutfits(
       req.session.user.username,
       clothesIdArr,
@@ -251,9 +254,13 @@ router.route("/edit/:id").post(async (req, res) => {
     let status = req.body.public ? "public" : "private";
     let styles = req.body.styles ? req.body.styles : [];
     let id = outfitValidation.checkId(req.params.id);
-    styles = styles.map((style) => style.trim().toLowerCase());
-    if (!images || images.length < 2)
-      throw "Error: not enough clothes to make outfit";
+
+    name = outfitValidation.checkOutfitName(name);
+    images = outfitValidation.checkImages(images);
+    seasons = outfitValidation.checkSeasons(seasons);
+    status = outfitValidation.checkStatus(status);
+    styles = outfitValidation.checkStyles(styles);
+
     let clothesIdArr = await clothesData.getClothingIdsByImages(images);
     let updateInfo = await outfitsData.updateUserOutfit(
       req.session.user.username,
