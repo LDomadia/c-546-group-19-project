@@ -1,6 +1,6 @@
 const { ObjectId } = require('mongodb');
 var validUrl = require('valid-url');
-  
+const xss = require('xss');
 
 module.exports = {
     checkUsername(username) {
@@ -24,7 +24,7 @@ module.exports = {
             }
         }
 
-        return username;
+        return xss(username);
     },
 
     checkPassword(password) {
@@ -36,7 +36,7 @@ module.exports = {
         password = password.trim();
         if (password.length < 8)
             throw "Error: password must have at least eight characters";
-        return password;
+        return xss(password);
     },
   
     checkId(id) {
@@ -47,7 +47,7 @@ module.exports = {
         id = id.trim();
         if (!ObjectId.isValid(id)) throw 'invalid object ID';
 
-        return id;
+        return xss(id);
     },
 
 
@@ -56,7 +56,7 @@ module.exports = {
         if (typeof string !== 'string') throw 'invalid string input';
         if (string.trim().length === 0)
             throw 'string cannot be an empty string or just spaces';
-        return string;
+        return xss(string);
     },
 
     checkWebsite(website) {
@@ -76,7 +76,6 @@ module.exports = {
             throw "not valid url"
         }
 
-
-        return website;
+        return xss(website);
     }
 };
