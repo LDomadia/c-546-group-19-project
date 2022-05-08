@@ -5,8 +5,12 @@
     {{#if error}}
     <a href="/calendar">Go Back to Calendar</a>
     {{/if}}
+
+    {{#if noOutfits}}
+    <p>No outfits in inventory! </p>
+    {{/if}}
     
-    <br>
+    <br/>
 <article class="main">
     {{#each outfits}}
         <div class="outfit-card">

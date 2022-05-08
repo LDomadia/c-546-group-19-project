@@ -4,6 +4,9 @@ const { ObjectId } = require("mongodb");
 const router = express.Router();
 const accountData = require("../data/account");
 const outfitsData = require("../data/outfits");
+const profile = require("../data/profile");
+const profileData = require("../data/profile");
+const account_validation = require("../validation/account_validation");
 const validate = require('../validation/clothes_validation');
 
 //Middleware
@@ -19,7 +22,7 @@ router.use("/", (req, res, next) => {
 // GET /
 router.route("/").get(async (req, res) => {
   try {
-   return res.render("pages/single/calendar", {title:"Calendar"});
+    return res.render("pages/single/calendar", { title: "Calendar" });
   } catch (e) {
     return res.sendStatus(500);
   }
@@ -27,25 +30,27 @@ router.route("/").get(async (req, res) => {
   let data = req.body
   let bday = data.birthday
 
-  try{
+  try {
     let bday = data.birthday
 
-    if(!moment(bday).isValid()){
+    if (!moment(bday).isValid()) {
       throw "Invalid date!"
     }
 
-    if(!moment().isAfter(bday)){
+    if (!moment().isAfter(bday)) {
       throw "Cannot log date in the future!"
     }
 
-    if(moment(bday).isBefore("2022-01-01", "year")){
+    if (moment(bday).isBefore("2022-01-01", "year")) {
       throw "Cannot log date before 2022!"
-    }  
+    }
   }
-  catch(e){
-    return res.status(400).render("pages/single/calendar", 
-    {title:"Calendar",
-     error: e});;
+  catch (e) {
+    return res.status(400).render("pages/single/calendar",
+      {
+        title: "Calendar",
+        error: e
+      });;
   }
 
   try {
@@ -67,36 +72,61 @@ router.route("/").get(async (req, res) => {
     let outfitItems = await outfitsData.getOutfitsOnDate(req.session.user.username, mdy_format)
 
 
-   return res.render("pages/single/calendar", 
-                     {title:"Calendar",
-                      outfitsPage: true,
-                      stylesheet: "/public/styles/outfit_card_styles.css",
-                      script: "/public/scripts/outfits.js",
-                      date: mdy_format,
-                      outfits: outfitItems});
+    return res.render("pages/single/calendar",
+      {
+        title: "Calendar",
+        outfitsPage: true,
+        stylesheet: "/public/styles/outfit_card_styles.css",
+        script: "/public/scripts/outfits.js",
+        date: mdy_format,
+        outfits: outfitItems
+      });
   } catch (e) {
-    return res.status(500).render("pages/single/calendar", 
-    {title:"Calendar",
-     error: e});;
+    return res.status(500).render("pages/single/calendar",
+      {
+        title: "Calendar",
+        error: e
+      });;
   }
 });
 
 router.route("/log").get(async (req, res) => {
-  
+
+  let noOutfits = false;
+  let user, username;
+  //check username
+  try {
+    username = account_validation.checkUsername(req.session.user.username);
+  }
+  catch (e) {
+    return res.status(400).render("pages/error/error", { title: "Error", code: 400, error: e });
+  }
 
   try {
-    let outfitItems = await outfitsData.getUserOutfits(req.session.user.username)
+    user = profileData.get(username);
+    if(!user) throw "user not found "
+  }
+  catch (e) {
+    return res.status(404).render("pages/error/error", { title: "Error", code: 404, error: e });
+  }
+
+  try {
+    let outfitItems = await outfitsData.getUserOutfits(req.session.user.username);
+
+    if(!outfitItems || outfitItems == null||outfitItems.length ==0){
+      noOutfits =true;
+    }
     let date = req.query.date
-    if(!moment(date,"MM-DD-YYYY", true).isValid()){
+    if (!moment(date, "MM-DD-YYYY", true).isValid()) {
       throw `Cannot log invalid date ${date}`
     }
-      
     return res.render("pages/medium/calendar_log", {
       title: "Log Outfits",
       outfitsPage: true,
       stylesheet: "/public/styles/outfit_card_styles.css",
       script: "/public/scripts/outfits.js",
       outfits: outfitItems,
+      noOutfits: noOutfits,
       date: date
     });
   } catch (e) {
@@ -106,13 +136,15 @@ router.route("/log").get(async (req, res) => {
     });;
   }
 }).post(async (req, res) => {
+
+
   try {
     const log_info = req.body
 
-    if(!log_info) throw "Could not get logging information";
+    if (!log_info) throw "Could not get logging information";
 
     //validate log info
-    if(!moment(log_info.log_date,"MM-DD-YYYY", true).isValid()){
+    if (!moment(log_info.log_date, "MM-DD-YYYY", true).isValid()) {
       throw `Cannot log invalid date ${log_info.log_date}`
     }
 
@@ -120,11 +152,13 @@ router.route("/log").get(async (req, res) => {
 
     let e = await outfitsData.addOutfitToCalendar(log_info.log_id, log_info.log_date)
 
-      
+
     return res.redirect("/calendar");
   } catch (e) {
-    return res.status(500).render("pages/medium/calendar_log", {title:"Log Outfits",
-                                                              error: e});
+    return res.status(500).render("pages/medium/calendar_log", {
+      title: "Log Outfits",
+      error: e
+    });
   }
 
 
