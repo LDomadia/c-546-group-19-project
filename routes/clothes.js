@@ -5,6 +5,7 @@ const multer = require("multer");
 const upload = multer({ dest: "uploads/" });
 const validate = require("../validation/clothes_validation");
 const { ObjectId } = require('mongodb');
+const xss = require('xss');
 
 //Middleware
 router.use("/", (req, res, next) => {
@@ -24,7 +25,7 @@ router.route("/").get(async (req, res) => {
 
   try {
     let clothingItems = await clothesData.getClothingItems(
-      req.session.user.username
+      xss(req.session.user.username)
     );
     res.render("pages/results/clothings", {
       title: "My Clothes",
@@ -97,15 +98,15 @@ router
 
     try {
       let result = await clothesData.addNewClothingItem(
-        data.name,
-        req.file.filename,
-        data.type,
-        data.size,
-        data["colors-patterns"],
-        data.seasons,
-        data.styles,
-        data.brand,
-        req.session.user.username
+        xss(data.name),
+        xss(req.file.filename),
+        xss(data.type),
+        xss(data.size),
+        xss(data["colors-patterns"]),
+        xss(data.seasons),
+        xss(data.styles),
+        xss(data.brand),
+        xss(req.session.user.username)
       );
       if (result.result == "success") {
         res.status(200).redirect("/clothes");
@@ -128,7 +129,7 @@ router
   .get(async (req, res) => {
     try {
       if (!ObjectId.isValid(req.params.id)) throw "Error: Clothing Item id is not valid";
-      const clothingItem = await clothesData.getClothingItemById(req.params.id);
+      const clothingItem = await clothesData.getClothingItemById(xss(req.params.id));
       if (clothingItem) {
         return res.status(200).render("pages/single/clothingEdit", {
           title: "Edit Clothing Item",
@@ -183,7 +184,7 @@ router
       data.styles = validate.checkListInput(data.styles, "Styles");
       if (data.brand) data.brand = validate.checkTextInput(data.brand, "Brand");
     } catch (e) {
-      const clothingItem = await clothesData.getClothingItemById(req.params.id);
+      const clothingItem = await clothesData.getClothingItemById(xss(req.params.id));
       if (clothingItem) {
         return res.status(400).render("pages/single/clothingEdit", {
           title: "Edit Clothing Item",
@@ -206,29 +207,29 @@ router
       let result;
       if (req.file) {
         result = await clothesData.updateClothingItem(
-          req.params.id,
-          data.name,
-          req.file.filename,
-          data.type,
-          data.size,
-          data["colors-patterns"],
-          data.seasons,
-          data.styles,
-          data.brand,
-          req.session.user.username
+          xss(req.params.id),
+          xss(data.name),
+          xss(req.file.filename),
+          xss(data.type),
+          xss(data.size),
+          xss(data["colors-patterns"]),
+          xss(data.seasons),
+          xss(data.styles),
+          xss(data.brand),
+          xss(req.session.user.username)
         );
       } else {
         result = await clothesData.updateClothingItem(
-          req.params.id,
-          data.name,
+          xss(req.params.id),
+          xss(data.name),
           null,
-          data.type,
-          data.size,
-          data["colors-patterns"],
-          data.seasons,
-          data.styles,
-          data.brand,
-          req.session.user.username
+          xss(data.type),
+          xss(data.size),
+          xss(data["colors-patterns"]),
+          xss(data.seasons),
+          xss(data.styles),
+          xss(data.brand),
+          xss(req.session.user.username)
         );
       }
 
@@ -238,7 +239,7 @@ router
         throw "Error: Failed to add Clothing Item";
       }
     } catch (e) {
-      const clothingItem = await clothesData.getClothingItemById(req.params.id);
+      const clothingItem = await clothesData.getClothingItemById(xss(req.params.id));
       if (clothingItem) {
         return res.status(500).render("pages/single/clothingEdit", {
           title: "Edit Clothing Item",
@@ -261,7 +262,7 @@ router
 router.route("/view/:id").get(async (req, res) => {
   try {
     if (!ObjectId.isValid(req.params.id)) throw "Error: Clothing Item id is not valid";
-    const clothingItem = await clothesData.getClothingItemById(req.params.id);
+    const clothingItem = await clothesData.getClothingItemById(xss(req.params.id));
     if (clothingItem) {
       return res.status(200).render("pages/single/clothingDetails", {
         title: "Clothing Details",
@@ -285,7 +286,7 @@ router.route("/delete/:id").delete(async (req, res) => {
   try {
     if (!req.session.user) throw 'Error: No user is logged in';
     if (!ObjectId.isValid(req.params.id)) throw "Error: Clothing Item id is not valid";
-    const result = await clothesData.deleteClothingItem(req.params.id, req.session.user.username);
+    const result = await clothesData.deleteClothingItem(xss(req.params.id), xss(req.session.user.username));
     if (result.result == 'success') {
       return res.json(result);
     }
