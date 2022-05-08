@@ -20,6 +20,8 @@
   var outfitsArr = [];
 
   outfitForm.submit(function (event) {
+    $("#server-error").text("");
+    $("#server-error").hide();
     try {
       outfitErr.removeClass();
       outfitErr.hide();

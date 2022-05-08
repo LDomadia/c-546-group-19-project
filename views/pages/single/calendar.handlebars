@@ -6,19 +6,23 @@
 <form action="/calendar/log" method="GET">
     <button name="date" value={{date}}>Log Outfits</button>
 </form>
+<br />
+<p>Choose a different day to view and log outfits that you wore on that day!</p>
+{{else}}
+<p>Choose a day to view and log outfits that you wore on that day!</p>
 {{/if}}
 
 <form id="calendar-form" method="POST" action="/calendar">
-  <label for="birthday">Time:</label>
-  <input type="date" id="birthday" name="birthday">
-  <input type="submit">
+    <label for="birthday">Time:</label>
+    <input type="date" id="birthday" name="birthday">
+    <input type="submit">
 </form>
 
 <article class="main">
     {{#each outfits}}
-        <div class="outfit-card">
-            <!-- Carousel wrapper -->
-            <div id="a{{_id}}" class="carousel carousel-dark slide" data-mdb-ride="carousel" data-mdb-interval="false">
+    <div class="outfit-card">
+        <!-- Carousel wrapper -->
+        <div id="a{{_id}}" class="carousel carousel-dark slide" data-mdb-ride="carousel" data-mdb-interval="false">
 
             <!-- Inner -->
             <div class="carousel-inner">
@@ -39,12 +43,12 @@
                 <span class="carousel-control-next-icon" aria-hidden="true"></span>
                 <span class="visually-hidden">Next</span>
             </button>
-            </div>
-            <!-- Carousel wrapper -->
-            <div class="outfit-card-details">
-                <h2 class="outfit-title">{{outfitName}}</h2>
-            </div>
         </div>
+        <!-- Carousel wrapper -->
+        <div class="outfit-card-details">
+            <h2 class="outfit-title">{{outfitName}}</h2>
+        </div>
+    </div>
     {{/each}}
-</div>
+    </div>
 </article>

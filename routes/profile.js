@@ -66,6 +66,7 @@ router.get("/", async (req, res) => {
     res.render("pages/single/profile", {
       title: "Profile",
       username: username,
+      profPage: true,
       bio: bio,
       stores: stores,
       noStore: noStore
@@ -138,7 +139,8 @@ router.post("/", async (req, res) => {
         stores: stores,
         E: true,
         error: e,
-        noStore: err
+        noStore: err,
+        profPage: true
       });
     }
 
@@ -152,6 +154,7 @@ router.post("/", async (req, res) => {
         title: "Profile",
         username: req.session.user.username,
         bio: bio,
+        profPage: true,
         stores: stores,
         E: true,
         error: e,
@@ -168,6 +171,7 @@ router.post("/", async (req, res) => {
       return res.render("pages/single/profile", {
         title: "Profile",
         username: username,
+        profPage: true,
         bio: bio,
         stores: stores,
         E: false,
@@ -179,6 +183,7 @@ router.post("/", async (req, res) => {
         title: "Profile",
         username: req.session.user.username,
         bio: bio,
+        profPage: true,
         stores: stores,
         E: true,
         error: e,
@@ -201,6 +206,7 @@ router.post("/", async (req, res) => {
         title: "Profile",
         username: req.session.user.username,
         bio: user.bio,
+        profPage: true,
         stores: user.stores,
         noStore: err,
         E: true,
@@ -220,6 +226,7 @@ router.post("/", async (req, res) => {
         username: req.session.user.username,
         bio: user.bio,
         stores: user.stores,
+        profPage: true,
         E: true,
         noStore: err,
         error: e
@@ -236,6 +243,7 @@ router.post("/", async (req, res) => {
       return res.status(200).render("pages/single/profile", {
         title: "Profile",
         username: username,
+        profPage: true,
         bio: user.bio,
         stores: user.stores,
         noStore: err,
@@ -247,6 +255,7 @@ router.post("/", async (req, res) => {
         title: "Profile",
         username: req.session.user.username,
         bio: user.bio,
+        profPage: true,
         stores: user.stores,
         noStore: err,
         E: true,
@@ -259,6 +268,7 @@ router.post("/", async (req, res) => {
       title: "Profile",
       username: req.session.user.username,
       bio: bio,
+      profPage: true,
       stores: stores,
       noStore: err,
       E: true,
@@ -273,7 +283,7 @@ router.post("/", async (req, res) => {
 router.get("/password", async (req, res) => {
 
   try {
-    return res.render("pages/single/changepassword", { title: "Change Password" });
+    return res.render("pages/single/changepassword", { title: "Change Password",profPage: true, });
   }
   catch (e) {
     return res.status(500).render("pages/error/error", {  title: "Error",code: 500, error: e });
@@ -294,7 +304,7 @@ router.post("/password", async (req, res) => {
   }
   catch (e) {
     //error
-    return res.status(400).render("pages/single/changepassword", { title: "Change Password", passwordE: true, error: e })
+    return res.status(400).render("pages/single/changepassword", { title: "Change Password", passwordE: true, error: e ,profPage: true,})
   }
 
   
@@ -304,7 +314,7 @@ router.post("/password", async (req, res) => {
   }
   catch (e) {
     //unable to get user
-    return res.status(404).render("pages/single/changepassword", { title: "Change Password", passwordE: true, error: e })
+    return res.status(404).render("pages/single/changepassword", { title: "Change Password", passwordE: true,profPage: true, error: e })
   }
 
 
@@ -320,7 +330,7 @@ router.post("/password", async (req, res) => {
   }
 
   try {
-    return res.render("pages/single/changepassword2", { title: "Change Password" });
+    return res.render("pages/single/changepassword2", { profPage: true,title: "Change Password" });
   }
   catch (e) {
     return res.status(500).render("pages/error/error", { title: "Error",code: 500, error: e });
@@ -342,7 +352,7 @@ router.post("/password2", async (req, res) => {
   catch (e) {
     //error
 
-    return res.status(400).render("pages/single/changepassword2", { title: "Change Password", passwordE: true, error: e })
+    return res.status(400).render("pages/single/changepassword2", {profPage: true, title: "Change Password", passwordE: true, error: e })
   }
 
   try {
@@ -351,7 +361,7 @@ router.post("/password2", async (req, res) => {
   }
   catch (e) {
     //unable to get user
-    return res.status(404).render("pages/single/changepassword2", { title: "Change Password", passwordE: true, error: e })
+    return res.status(404).render("pages/single/changepassword2", { profPage: true,title: "Change Password", passwordE: true, error: e })
 
   }
 
@@ -361,15 +371,15 @@ router.post("/password2", async (req, res) => {
     await data.changePassword(xss(username), xss(password1), xss(password2));
 
   } catch (e) {
-    return res.status(400).render("pages/single/changepassword2", { title: "Change Password", passwordE: true, error: e });
+    return res.status(400).render("pages/single/changepassword2", {profPage: true, title: "Change Password", passwordE: true, error: e });
   }
 
   try {
     req.session.destroy();
-    return res.render("pages/single/changepassword3", { title: "Password Changed", not_logged_in: true, });
+    return res.render("pages/single/changepassword3", { profPage: true,title: "Password Changed", not_logged_in: true, });
   }
   catch (e) {
-    return res.status(500).render("pages/error/error", { title: "Error",code: 500, error: e });
+    return res.status(500).render("pages/error/error", { profPage: true,title: "Error",code: 500, error: e });
   }
 
 });
@@ -377,7 +387,7 @@ router.post("/password2", async (req, res) => {
 
 //get profile if signed in 
 router.get("/delete", async (req, res) => {
-  res.render("pages/medium/delete", { title: "Delete Account",stylesheet: '/public/styles/outfit_card_styles.css', });
+  res.render("pages/medium/delete", {profPage: true, title: "Delete Account",stylesheet: '/public/styles/outfit_card_styles.css', });
 
 
 });
@@ -394,6 +404,7 @@ router.post("/delete", async (req, res) => {
   }
   catch (e) {
     return res.status(400).render("pages/medium/delete", {
+      profPage: true,
       title: "Delete Account",
       error: e,
       deleteE: true
@@ -407,6 +418,7 @@ router.post("/delete", async (req, res) => {
   }
   catch (e) {
     return res.status(404).render("pages/medium/delete", {
+      profPage: true,
       title: "Delete Account",
       error: e,
       deleteE: true
@@ -420,19 +432,20 @@ router.post("/delete", async (req, res) => {
   }
   catch (e) {
     //unable to get user
-    return res.status(404).render("pages/single/changepassword2", { title: "Delete Account", passwordE: true, error: e })
+    return res.status(404).render("pages/single/changepassword2", { profPage: true,title: "Delete Account", passwordE: true, error: e })
   }
 
   try {
     //await data.removeAccount(req.session.user.username);
     req.session.destroy();
     //return res.json({deleted:true});
-    return res.render("pages/medium/confirmdeletion", { title: "Account Deleted", not_logged_in: true, });
+    return res.render("pages/medium/confirmdeletion", {profPage: true, title: "Account Deleted", not_logged_in: true, });
   }
 
   catch (e) {
     return res.status(500).render("pages/medium/delete", {
       title: "Delete Account",
+      profPage: true,
       error: e,
       deleteE: true
     });

@@ -246,6 +246,11 @@ module.exports = {
         $pull: { userLikes: outfitId },
       }
     );
+
+
+
+
+
     if (!userLikesUpdate.acknowledged)
       throw "Error: Failed to delete outfit from user likes";
 

@@ -9,12 +9,12 @@ function checkTextInput(input, inputName) {
 }
 
 function checkNumericTextInput(input, inputName, convert) {
-    if (!input) throw `Error: ${inputName} is required`;
-    if (typeof input !== 'string') throw `Error: ${inputName} must be a string`;
-    input = input.trim();
-    if (!input) throw `Error: ${inputName} is empty`;
+  if (!input) throw `Error: ${inputName} is required`;
+  if (typeof input !== "string") throw `Error: ${inputName} must be a string`;
+  input = input.trim();
+  if (!input) throw `Error: ${inputName} is empty`;
 
-    parse_input = parseInt(input)
+  parse_input = parseInt(input);
 
     if(isNaN(parse_input) || !Number.isInteger(parse_input)){
         throw `Error ${inputName} cannot be converted to an integer`
@@ -71,10 +71,10 @@ function checkCheckboxInput(input, inputName, acceptableValues) {
 }
 
 module.exports = {
-    checkCheckboxInput,
-    checkFileInput,
-    checkListInput,
-    checkSelectInput,
-    checkTextInput,
-    checkNumericTextInput
-}
+  checkCheckboxInput,
+  checkFileInput,
+  checkListInput,
+  checkSelectInput,
+  checkTextInput,
+  checkNumericTextInput,
+};

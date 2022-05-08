@@ -1,8 +1,11 @@
 const MongoClient = require("mongodb").MongoClient;
 require("dotenv").config();
+
+let url = (!process.env.MONGO_URL) ? process.env.MONGO_URI : process.env.MONGO_URL
+
 const settings = {
   mongoConfig: {
-    serverUrl: process.env.MONGO_URL,
+    serverUrl: url,
     database: "CS546_group19_final",
   },
 };

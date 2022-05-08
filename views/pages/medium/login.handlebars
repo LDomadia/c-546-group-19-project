@@ -6,7 +6,7 @@
             <p>Please fill in this form to log into your account.</p>
             <hr>
             {{#if dbErr}}
-                <p>{{error}}</p>
+                <p id="server-error">{{error}}</p>
             {{/if}}
             {{#if usernameErr}}
                 <p>{{error}}</p>
