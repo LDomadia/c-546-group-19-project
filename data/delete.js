@@ -1,6 +1,7 @@
 const { ObjectId } = require("mongodb");
 const clothesdata = require("../data/clothes");
 const outfitsdata = require("../data/outfits");
+const profiledata = require("../data/profile");
 //const { use } = require("../routes/account");
 const bcrypt = require("bcryptjs");
 const saltRounds = 16;
@@ -46,7 +47,7 @@ module.exports = {
 
         for (let i = 0; i < clothes.length; i++) {
             //delete each clothing item from clothing collection
-            validation.checkId(clothes[i].toString());    
+            validation.checkId(clothes[i].toString());
             await clothesdata.deleteClothingItem(clothes[i].toString(), username);
         }
 
@@ -58,7 +59,13 @@ module.exports = {
 
         //find all outfits with the given username and perform delete 
         username = validation.checkUsername(username);
-
+        //get user
+        let user = await profiledata.get(username);
+        if (!user) throw "user not found"
+        //get all the outfit Ids 
+        let outfit_array = user.userOutfits;
+   
+        //delete all outfits
         const outfitsCollection = await outfits();
         if (!outfitsCollection) throw "Error: could not retrieve outfits";
         //remove all outfits with given user
@@ -69,7 +76,41 @@ module.exports = {
         if (!deletionInfo) {
             throw `Could not delete outfits with given username`;
         }
+
+        //find outfitId
+
+        //update in user likes and saves
+        const usersCollection = await users();
+        let userSavesUpdate, userLikesUpdate;
+
+        for (let i = 0; i < outfit_array.length; i++) {
+
+            //for likes
+            userSavesUpdate = await usersCollection.updateMany(
+                {},
+                {
+                    $pull: { userSaves: outfit_array[i] },
+                }
+            );
+            if (!userSavesUpdate.acknowledged)
+                throw "Error: Failed to delete outfit from user saves";
+
+
+            //for likes
+            userLikesUpdate = await usersCollection.updateMany(
+                {},
+                {
+                    $pull: { userLikes: outfit_array[i] },
+                }
+            );
+            if (!userLikesUpdate.acknowledged)
+                throw "Error: Failed to delete outfit from user likes";
+        }
+
         return { deleted: true };
-    }
+    },
+
+
 }
+
 
