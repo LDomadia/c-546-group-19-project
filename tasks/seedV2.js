@@ -12,7 +12,7 @@ const main = async () => {
 
         const item0 = await clothes.addNewClothingItem(
             'Mustard Sweatshirt',
-            'seed_images/IMG_0175.jpg',
+            'seed_images/img_0175.jpg',
             'outerwear',
             'S',
             ['mustard'],
@@ -24,7 +24,7 @@ const main = async () => {
     
         const item1 = await clothes.addNewClothingItem(
             'Floral Clutch',
-            'seed_images/IMG_0138.jpg',
+            'seed_images/img_0138.jpg',
             'accessory',
             null,
             ['brown', 'floral'],
@@ -36,7 +36,7 @@ const main = async () => {
     
         const item2 = await clothes.addNewClothingItem(
             'Superman Cape',
-            'seed_images/IMG_0174.jpg',
+            'seed_images/img_0174.jpg',
             'accessory',
             null,
             ['blue', 'gold'],
@@ -48,7 +48,7 @@ const main = async () => {
 
         const item3 = await clothes.addNewClothingItem(
             'Blue Hoodie',
-            'seed_images/IMG_0173.jpg',
+            'seed_images/img_0173.jpg',
             'outerwear',
             'XS',
             ['blue'],
@@ -60,7 +60,7 @@ const main = async () => {
 
         const item4 = await clothes.addNewClothingItem(
             'Gold Polka Dot Headband',
-            'seed_images/IMG_0172.jpg',
+            'seed_images/img_0172.jpg',
             'accessory',
             null,
             ['gold', 'white'],
@@ -72,7 +72,7 @@ const main = async () => {
 
         const item5 = await clothes.addNewClothingItem(
             'Lavender Crossbody Bag',
-            'seed_images/IMG_0171.jpg',
+            'seed_images/img_0171.jpg',
             'accessory',
             null,
             ['lavender', 'floral'],
@@ -84,7 +84,7 @@ const main = async () => {
 
         const item6 = await clothes.addNewClothingItem(
             'Socks with Foxes',
-            'seed_images/IMG_0170.jpg',
+            'seed_images/img_0170.jpg',
             'socks',
             null,
             ['gray', 'green'],
@@ -96,7 +96,7 @@ const main = async () => {
 
         const item7 = await clothes.addNewClothingItem(
             'Cat Christmas Socks',
-            'seed_images/IMG_0169.jpg',
+            'seed_images/img_0169.jpg',
             'socks',
             null,
             ['black', 'green', 'red'],
@@ -108,7 +108,7 @@ const main = async () => {
 
         const item8 = await clothes.addNewClothingItem(
             'Pink Llama Socks',
-            'seed_images/IMG_0168.jpg',
+            'seed_images/img_0168.jpg',
             'socks',
             null,
             ['pink', 'white', 'magenta'],
@@ -120,7 +120,7 @@ const main = async () => {
 
         const item9 = await clothes.addNewClothingItem(
             'Pink Cuffed Shirt',
-            'seed_images/IMG_0159.jpg',
+            'seed_images/img_0159.jpg',
             'top',
             'XS',
             ['pink'],
@@ -132,7 +132,7 @@ const main = async () => {
 
         const item10 = await clothes.addNewClothingItem(
             'Blue Sweatpants',
-            'seed_images/IMG_0160.jpg',
+            'seed_images/img_0160.jpg',
             'bottom',
             'S',
             ['blue'],
@@ -144,7 +144,7 @@ const main = async () => {
 
         const item11 = await clothes.addNewClothingItem(
             'Graphic Leggings',
-            'seed_images/IMG_0161.jpg',
+            'seed_images/img_0161.jpg',
             'bottom',
             'S',
             ['blue', 'white', 'pink', 'purple'],
@@ -156,7 +156,7 @@ const main = async () => {
 
         const item12 = await clothes.addNewClothingItem(
             'Black Sport Leggings',
-            'seed_images/IMG_0162.jpg',
+            'seed_images/img_0162.jpg',
             'bottom',
             'S',
             ['blue', 'black', 'green', 'purple'],
@@ -168,7 +168,7 @@ const main = async () => {
 
         const item13 = await clothes.addNewClothingItem(
             'Blue Jeans',
-            'seed_images/IMG_0163.jpg',
+            'seed_images/img_0163.jpg',
             'bottom',
             '3',
             ['blue'],
@@ -180,7 +180,7 @@ const main = async () => {
 
         const item14 = await clothes.addNewClothingItem(
             'Gray Leggings',
-            'seed_images/IMG_0164.jpg',
+            'seed_images/img_0164.jpg',
             'bottom',
             'S',
             ['gray'],
@@ -192,7 +192,7 @@ const main = async () => {
 
         const item15 = await clothes.addNewClothingItem(
             'White Puffer Jacket',
-            'seed_images/IMG_0165.jpg',
+            'seed_images/img_0165.jpg',
             'outerwear',
             'XS',
             ['gray'],
@@ -204,7 +204,7 @@ const main = async () => {
 
         const item16 = await clothes.addNewClothingItem(
             'Gray Bomber Jacket',
-            'seed_images/IMG_0166.jpg',
+            'seed_images/img_0166.jpg',
             'outerwear',
             'S',
             ['gray'],
@@ -216,7 +216,7 @@ const main = async () => {
 
         const item17 = await clothes.addNewClothingItem(
             'Teal Crossbody Bag',
-            'seed_images/IMG_0167.jpg',
+            'seed_images/img_0167.jpg',
             'accessory',
             null,
             ['teal', 'floral'],
@@ -228,7 +228,7 @@ const main = async () => {
 
         const item18 = await clothes.addNewClothingItem(
             'Maroon Shirt',
-            'seed_images/IMG_0158.jpg',
+            'seed_images/img_0158.jpg',
             'top',
             'S',
             ['maroon'],
@@ -240,7 +240,7 @@ const main = async () => {
 
         const item19 = await clothes.addNewClothingItem(
             'Navy Striped Sweater',
-            'seed_images/IMG_0157.jpg',
+            'seed_images/img_0157.jpg',
             'top',
             'S',
             ['navy', 'mint', 'gray'],
@@ -252,7 +252,7 @@ const main = async () => {
 
         const item20 = await clothes.addNewClothingItem(
             'Black Striped Sweater',
-            'seed_images/IMG_0156.jpg',
+            'seed_images/img_0156.jpg',
             'top',
             'S',
             ['white', 'black'],
@@ -264,7 +264,7 @@ const main = async () => {
 
         const item21 = await clothes.addNewClothingItem(
             'NY Giants Longsleeve',
-            'seed_images/IMG_0155.jpg',
+            'seed_images/img_0155.jpg',
             'top',
             'S',
             ['gray', 'blue', 'red', 'white'],
@@ -276,7 +276,7 @@ const main = async () => {
 
         const item22 = await clothes.addNewClothingItem(
             'Under Armour Shirt',
-            'seed_images/IMG_0154.jpg',
+            'seed_images/img_0154.jpg',
             'top',
             'S',
             ['blue', 'white'],
@@ -288,7 +288,7 @@ const main = async () => {
 
         const item23 = await clothes.addNewClothingItem(
             'Teal Activewear Shirt',
-            'seed_images/IMG_0153.jpg',
+            'seed_images/img_0153.jpg',
             'top',
             'XS',
             ['teal'],
@@ -300,7 +300,7 @@ const main = async () => {
 
         const item24 = await clothes.addNewClothingItem(
             'Stevens Shirt',
-            'seed_images/IMG_0152.jpg',
+            'seed_images/img_0152.jpg',
             'top',
             'XS',
             ['red', 'white'],
@@ -312,7 +312,7 @@ const main = async () => {
 
         const item25 = await clothes.addNewClothingItem(
             'Black Paisley Dress',
-            'seed_images/IMG_0151.jpg',
+            'seed_images/img_0151.jpg',
             'dress',
             'XS',
             ['red', 'white', 'black'],
@@ -324,7 +324,7 @@ const main = async () => {
 
         const item26 = await clothes.addNewClothingItem(
             'Navy Formal Dress',
-            'seed_images/IMG_0150.jpg',
+            'seed_images/img_0150.jpg',
             'dress',
             'XS',
             ['navy'],
@@ -336,7 +336,7 @@ const main = async () => {
 
         const item27 = await clothes.addNewClothingItem(
             'White Lace Dress',
-            'seed_images/IMG_0149.jpg',
+            'seed_images/img_0149.jpg',
             'dress',
             'XS',
             ['white'],
@@ -348,7 +348,7 @@ const main = async () => {
 
         const item28 = await clothes.addNewClothingItem(
             'Pink Sneakers',
-            'seed_images/IMG_0142.jpg',
+            'seed_images/img_0142.jpg',
             'shoes',
             '6',
             ['pink', 'blue', 'lime'],
@@ -360,7 +360,7 @@ const main = async () => {
 
         const item29 = await clothes.addNewClothingItem(
             'White Casual Sneakers',
-            'seed_images/IMG_0143.jpg',
+            'seed_images/img_0143.jpg',
             'shoes',
             '6',
             ['white'],
@@ -372,7 +372,7 @@ const main = async () => {
 
         const item30 = await clothes.addNewClothingItem(
             'Black Heels',
-            'seed_images/IMG_0145.jpg',
+            'seed_images/img_0145.jpg',
             'shoes',
             '6',
             ['black'],
@@ -384,7 +384,7 @@ const main = async () => {
 
         const item31 = await clothes.addNewClothingItem(
             'Navy Uggs',
-            'seed_images/IMG_0144.jpg',
+            'seed_images/img_0144.jpg',
             'shoes',
             '6',
             ['navy'],
@@ -396,7 +396,7 @@ const main = async () => {
 
         const item32 = await clothes.addNewClothingItem(
             'Blue Casual Heels',
-            'seed_images/IMG_0146.jpg',
+            'seed_images/img_0146.jpg',
             'shoes',
             '6',
             ['blue'],
@@ -408,7 +408,7 @@ const main = async () => {
 
         const item33 = await clothes.addNewClothingItem(
             'Slate Uggs',
-            'seed_images/IMG_0147.jpg',
+            'seed_images/img_0147.jpg',
             'shoes',
             '6',
             ['slate', 'gray'],
@@ -420,7 +420,7 @@ const main = async () => {
 
         const item34 = await clothes.addNewClothingItem(
             'Black Combat Boots',
-            'seed_images/IMG_0148.jpg',
+            'seed_images/img_0148.jpg',
             'shoes',
             '6',
             ['black'],
