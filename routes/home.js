@@ -3,6 +3,7 @@ const router = express.Router();
 const outfitsData = require('../data/outfits');
 const accountData = require('../data/account');
 const { ObjectId } = require('mongodb');
+const xss = require('xss');
 
 //Middleware
 // router.use("/", (req, res, next) => {
@@ -21,7 +22,7 @@ router.route('/').get( async (req, res) => {
   const publicOutfits = await outfitsData.getAllOutfits();
   try {
     if (!req.session.user) throw 'Error: No user is logged in';
-    const userId = await accountData.getUserIdByUserName(req.session.user.username);
+    const userId = await accountData.getUserIdByUserName(xss(req.session.user.username));
 
     res.status(200).render("pages/single/index", {
       title: "Digital Closet",
@@ -48,7 +49,7 @@ router.route('/like/:id').post(async (req, res) => {
   try {
     if (!req.session.user) throw 'Error: No user is logged in';
     if (!ObjectId.isValid(req.params.id)) throw "Error: Outfit id is not valid";
-    const result = await outfitsData.likeOutfit(req.params.id, req.session.user.username);
+    const result = await outfitsData.likeOutfit(xss(req.params.id), xss(req.session.user.username));
     if (result.result == 'success') {
       return res.json(result);
     }
@@ -64,7 +65,7 @@ router.route('/save/:id').post(async (req, res) => {
   try {
     if (!req.session.user) throw 'Error: No user is logged in';
     if (!ObjectId.isValid(req.params.id)) throw "Error: Outfit id is not valid";
-    const result = await outfitsData.saveOutfit(req.params.id, req.session.user.username);
+    const result = await outfitsData.saveOutfit(xss(req.params.id), xss(req.session.user.username));
     if (result.result == 'success') {
       return res.json(result);
     }
