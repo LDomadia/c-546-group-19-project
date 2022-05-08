@@ -1,6 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const data = require("../data/profile");
+const clothesdata = require("../data/clothes");
+const deletedata = require("../data/delete");
 const validation = require("../validation/account_validation")
 
 //Middleware
@@ -293,7 +295,9 @@ router.post("/password", async (req, res) => {
   }
   catch (e) {
     //error
+
     return res.status(400).render("pages/single/changepassword", { title: "Change Password", passwordE: true, error: e })
+
   }
 
   
@@ -340,6 +344,7 @@ router.post("/password2", async (req, res) => {
   }
   catch (e) {
     //error
+
     return res.status(400).render("pages/single/changepassword2", { title: "Change Password", passwordE: true, error: e })
   }
 
@@ -350,6 +355,7 @@ router.post("/password2", async (req, res) => {
   catch (e) {
     //unable to get user
     return res.status(404).render("pages/single/changepassword2", { title: "Change Password", passwordE: true, error: e })
+
   }
 
 
@@ -374,28 +380,61 @@ router.post("/password2", async (req, res) => {
 
 //get profile if signed in 
 router.get("/delete", async (req, res) => {
-  res.render("pages/medium/delete", { title: "Delete Account" });
+  res.render("pages/medium/delete", { title: "Delete Account",stylesheet: '/public/styles/outfit_card_styles.css', });
+
+
 });
 
 router.post("/delete", async (req, res) => {
 
+  //error checking 
+  if (!req.session.user) {
+    return res.redirect("/account/login");
+  }
+
   try {
+    validation.checkUsername(req.session.user.username);
+  }
+  catch (e) {
+    return res.status(400).render("pages/medium/delete", {
+      title: "Delete Account",
+      error: e,
+      deleteE: true
+    });
+  }
+
+
+  try{
+    await deletedata.deleteUserClothes(req.session.user.username);
+    await deletedata.deleteUserOutfits(req.session.user.username);
+  }
+  catch (e) {
+    return res.status(404).render("pages/medium/delete", {
+      title: "Delete Account",
+      error: e,
+      deleteE: true
+    });
+  }
+
+  try {
+
     await data.removeAccount(req.session.user.username);
+
   }
   catch (e) {
     //unable to get user
     return res.status(404).render("pages/single/changepassword2", { title: "Delete Account", passwordE: true, error: e })
   }
 
-
   try {
     //await data.removeAccount(req.session.user.username);
     req.session.destroy();
-    return res.redirect("/home");
+    //return res.json({deleted:true});
+    return res.render("pages/medium/confirmdeletion", { title: "Account Deleted", not_logged_in: true, });
   }
 
   catch (e) {
-    res.status(500).render("pages/medium/delete", {
+    return res.status(500).render("pages/medium/delete", {
       title: "Delete Account",
       error: e,
       deleteE: true
