@@ -10,92 +10,12 @@ const validation = require('../validation/account_validation');
 
 module.exports = {
 
-    //change username
-    async changeUsername(original, username) {
-        //check id 
-        //see lab6 
-
-        username = validation.checkUsername(username);
-        //id=validation.checkId(id);
-        original = validation.checkUsername(original);
-        const userCollection = await users();
-        //get the user
-        const user = await userCollection.findOne({
-            username: { $regex: "^" + original + "$", $options: "i" },
-        });
-
-        if (!user) {
-            throw "invalid username";
-        }
-
-        if (!user.bio) {
-            user.bio = null;
-        }
-        if (!user.stores) {
-            user.stores = null;
-        }
-
-
-        const user2 = await userCollection.findOne({
-            username: { $regex: "^" + username + "$", $options: "i" },
-        });
-
-        if (user2) {
-            throw "Error: username taken";
-        }
-
-        let updateUser = {
-            username: username,
-            hashedPassword: user.hashedPassword,
-            userClothes: user.userClothes,
-            userOutfits: user.userOutfits,
-            userLikes: user.userLikes,
-            userSaves: user.userSaves,
-            statistics: {
-                type: {
-                    tops: user.statistics.type.tops,
-                    bottoms: user.statistics.type.bottoms,
-                    dresses: user.statistics.type.dresses,
-                    shoes: user.statistics.type.shoes,
-                    accessories: user.statistics.type.accessories,
-                    outerwear: user.statistics.type.outerwear,
-                    socks: user.statistics.type.socks,
-                },
-                //need to call something like user.statistics.colors-patterns
-                "colors-patterns": user.statistics["color-patterns"],
-                brands: user.statistics.brands,
-            },
-            calendar: user.calendar,
-            bio: user.bio,
-            stores: user.stores
-        };
-
-        const updatedInfo = await userCollection.updateOne(
-            { username: original },
-            { $set: updateUser }
-        );
-
-        if (updatedInfo.modifiedCount === 0) {
-            throw 'Make sure your username is different from the previous one';
-        };
-
-        const modifieduser = await userCollection.findOne({
-            username: { $regex: "^" + username + "$", $options: "i" },
-        });
-
-        modifieduser._id = modifieduser._id.toString();
-        return modifieduser;
-    },
-
-    
   async checkPassword(username, password) {
 
     username = validation.checkUsername(username);
     password = validation.checkPassword(password);
     //check for alphnumeric
     //https://stackoverflow.com/questions/4434076/best-way-to-alphanumeric-check-in-javascript
-
-
     username = username.toLowerCase();
 
     const userCollection = await users();
@@ -123,10 +43,10 @@ module.exports = {
         //check id 
         //see lab6 
 
-      
         username = validation.checkUsername(username);
         password = validation.checkPassword(password);
         password2 = validation.checkPassword(password2);
+        username=username.toLowerCase();
 
         if(password!==password2) throw "passwords do not match"
 
@@ -161,36 +81,9 @@ module.exports = {
     
         if (compare) throw "password should not be the same as before";
 
-        let updateUser = {
-            username: user.username,
-            hashedPassword: hashedPassword,
-            userClothes: user.userClothes,
-            userOutfits: user.userOutfits,
-            userLikes: user.userLikes,
-            userSaves: user.userSaves,
-            statistics: {
-                type: {
-                    tops: user.statistics.type.tops,
-                    bottoms: user.statistics.type.bottoms,
-                    dresses: user.statistics.type.dresses,
-                    shoes: user.statistics.type.shoes,
-                    accessories: user.statistics.type.accessories,
-                    outerwear: user.statistics.type.outerwear,
-                    socks: user.statistics.type.socks,
-                },
-                //need to call something like user.statistics.colors-patterns
-                "colors-patterns": user.statistics["color-patterns"],
-                brands: user.statistics.brands,
-            },
-
-            calendar: user.calendar,
-            bio: user.bio,
-            stores: user.stores
-        };
-
         const updatedInfo = await userCollection.updateOne(
             { username: username },
-            { $set: updateUser }
+            { $set: { hashedPassword: hashedPassword } }
         );
         const modifieduser = await userCollection.findOne({
             username: { $regex: "^" + username + "$", $options: "i" },
@@ -209,7 +102,9 @@ module.exports = {
         //check id 
         //see lab6 
         bio = validation.checkString(bio);
+        bio = bio.trim();
         username = validation.checkUsername(username);
+        username=username.toLowerCase();
         const userCollection = await users();
 
         const user = await userCollection.findOne({
@@ -224,37 +119,9 @@ module.exports = {
             user.stores = null;
         }
 
-        let updateUser = {
-            username: user.username,
-            hashedPassword: user.hashedPassword,
-            userClothes: user.userClothes,
-            userOutfits: user.userOutfits,
-            userLikes: user.userLikes,
-            userSaves: user.userSaves,
-            statistics: {
-                type: {
-                    tops: user.statistics.type.tops,
-                    bottoms: user.statistics.type.bottoms,
-                    dresses: user.statistics.type.dresses,
-                    shoes: user.statistics.type.shoes,
-                    accessories: user.statistics.type.accessories,
-                    outerwear: user.statistics.type.outerwear,
-                    socks: user.statistics.type.socks,
-                },
-                //need to call something like user.statistics.colors-patterns
-                "colors-patterns": user.statistics["color-patterns"],
-                brands: user.statistics.brands,
-            },
-            calendar: user.calendar,
-            stores: user.stores,
-            bio: bio
-            //favstores
-            //bio
-        };
-
         const updatedInfo = await userCollection.updateOne(
             { username: username },
-            { $set: updateUser }
+            { $set: {bio: bio} }
         );
 
         const modifieduser = await userCollection.findOne({
@@ -279,6 +146,7 @@ module.exports = {
         store = validation.checkString(storename);
         website = validation.checkWebsite(storelink);
         username = validation.checkUsername(username);
+        username=username.toLowerCase();
         const userCollection = await users();
 
         const user = await userCollection.findOne({
@@ -315,38 +183,10 @@ module.exports = {
             }
 
         }
-        user.stores.push(newstore);
-
-
-        let updateUser = {
-            username: username,
-            hashedPassword: user.hashedPassword,
-            userClothes: user.userClothes,
-            userOutfits: user.userOutfits,
-            userLikes: user.userLikes,
-            userSaves: user.userSaves,
-            statistics: {
-                type: {
-                    tops: user.statistics.type.tops,
-                    bottoms: user.statistics.type.bottoms,
-                    dresses: user.statistics.type.dresses,
-                    shoes: user.statistics.type.shoes,
-                    accessories: user.statistics.type.accessories,
-                    outerwear: user.statistics.type.outerwear,
-                    socks: user.statistics.type.socks,
-                },
-                //need to call something like user.statistics.colors-patterns
-                "colors-patterns": user.statistics["color-patterns"],
-                brands: user.statistics.brands,
-            },
-            calendar: user.calendar,
-            bio: user.bio,
-            stores: user.stores
-        };
 
         const updatedInfo = await userCollection.updateOne(
             { username: username },
-            { $set: updateUser }
+            { $push: { stores: newstore } }
         );
 
         const modifieduser = await userCollection.findOne({
@@ -362,6 +202,7 @@ module.exports = {
 
     async get(username) {
         username = validation.checkUsername(username);
+        username=username.toLowerCase();
         const userCollection = await users();
 
         //get the user
@@ -380,6 +221,7 @@ module.exports = {
 
     async removeAccount(username) {
         username = validation.checkUsername(username);
+        username=username.toLowerCase();
         const userCollection = await users();
 
         

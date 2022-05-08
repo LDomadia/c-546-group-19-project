@@ -9,7 +9,7 @@ const validation = require("../validation/account_validation")
 router.use("/", (req, res, next) => {
   //if session not logged in 
   if (!req.session.user) {
-    return res.redirect("/account/login");
+    return res.status(403).redirect("/account/login");
   }
   next();
 });
@@ -17,12 +17,24 @@ router.use("/", (req, res, next) => {
 //get profile if signed in 
 router.get("/", async (req, res) => {
 
-  let user;
+  let user, username;
+
+  //error check
   try {
-    user = await data.get(req.session.user.username);
+    username = validation.checkUsername(req.session.user.username);
   }
   catch (e) {
-    res.status(404).render("pages/error/error", { code: 404, error: e });
+    return res.status(400).render("pages/error/error", {  title: "Error",code: 400, error: e });
+  }
+
+
+  try {
+    user = await data.get(username);
+    if (!user) throw "no user found";
+  }
+  catch (e) {
+    //unable to get user
+    res.status(404).render("pages/error/error", {  title: "Error",code: 404, error: e });
     return;
   }
 
@@ -59,25 +71,34 @@ router.get("/", async (req, res) => {
       noStore: noStore
     });
   } catch (e) {
-    res.sendStatus(500);
+    res.status(500).render("pages/error/error", {  title: "Error",code: 500, error: e });
+    return;
   }
 });
 
 
 router.post("/", async (req, res) => {
   //change bio
-  let user;
+  let user,username;
+
+  try { //error check
+    username = validation.checkUsername(req.session.user.username);
+  }
+  catch (e) {
+    return res.status(400).render("pages/error/error", {  title: "Error",code: 400, error: e });
+  }
 
   try {
     user = await data.get(req.session.user.username);
+    if (!user) throw "no user found";
   }
   catch (e) {
     //error page: no user
-    res.status(404).render("pages/error/error", { error: e });
+    res.status(404).render("pages/error/error", { title: "Error",code:404, error: e });
     return;
   }
 
-  let username, bio, stores;
+  let bio, stores;
   let err = false;
 
   //self checks
@@ -110,7 +131,7 @@ router.post("/", async (req, res) => {
       bio = validation.checkString(req.body.bio);
     }
     catch (e) {
-      res.render("pages/single/profile", {
+      return res.status(400).render("pages/single/profile", {
         title: "Profile",
         username: req.session.user.username,
         bio: bio,
@@ -119,15 +140,15 @@ router.post("/", async (req, res) => {
         error: e,
         noStore: err
       });
-      return;
     }
 
     try {
       //change bio
       user = await data.changeBio(req.session.user.username, req.body.bio);
+      if(!user) throw "user not found"
     }
     catch (e) {
-      res.render("pages/single/profile", {
+      res.status(404).render("pages/single/profile", {
         title: "Profile",
         username: req.session.user.username,
         bio: bio,
@@ -144,7 +165,6 @@ router.post("/", async (req, res) => {
     try {
 
       req.session.user.bio = user.bio;
-
       return res.render("pages/single/profile", {
         title: "Profile",
         username: username,
@@ -155,7 +175,7 @@ router.post("/", async (req, res) => {
       });
     }
     catch (e) {
-      res.render("pages/single/profile", {
+      res.status(500).render("pages/single/profile", {
         title: "Profile",
         username: req.session.user.username,
         bio: bio,
@@ -177,7 +197,7 @@ router.post("/", async (req, res) => {
       storelink = validation.checkWebsite(req.body.storelink);
     }
     catch (e) {
-      res.render("pages/single/profile", {
+      res.status(400).render("pages/single/profile", {
         title: "Profile",
         username: req.session.user.username,
         bio: user.bio,
@@ -192,9 +212,10 @@ router.post("/", async (req, res) => {
     try {
       //change store 
       user = await data.changeStore(req.session.user.username, req.body.storename, req.body.storelink);
+      if (!user) throw "no user found";
     }
     catch (e) {
-      res.render("pages/single/profile", {
+      res.status(404).render("pages/single/profile", {
         title: "Profile",
         username: req.session.user.username,
         bio: user.bio,
@@ -212,7 +233,7 @@ router.post("/", async (req, res) => {
       req.session.user.stores = user.stores;
       err = false;
 
-      return res.render("pages/single/profile", {
+      return res.status(200).render("pages/single/profile", {
         title: "Profile",
         username: username,
         bio: user.bio,
@@ -222,7 +243,7 @@ router.post("/", async (req, res) => {
       });
     }
     catch (e) {
-      return res.render("pages/single/profile", {
+      return res.status(500).render("pages/single/profile", {
         title: "Profile",
         username: req.session.user.username,
         bio: user.bio,
@@ -234,7 +255,7 @@ router.post("/", async (req, res) => {
     }
   }
   else {
-    return res.render("pages/single/profile", {
+    return res.status(400).render("pages/single/profile", {
       title: "Profile",
       username: req.session.user.username,
       bio: bio,
@@ -255,7 +276,7 @@ router.get("/password", async (req, res) => {
     return res.render("pages/single/changepassword", { title: "Change Password" });
   }
   catch (e) {
-    return res.status(500).render("pages/error/error", { code: 500, error: e });
+    return res.status(500).render("pages/error/error", {  title: "Error",code: 500, error: e });
   }
 
 });
@@ -263,21 +284,37 @@ router.get("/password", async (req, res) => {
 //change password
 router.post("/password", async (req, res) => {
 
-  let username = req.session.user.username;
+  let username;
+  let user;
   let password;
 
   try {
+    username = validation.checkUsername(req.session.user.username);
     password = validation.checkPassword(req.body.password);
   }
   catch (e) {
     //error
-    return res.render("pages/single/changepassword", { title: "Change Password", passwordE: true, error: e })
+
+    return res.status(400).render("pages/single/changepassword", { title: "Change Password", passwordE: true, error: e })
+
   }
+
+  
+  try {
+    user = await data.get(username);
+    if (!user) throw "no user found";
+  }
+  catch (e) {
+    //unable to get user
+    return res.status(404).render("pages/single/changepassword", { title: "Change Password", passwordE: true, error: e })
+  }
+
 
   try {
     await data.checkPassword(username, password);
   } catch (e) {
-    return res.status(500).render("pages/single/changepassword", {
+    //bad input
+    return res.status(400).render("pages/single/changepassword", {
       title: "Change Password",
       passwordE: true,
       error: e,
@@ -288,7 +325,7 @@ router.post("/password", async (req, res) => {
     return res.render("pages/single/changepassword2", { title: "Change Password" });
   }
   catch (e) {
-    return res.status(500).render("pages/error/error", { code: 500, error: e });
+    return res.status(500).render("pages/error/error", { title: "Error",code: 500, error: e });
   }
 
 });
@@ -306,27 +343,35 @@ router.post("/password2", async (req, res) => {
   }
   catch (e) {
     //error
-    return res.render("pages/single/changepassword2", { title: "Change Password", passwordE: true, error: e })
+
+    return res.status(400).render("pages/single/changepassword2", { title: "Change Password", passwordE: true, error: e })
+  }
+
+  try {
+    user = await data.get(username);
+    if (!user) throw "no user found";
+  }
+  catch (e) {
+    //unable to get user
+    return res.status(404).render("pages/single/changepassword2", { title: "Change Password", passwordE: true, error: e })
+
   }
 
 
   try {
+    //changes password if passwords entered correctly
     await data.changePassword(username, password1, password2);
 
   } catch (e) {
-    return res.status(500).render("pages/single/changepassword2", {
-      passwordE: true,
-      error: e,
-    });
+    return res.status(400).render("pages/single/changepassword2", { title: "Change Password", passwordE: true, error: e });
   }
 
   try {
     req.session.destroy();
-
     return res.render("pages/single/changepassword3", { title: "Password Changed", not_logged_in: true, });
   }
   catch (e) {
-    return res.status(500).render("pages/error/error", { code: 500, error: e });
+    return res.status(500).render("pages/error/error", { title: "Error",code: 500, error: e });
   }
 
 });
@@ -335,6 +380,8 @@ router.post("/password2", async (req, res) => {
 //get profile if signed in 
 router.get("/delete", async (req, res) => {
   res.render("pages/medium/delete", { title: "Delete Account",stylesheet: '/public/styles/outfit_card_styles.css', });
+
+
 });
 
 router.post("/delete", async (req, res) => {
@@ -371,14 +418,22 @@ router.post("/delete", async (req, res) => {
   try {
 
     await data.removeAccount(req.session.user.username);
-    //remove clothes
+
+  }
+  catch (e) {
+    //unable to get user
+    return res.status(404).render("pages/single/changepassword2", { title: "Delete Account", passwordE: true, error: e })
+  }
+
+  try {
+    //await data.removeAccount(req.session.user.username);
     req.session.destroy();
     //return res.json({deleted:true});
     return res.render("pages/medium/confirmdeletion", { title: "Account Deleted", not_logged_in: true, });
   }
 
   catch (e) {
-    res.status(404).render("pages/medium/delete", {
+    return res.status(500).render("pages/medium/delete", {
       title: "Delete Account",
       error: e,
       deleteE: true

@@ -1,11 +1,13 @@
-<h1 class="right">Digital Closet</h1>
-<article class="main">
+<h1>Log Outfits</h1>
+<div>
+    <div class="error-message">{{error}}</div>
+    <p class="success">{{msg}}</p>
     {{#if error}}
-    <p class="error-message">{{error}}</p>
-    {{else}}
-    <p>
-        Digital Closet is a web application that makes organizing a user's wardrobe easy and efficient!
-    </p>
+    <a href="/calendar">Go Back to Calendar</a>
+    {{/if}}
+    
+    <br>
+<article class="main">
     {{#each outfits}}
         <div class="outfit-card">
             <!-- Carousel wrapper -->
@@ -34,27 +36,17 @@
             <!-- Carousel wrapper -->
             <div class="outfit-card-details">
                 <h3 class="outfit-title">{{outfitName}}</h3>
-                <div class="outfit-card-creator-likes">
-                    <p class="outfit-creator">{{creator}}</p>
-                    <p class="outfit-likes">{{likes.length}} likes</p>
-                </div>
-                <a href="/detailed/{{_id}}" class="card-btn">View</a>
-                <a class="like-btn icon-btn" href="home/like/{{_id}}">
-                    {{#ifIn ../userId likes}}
-                    <i class="fa-solid fa-heart"></i>
-                    {{else}}
-                    <i class="fa-regular fa-heart"></i>
-                    {{/ifIn}}
-                </a>
-                <a class="save-btn icon-btn" href="home/save/{{_id}}">
-                    {{#ifIn ../userId saves}}
-                    <i class="fa-solid fa-bookmark"></i>
-                    {{else}}
-                    <i class="fa-regular fa-bookmark"></i>
-                    {{/ifIn}}
-                </a>
+                <form action="/calendar/log" method="POST">
+                <input name="log_id" type="hidden" value={{_id}}></input>
+                <button name="log_date" value="{{../date}}">Log Outfit</button>
+                </form>
             </div>
         </div>
     {{/each}}
-    {{/if}}
+</div>
 </article>
+ <script
+      src="https://code.jquery.com/jquery-3.5.1.js"
+      integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
+      crossorigin="anonymous">
+</script>
