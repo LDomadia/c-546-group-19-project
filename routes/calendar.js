@@ -22,7 +22,7 @@ router.use("/", (req, res, next) => {
 // GET /
 router.route("/").get(async (req, res) => {
   try {
-    return res.render("pages/single/calendar", { title: "Calendar" });
+    return res.render("pages/single/calendar", { calPage: true,title: "Calendar" });
   } catch (e) {
     return res.sendStatus(500);
   }
@@ -48,6 +48,7 @@ router.route("/").get(async (req, res) => {
   catch (e) {
     return res.status(400).render("pages/single/calendar",
       {
+        calPage: true,
         title: "Calendar",
         error: e
       });;
@@ -74,8 +75,8 @@ router.route("/").get(async (req, res) => {
 
     return res.render("pages/single/calendar",
       {
+        calPage: true,
         title: "Calendar",
-        outfitsPage: true,
         stylesheet: "/public/styles/outfit_card_styles.css",
         script: "/public/scripts/outfits.js",
         date: mdy_format,
@@ -84,6 +85,7 @@ router.route("/").get(async (req, res) => {
   } catch (e) {
     return res.status(500).render("pages/single/calendar",
       {
+        calPage: true,
         title: "Calendar",
         error: e
       });;
@@ -122,7 +124,7 @@ router.route("/log").get(async (req, res) => {
     }
     return res.render("pages/medium/calendar_log", {
       title: "Log Outfits",
-      outfitsPage: true,
+      calPage: true,
       stylesheet: "/public/styles/outfit_card_styles.css",
       script: "/public/scripts/outfits.js",
       outfits: outfitItems,
@@ -136,7 +138,6 @@ router.route("/log").get(async (req, res) => {
     });;
   }
 }).post(async (req, res) => {
-
 
   try {
     const log_info = req.body
@@ -156,6 +157,7 @@ router.route("/log").get(async (req, res) => {
     return res.redirect("/calendar");
   } catch (e) {
     return res.status(500).render("pages/medium/calendar_log", {
+      calPage: true,
       title: "Log Outfits",
       error: e
     });
