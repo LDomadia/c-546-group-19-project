@@ -1,9 +1,9 @@
 const express = require("express");
 const router = express.Router();
 const data = require("../data/profile");
-const clothesdata = require("../data/clothes");
 const deletedata = require("../data/delete");
 const validation = require("../validation/account_validation")
+const xss = require('xss');
 
 //Middleware
 router.use("/", (req, res, next) => {
@@ -29,7 +29,7 @@ router.get("/", async (req, res) => {
 
 
   try {
-    user = await data.get(username);
+    user = await data.get(xss(username));
     if (!user) throw "no user found";
   }
   catch (e) {
@@ -89,7 +89,7 @@ router.post("/", async (req, res) => {
   }
 
   try {
-    user = await data.get(req.session.user.username);
+    user = await data.get(xss(req.session.user.username));
     if (!user) throw "no user found";
   }
   catch (e) {
@@ -144,7 +144,7 @@ router.post("/", async (req, res) => {
 
     try {
       //change bio
-      user = await data.changeBio(req.session.user.username, req.body.bio);
+      user = await data.changeBio(xss(req.session.user.username), xss(req.body.bio));
       if(!user) throw "user not found"
     }
     catch (e) {
@@ -211,7 +211,7 @@ router.post("/", async (req, res) => {
 
     try {
       //change store 
-      user = await data.changeStore(req.session.user.username, req.body.storename, req.body.storelink);
+      user = await data.changeStore(xss(req.session.user.username), xss(req.body.storename), xss(req.body.storelink));
       if (!user) throw "no user found";
     }
     catch (e) {
@@ -299,7 +299,7 @@ router.post("/password", async (req, res) => {
 
   
   try {
-    user = await data.get(username);
+    user = await data.get(xss(username));
     if (!user) throw "no user found";
   }
   catch (e) {
@@ -309,7 +309,7 @@ router.post("/password", async (req, res) => {
 
 
   try {
-    await data.checkPassword(username, password);
+    await data.checkPassword(xss(username), xss(password));
   } catch (e) {
     //bad input
     return res.status(400).render("pages/single/changepassword", {
@@ -346,7 +346,7 @@ router.post("/password2", async (req, res) => {
   }
 
   try {
-    user = await data.get(username);
+    user = await data.get(xss(username));
     if (!user) throw "no user found";
   }
   catch (e) {
@@ -358,7 +358,7 @@ router.post("/password2", async (req, res) => {
 
   try {
     //changes password if passwords entered correctly
-    await data.changePassword(username, password1, password2);
+    await data.changePassword(xss(username), xss(password1), xss(password2));
 
   } catch (e) {
     return res.status(400).render("pages/single/changepassword2", { title: "Change Password", passwordE: true, error: e });
@@ -402,8 +402,8 @@ router.post("/delete", async (req, res) => {
 
 
   try{
-    await deletedata.deleteUserClothes(req.session.user.username);
-    await deletedata.deleteUserOutfits(req.session.user.username);
+    await deletedata.deleteUserClothes(xss(req.session.user.username));
+    await deletedata.deleteUserOutfits(xss(req.session.user.username));
   }
   catch (e) {
     return res.status(404).render("pages/medium/delete", {
@@ -415,7 +415,7 @@ router.post("/delete", async (req, res) => {
 
   try {
 
-    await data.removeAccount(req.session.user.username);
+    await data.removeAccount(xss(req.session.user.username));
 
   }
   catch (e) {
