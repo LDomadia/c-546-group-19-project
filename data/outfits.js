@@ -231,6 +231,23 @@ module.exports = {
     if (userUpdate.matchedCount == 0 || userUpdate.modifiedCount == 0) {
       throw "Error: Failed to delete outfit from user";
     }
+    const userSavesUpdate = await usersCollection.updateMany(
+      {},
+      {
+        $pull: { userSaves: outfitId },
+      }
+    );
+    if (!userSavesUpdate.acknowledged)
+      throw "Error: Failed to delete outfit from user saves";
+
+    const userLikesUpdate = await usersCollection.updateMany(
+      {},
+      {
+        $pull: { userLikes: outfitId },
+      }
+    );
+    if (!userLikesUpdate.acknowledged)
+      throw "Error: Failed to delete outfit from user likes";
 
     const outfitsCollection = await outfits();
     if (!outfitsCollection) throw "Error: could not retrieve outfits";
@@ -240,7 +257,7 @@ module.exports = {
     });
 
     if (!deletionInfo) {
-      throw `Could not delete band with id of ${id}`;
+      throw "Could not delete outfit";
     }
     return `${deletionInfo.value.outfitName} has been successfully deleted!`;
   },
@@ -558,7 +575,6 @@ module.exports = {
   },
 
   async getOutfitsOnDate(username, date) {
-    if (!username) throw `Error: Invalid username`;
     username = validation.checkUsername(username);
     if (!moment(date, "MM-DD-YYYY", true).isValid()) {
       throw `Cannot log invalid date ${date}`;
