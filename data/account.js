@@ -25,7 +25,7 @@ module.exports = {
     username = username.trim();
     password = password.trim();
     if (!isAlphanumeric(username))
-      throw "Error: username should only have alphanumberic characters";
+      throw "Error: username should only have alphanumeric characters";
     if (username.length < 2)
       throw "Error: username must have at least two characters";
     if (password.length < 8)
@@ -93,11 +93,11 @@ module.exports = {
     if (password.length < 8)
       throw "Error: password must have at least eight characters";
 
-    //check for alphnumeric
+    //check for alphanumeric
     //https://stackoverflow.com/questions/4434076/best-way-to-alphanumeric-check-in-javascript
 
     if (!isAlphanumeric(username))
-      throw "Error: username should only have alphanumberic characters";
+      throw "Error: username should only have alphanumeric characters";
 
     // username = username.toLowerCase();
 

@@ -79,7 +79,7 @@ module.exports = {
       text: text,
     };
 
-    //if somehow doesnt have comment
+    //if somehow doesn't have comment
     if (!outfit.comments) {
       outfit.comments = [];
     }
@@ -103,7 +103,7 @@ module.exports = {
     );
 
     if (updatedInfo.modifiedCount === 0) {
-      throw "Cout not comemnt successfully";
+      throw "Could not comment successfully";
     }
 
     return newComment;
@@ -157,7 +157,7 @@ module.exports = {
   //     );
 
   //     if (updatedInfo.modifiedCount === 0) {
-  //         throw "Cout not comemnt successfully";
+  //         throw "Could not comment successfully";
   //     };
 
   //     return num;
