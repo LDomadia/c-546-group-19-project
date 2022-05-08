@@ -30,12 +30,12 @@ router.use("/logout", (req, res, next) => {
 // Signup - GET /
 router.get("/signup", async (req, res) => {
   try {
-    res.render("pages/medium/signup", {
+    return res.render("pages/medium/signup", {
       title: "Sign Up",
       not_logged_in: true,
     });
   } catch (e) {
-    res.sendStatus(500);
+    return res.sendStatus(500);
   }
 });
 
@@ -84,15 +84,15 @@ router.post("/signup", async (req, res) => {
   try {
     return res.redirect("/account/login");
   } catch (e) {
-    res.status(500);
+    return res.sendStatus(500);
   }
 });
 
 router.get("/login", async (req, res) => {
   try {
-    res.render("pages/medium/login", { title: "Log In", not_logged_in: true });
+    return res.render("pages/medium/login", { title: "Log In", not_logged_in: true });
   } catch (e) {
-    res.sendStatus(500);
+    return res.sendStatus(500);
   }
 });
 
@@ -130,7 +130,6 @@ router.post("/login", async (req, res) => {
     let isAdmin = await accountData.isUserAdmin(xss(username));
     req.session.user = { username: existingUser };
     if (isAdmin.administrator) req.session.admin = true;
-    return res.redirect("/home");
   } catch (e) {
     return res.status(400).render("pages/medium/login", {
       error: e,
@@ -138,6 +137,12 @@ router.post("/login", async (req, res) => {
       username: username,
       not_logged_in: true,
     });
+  }
+
+  try {
+    return res.redirect("/home");
+  } catch (e) {
+    res.sendStatus(500);
   }
 });
 
