@@ -27,9 +27,21 @@ router.route("/").get(async (req, res) => {
   let data = req.body
 
   try {
-    if(!moment().isAfter(data.birthday)){
+
+    let bday = data.birthday
+
+    if(!moment(bday).isValid()){
+      throw "Invalid date!"
+    }
+
+    if(!moment().isAfter(bday)){
       throw "Cannot log date in the future!"
     }
+
+    if(moment(bday).isBefore("2022-01-01", "year")){
+      throw "Cannot log date before 2022!"
+    }
+
     date = data.birthday.split("-")
     date = date.map(e => validate.checkNumericTextInput(e, "date"))
     date_obj = {
