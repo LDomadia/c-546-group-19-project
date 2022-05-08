@@ -7,6 +7,6 @@ module.exports = {
             throw 'Id cannot be an empty string or just spaces';
         id = id.trim();
         if (!ObjectId.isValid(id)) throw 'invalid object ID';
-        return id;
+        return xss(id);
     }
 }
