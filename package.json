@@ -4,7 +4,7 @@
   "description": "clothing project",
   "main": "app.js",
   "scripts": {
-    "start": "node app.js",
+    "start": "npm install && node app.js",
     "seed": "node tasks/seedV2.js",
     "get_deps": "npm install"
   },
