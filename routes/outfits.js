@@ -4,6 +4,7 @@ const outfitValidation = require("../validation/outfit_validation");
 const gen_outfitData = require("../data/gen_outfit");
 const outfitsData = require("../data/outfits");
 const clothesData = require("../data/clothes");
+const accountData = require('../data/account');
 
 //Middleware
 router.use("/", (req, res, next) => {
@@ -299,6 +300,28 @@ router.route("/delete/:id").delete(async (req, res) => {
     return res.json({ redirect: true });
   } catch (e) {
     return res.json({ error: e });
+  }
+});
+router.route('/likes').get(async (req, res) => {
+  try {
+    if (!req.session.user) throw 'Error: User is not logged in';
+    const outfitLikes = await outfitsData.getUserLikedOutfits(req.session.user.username);
+    const userId = await accountData.getUserIdByUserName(req.session.user.username);
+    return res.status(200).render('pages/results/outfitsLikes', {
+      title: 'My Liked Outfits',
+      outfitsPage: true,
+      outfits: outfitLikes,
+      userId: userId,
+      stylesheet: '/public/styles/outfit_card_styles.css',
+      script: '/public/scripts/home_script.js'
+    });
+  } catch (e) {
+    return res.status(500).render('pages/results/outfitsLikes', {
+      title: 'My Liked Outfits',
+      outfitsPage: true,
+      stylesheet: '/public/styles/outfit_card_styles.css',
+      error: e
+    });
   }
 });
 

@@ -431,5 +431,31 @@ module.exports = {
     const updatedOutfit = await outfitsCollection.findOne({ _id: id });
     if (!updatedOutfit) throw 'Error: Failed to get updated Outfit';
     return { result: 'success', icon: status };
+  },
+  async getUserLikedOutfits(user) {
+    if (!user || !user.trim()) throw 'Error: User was not provided';
+    const usersCollection = await users();
+    const userDoc = await usersCollection.findOne({ username: user });
+    if (!userDoc) throw 'Error: Could not find User document';
+    const outfitsCollection = await outfits();
+    const outfitLikes = [];
+    for (const likeId of userDoc.userLikes) {
+      const outfitData = await outfitsCollection.findOne({ _id: likeId });
+      if (!outfitData) throw 'Error: Could not find Outfit document';
+      outfitLikes.push(outfitData);
+    }
+    if (outfitLikes) {
+      for (let outfit of outfitLikes) {
+        outfit["clothingData"] = [];
+        for (let clothingId of outfit.clothes) {
+          const clothingItem = await clothesData.getClothingItemById(
+            clothingId.toString()
+          );
+          if (clothingItem) outfit["clothingData"].push(clothingItem);
+          else throw "Error: Failed to find Clothing Item";
+        }
+      }
+    }
+    return outfitLikes;
   }
 };
