@@ -123,22 +123,32 @@
     // }
   });
 
-  stylesBtn.click(function () {
-    if (stylesInput.val().trim() === "") {
+  stylesBtn.click(function (event) {
+    event.preventDefault();
+    let inputValue = escapeInput(stylesInput.val().trim());
+    if (inputValue === "") {
       formErr.empty();
       formErr.text("Empty styles cannot be added");
       formErr.show();
       formErr.focus();
       return;
     }
-    addToList(stylesInput.val().trim(), stylesList, "styles[]");
+    addToList(inputValue, stylesList, "styles[]");
     stylesInput.val("");
     stylesInput.focus();
   });
   stylesInput.keydown((event) => {
     if (event.key == "Enter") {
       event.preventDefault();
-      addToList(stylesInput.val().trim(), stylesList, "styles[]");
+      let inputValue = escapeInput(stylesInput.val().trim());
+      if (inputValue === "") {
+        formErr.empty();
+        formErr.text("Empty styles cannot be added");
+        formErr.show();
+        formErr.focus();
+        return;
+      }
+      addToList(inputValue, stylesList, "styles[]");
       stylesInput.val("");
       stylesInput.focus();
     }
@@ -171,5 +181,13 @@
   }
   function removeFromList() {
     this.parentElement.remove();
+  }
+  function escapeInput(input) {
+    return String(input)
+            .replace(/&/g, '&amp;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#39;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;');
   }
 })(window.jQuery);
