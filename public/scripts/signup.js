@@ -59,7 +59,7 @@
     pswError.empty();
     if ($("#server-error").length) {
       $("#server-error").text("");
-      $("#server-error").hide("");
+      $("#server-error").hide();
     }
     var username = usernameInput.val();
     try {
@@ -79,6 +79,8 @@
       //alert(e);
       pswInput.empty();
       pswConfirm.empty();
+      pswInput.val("");
+      pswConfirm.val("");
       pswError.text(e);
       pswError.show();
       return;
@@ -92,6 +94,8 @@
     } catch (e) {
       //alert(e);
       pswInput.empty();
+      pswInput.val("");
+      pswConfirm.val("");
       pswConfirm.empty();
       pswError.text(e);
       pswError.show();

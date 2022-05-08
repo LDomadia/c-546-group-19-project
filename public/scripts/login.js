@@ -74,14 +74,12 @@
     pswError.text("");
     if ($("#server-error").length) {
       $("#server-error").text("");
-      $("#server-error").hide("");
+      $("#server-error").hide();
     }
     var username = usernameInput.val();
     try {
       username = checkUsername(username);
     } catch (e) {
-      //alert(e);
-      usernameInput.empty();
       usrError.text(e);
       usrError.show();
       return;
@@ -91,8 +89,8 @@
     try {
       password = checkPassword(password);
     } catch (e) {
-      //alert(e);
       pswInput.empty();
+      pswInput.val("");
       pswError.text(e);
       pswError.show();
       return;

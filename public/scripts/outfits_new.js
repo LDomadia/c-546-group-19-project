@@ -20,6 +20,8 @@
   var outfitsArr = [];
 
   outfitForm.submit(function (event) {
+    $("#server-error").text("");
+    $("#server-error").hide();
     try {
       outfitErr.removeClass();
       outfitErr.hide();
@@ -89,12 +91,12 @@
   });
   addBox.change(function () {
     outfitErr.empty().hide();
-      let image_name = $(this)
+    let image_name = $(this)
       .parent()
       .parent()
       .siblings(".clothing-item-image")
       .attr("src")
-      .replace('/uploads/', '');
+      .replace("/uploads/", "");
     let type = $(this).parent().siblings(".clothing-type").text();
     if ($(this).is(":checked")) {
       outfitsArr.push(image_name);
