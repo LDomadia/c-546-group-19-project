@@ -53,11 +53,13 @@
     event.preventDefault();
     usrError.hide();
     usrError.empty();
+    usrError.text("");
+    pswError.text("");
     pswError.hide();
     pswError.empty();
-    if ($("#server-err")) {
-      $("#server-err").hide();
-      $("#server-err").empty();
+    if ($("#server-error").length) {
+      $("#server-error").text("");
+      $("#server-error").hide("");
     }
     var username = usernameInput.val();
     try {

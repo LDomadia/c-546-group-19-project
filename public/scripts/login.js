@@ -70,6 +70,12 @@
     usrError.empty();
     pswError.hide();
     pswError.empty();
+    usrError.text("");
+    pswError.text("");
+    if ($("#server-error").length) {
+      $("#server-error").text("");
+      $("#server-error").hide("");
+    }
     var username = usernameInput.val();
     try {
       username = checkUsername(username);
