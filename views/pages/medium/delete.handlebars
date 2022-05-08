@@ -1,18 +1,25 @@
+<article>
+
+     <h1 class="right">Delete Account</h1>
+
+    <p id = "message">
+        Are you sure you want to delete account?
+        All Outfits and clothings will be deleted and cannot be restored. 
+        Comments and Likes will not be deleted. 
+    </p>
+
+    <form id="delete" method="POST" action="/profile/delete">
+
+        {{#if deleteE}}
+        <p>{{error}}</p>
+        {{/if}}
+        <button type="submit">confirm</button>
+    </form>
 
 
-<h1>{{title}}</h1>
-<p>
-    Are you sure you want to delete account?
-</p>
+    <a id = "profile" href="/profile">Go back to Profile</a>
+ 
+</article>
 
-
-<form id="delete" method="POST" action="/profile/delete">
-
-    {{#if deleteE}}
-    <p>{{error}}</p>
-    {{/if}}
-    <button type="submit">confirm</button>
-</form>
-
-
-<a href="/profile">Go back to Profile</a>
+<script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
+    crossorigin="anonymous"></script>
