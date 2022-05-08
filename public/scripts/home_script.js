@@ -23,7 +23,7 @@
                 $.ajax(requestConfig).then(function(result) {
                     if (result.result == 'success') {
                         likes[0].innerText = result.likes + ' likes';
-                        btn.innerHTML = result.icon;
+                        btn.innerHTML = "Like "+ result.icon;
                     }
                     else {
                         Swal.fire(
@@ -48,7 +48,7 @@
                 let btn = this;
                 $.ajax(requestConfig).then(function(result) {
                     if (result.result == 'success') {
-                        btn.innerHTML = result.icon;
+                        btn.innerHTML = "Save " + result.icon;
                     }
                     else {
                         Swal.fire(
