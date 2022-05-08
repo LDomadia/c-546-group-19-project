@@ -39,7 +39,6 @@ router.get("/signup", async (req, res) => {
 
 // Signup - POST /
 router.post("/signup", async (req, res) => {
-
   let userInfo = req.body;
   let username = userInfo.username;
   let userPsw = userInfo.psw;
@@ -151,7 +150,10 @@ router.post("/login", async (req, res) => {
 
   try {
     let existingUser = await accountData.login(username, userPsw);
+    if (!existingUser) throw "Eror: could not login";
+    let isAdmin = await accountData.isUserAdmin(username);
     req.session.user = { username: existingUser };
+    if (isAdmin.administrator) req.session.admin = true;
     return res.redirect("/home");
   } catch (e) {
     return res.status(400).render("pages/medium/login", {
@@ -160,15 +162,6 @@ router.post("/login", async (req, res) => {
       username: username,
       not_logged_in: true,
     });
-  }
-
-  try {
-    res.status(200).render("pages/single/index", {
-      title: "Digital Closet",
-      not_logged_in: false,
-    });
-  } catch (e) {
-    res.sendStatus(500);
   }
 });
 

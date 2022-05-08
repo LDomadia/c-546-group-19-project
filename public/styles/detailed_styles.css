@@ -109,3 +109,8 @@ dl ul {
     border-radius: 10px;
     background-color: #00000015;
 }
+
+.delete-comment-btn{
+    margin-left: 50px;
+    border-radius: 12px;
+  }
