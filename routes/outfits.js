@@ -60,6 +60,7 @@ router
   }) //TODO - add error checking here
   .post(async (req, res) => {
     const data = req.body;
+    let seasons = outfitValidation.checkSeasons(data.season);
 
     try {
       if (!data) throw "Error: Nothing was entered";
@@ -78,7 +79,7 @@ router
     try {
       let result = await gen_outfitData.generateOutfit(
         data["colors-patterns"],
-        data.season,
+        seasons,
         data.styles,
         req.session.user.username
       );
@@ -96,7 +97,7 @@ router
         result.map((res) => res._id.toString()),
         "private",
         data.name,
-        data.season,
+        seasons,
         data.styles
       );
 
