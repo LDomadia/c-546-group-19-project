@@ -2,6 +2,19 @@
 (function ($) {
 
 
+  //two forms
+  var bioForm = $("#bio"),
+    bioInput = $("#bio_term"),
+    error = $("#error"),
+    storeForm = $("#stores"),
+    storeName = $("#store_name"),
+    storeLink = $("#store_link"),
+    deleteButton = $("#delete-account");
+
+  error.hide();
+  error.empty();
+
+
   function checkString(string) {
     if (!string) throw "must provide text input"
     if (typeof string !== 'string') throw 'invalid string input';
@@ -15,43 +28,34 @@
     if (typeof website !== 'string') throw 'invalid website input';
     if (website.trim().length === 0)
       throw 'Id cannot be an empty website or just spaces';
-    if (!website.includes('https://www.') && !(website.includes('http://www.'))) throw 'invalid website'
-    //end
-
-    if (website.slice(website.length - 4, website.length) !== '.com') throw 'invalid website'
-    //middle\\
-    //console.log(website.slice(website.length - 4, website.length))
-    site = website.indexOf('http://www.') + 11
-    if (website.slice(site, -4).length < 2) throw 'invalid website input'
-
 
     return website;
   }
 
+  function isValidHttpUrl(string) {
+    let url;
+    
+    try {
+      url = new URL(string);
+      console.log(url);
+    } catch (e) {
+      throw e;
+    }
+  
+    return string;
+  }
 
-  //two forms 
-
-  var bioForm = $("#bio"),
-    bioInput = $("#bio_term"),
-    error = $("#error"),
-    storeForm = $("#stores"),
-    storeName = $("#store_name"),
-    storeLink = $("#store_link");
-  error.hide();
-  error.empty();
 
 
   bioForm.submit(function (event) {
     event.preventDefault();
     error.hide();
-
     error.empty();
 
     var bio = bioInput.val();
     try {
       bio = checkString(bio);
     } catch (e) {
-      console.log("here");
       //alert(e);
       bioInput.empty();
       error.text(e);
@@ -73,6 +77,7 @@
     try {
       storen = checkString(storen);
       storel = checkWebsite(storel);
+      storel = isValidHttpUrl(storel);
     } catch (e) {
       //alert(e);
       storeName.empty();
@@ -83,7 +88,6 @@
     }
 
     event.currentTarget.submit();
-  });
-
+  })
 
 })(window.jQuery);

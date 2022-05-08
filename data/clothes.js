@@ -99,7 +99,7 @@ module.exports = {
 
     if (updateInfo.matchedCount == 0 || updateInfo.modifiedCount == 0)
       throw "Error: Failed to update User";
-    return { result: "success" };
+    return { result: "success", id: insertInfo.insertedId };
   },
   async getClothingItems(user) {
     let clothingItems = [];
@@ -119,6 +119,9 @@ module.exports = {
   },
   async getClothingbyIds(ids) {
     //TODO validate array
+    if(!ids.every(id => ObjectId.isValid(id))){
+      throw "Error: clothes ids contains invalid id"
+    }
     let clothingItems = [];
     const clothesCollection = await clothes();
     for (let i = 0; i < ids.length; i++) {
