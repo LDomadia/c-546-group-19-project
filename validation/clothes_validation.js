@@ -1,9 +1,11 @@
+const xss = require('xss');
+
 function checkTextInput(input, inputName) {
     if (!input) throw `Error: ${inputName} is required`;
     if (typeof input !== 'string') throw `Error: ${inputName} must be a string`;
     input = input.trim();
     if (!input) throw `Error: ${inputName} is empty`;
-    return input;
+    return xss(input);
 }
 
 function checkNumericTextInput(input, inputName, convert) {
@@ -18,10 +20,10 @@ function checkNumericTextInput(input, inputName, convert) {
         throw `Error ${inputName} cannot be converted to an integer`
     }
     if(!convert){
-        return input
+        return xss(input)
     }
     else{
-        return parse_input;
+        return xss(parse_input);
     }
 }
 
@@ -30,7 +32,7 @@ function checkFileInput(input, inputName) {
     if (typeof input !== 'string') throw `Error: ${inputName} must be a string`;
     input = input.trim();
     if (!input) throw `Error: ${inputName} has not been selected`;
-    return input;
+    return xss(input);
 }
 
 function checkSelectInput(input, inputName, acceptableValues) {
@@ -39,7 +41,7 @@ function checkSelectInput(input, inputName, acceptableValues) {
     input = input.trim();
     if (input === 'null') throw `Error: ${inputName} is empty`;
     if (!acceptableValues.includes(input)) throw `Error: ${inputName} contains invalid inputs.`;
-    return input;
+    return xss(input);
 }
 
 function checkListInput(input, inputName) {
@@ -50,20 +52,22 @@ function checkListInput(input, inputName) {
     })
     const setInput = [...new Set(input)];
     if (setInput.length != input.length) throw `Error: ${inputName} contains duplicates`;
-    input.forEach(element => {
+    for (const element of input) {
         if (!element) throw `Error: ${inputName} contains empty elements`;
-    });
-    return input;
+        element = xss(element);
+    }
+    return xss(input);
 }
 
 function checkCheckboxInput(input, inputName, acceptableValues) {
     if (!input) throw `Error: ${inputName} is empty`;
     if (!Array.isArray(input)) throw `Error: ${inputName} must be an array`;
-    input.forEach(element => {
+    for (const element of input) {
         element = element.trim().toLowerCase();
         if (!acceptableValues.includes(element)) throw `Error: ${inputName} contains invalid inputs.`;
-    });
-    return input;
+        element = xss(element);
+    }
+    return xss(input);
 }
 
 module.exports = {
