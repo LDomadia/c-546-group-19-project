@@ -249,8 +249,27 @@ module.exports = {
     if (!userLikesUpdate.acknowledged)
       throw "Error: Failed to delete outfit from user likes";
 
+    const user = await usersCollection.findOne({ username: username });
+    let calendar = user.calendar;
+    let outfitIndex;
+    const calendarUpdate = async (_) => {
+      for (const data in calendar) {
+        let outfitArr = calendar[data];
+        console.log(outfitArr.map(String).indexOf(outfitId.toString()));
+        if (outfitArr.map(String).indexOf(outfitId.toString()) !== -1) {
+          outfitArr.splice(outfitIndex, 1);
+          calendar[data] = outfitArr;
+          const usersUpdate = await usersCollection.updateOne(
+            { _id: user._id },
+            { $set: { calendar: calendar } }
+          );
+        }
+      }
+    };
+
     const outfitsCollection = await outfits();
     if (!outfitsCollection) throw "Error: could not retrieve outfits";
+
     const deletionInfo = await outfitsCollection.findOneAndDelete({
       _id: outfitId,
       creator: username,
