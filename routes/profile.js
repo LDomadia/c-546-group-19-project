@@ -114,7 +114,7 @@ router.post("/", async (req, res) => {
   else {
     bio = user.bio;
   }
-  if (!user.stores || user.stores == null||user.stores==[]) {
+  if (!user.stores || user.stores == null||user.stores.length==0) {
     stores = "N/A";
     err = true;
   }
