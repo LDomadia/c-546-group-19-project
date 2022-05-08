@@ -3,6 +3,7 @@ const sanitizer = require('sanitizer');
 const router = express.Router();
 const data = require("../data");
 const accountData = data.account;
+const xss = require('xss');
 
 //Middleware
 router.use("/signup", (req, res, next) => {
@@ -41,16 +42,18 @@ router.get("/signup", async (req, res) => {
 // Signup - POST /
 router.post("/signup", async (req, res) => {
   let userInfo = req.body;
-  let username = userInfo.username;
-  let userPsw = userInfo.psw;
-  let pswRepeat = userInfo.pswRepeat;
+  let username = xss(userInfo.username);
+  let userPsw = xss(userInfo.psw);
+  let pswRepeat = xss(userInfo.pswRepeat);
 
+  //for username
   try {
     if (!username) throw "Error: username was not provided";
     if (typeof username !== "string")
       throw "Error: username should be a string";
     username = username.trim();
-    username = sanitizer.sanitize(username)
+    username = sanitizer.sanitize(username);
+    username = xss(username);
     if (username.length < 2)
       throw "Error: username must have at least two characters";
   } catch (e) {
@@ -61,6 +64,7 @@ router.post("/signup", async (req, res) => {
     });
   }
 
+  //for password
   try {
     if (!userPsw) throw "Error: password was not provided";
     if (!pswRepeat) throw "Error: no entry for confirm password";
@@ -70,9 +74,11 @@ router.post("/signup", async (req, res) => {
       throw "Error: confirm password should be a string";
 
     userPsw = userPsw.trim();
-    userPsw = sanitizer.sanitize(userPsw)
+    userPsw = sanitizer.sanitize(userPsw);
+    userPsw = xss(userPsw);
     pswRepeat = pswRepeat.trim();
-    pswRepeat = sanitizer.sanitize(pswRepeat)
+    pswRepeat = sanitizer.sanitize(pswRepeat);
+    pswRepeat = xss(userPsw);
 
     if (userPsw.length < 8)
       throw "Error: password must have at least eight characters";
@@ -88,7 +94,7 @@ router.post("/signup", async (req, res) => {
   }
 
   try {
-    await accountData.addNewUser(username, userPsw);
+    await accountData.addNewUser(xss(username), xss(userPsw));
   } catch (e) {
     return res.status(500).render("pages/medium/signup", {
       error: e,
@@ -114,9 +120,9 @@ router.get("/login", async (req, res) => {
 });
 
 router.post("/login", async (req, res) => {
-  let userInfo = req.body;
-  let username = userInfo.username;
-  let userPsw = userInfo.psw;
+  let userInfo =req.body;
+  let username = xss(userInfo.username);
+  let userPsw = xss(userInfo.psw);
 
   //error checking
   try {
@@ -124,7 +130,8 @@ router.post("/login", async (req, res) => {
     if (typeof username !== "string")
       throw "Error: username should be a string";
     username = username.trim();
-    username = sanitizer.sanitize(username)
+    username = sanitizer.sanitize(username);
+    username = xss(username);
     if (username.length < 2)
       throw "Error: username must have at least two characters";
   } catch (e) {
@@ -140,7 +147,8 @@ router.post("/login", async (req, res) => {
     if (typeof userPsw !== "string") throw "Error: password should be a string";
 
     userPsw = userPsw.trim();
-    userPsw = sanitizer.sanitize(userPsw)
+    userPsw = sanitizer.sanitize(userPsw);
+    userPsw = xss(userPsw);
 
     if (userPsw.length < 8)
       throw "Error: Password must be at least eight characters";
@@ -155,9 +163,10 @@ router.post("/login", async (req, res) => {
   }
 
   try {
-    let existingUser = await accountData.login(username, userPsw);
+    let existingUser = await accountData.login(xss(username), xss(userPsw));
     if (!existingUser) throw "Eror: could not login";
-    let isAdmin = await accountData.isUserAdmin(username);
+    let isAdmin = await accountData.isUserAdmin(xss(username));
+
     req.session.user = { username: existingUser };
     if (isAdmin.administrator) req.session.admin = true;
     return res.redirect("/home");

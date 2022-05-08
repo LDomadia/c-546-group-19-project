@@ -130,7 +130,7 @@ router.post("/", async (req, res) => {
     }
     catch (e) {
       bio = "No bio"
-      return res.status(400).render.("pages/single/profile", {
+      return res.status(400).render("pages/single/profile", {
         title: "Profile",
         username: req.session.user.username,
         bio: bio,

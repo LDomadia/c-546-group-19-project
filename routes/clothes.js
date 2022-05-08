@@ -5,6 +5,7 @@ const multer = require("multer");
 const upload = multer({ dest: "uploads/" });
 const validate = require("../validation/clothes_validation");
 const { ObjectId } = require('mongodb');
+const xss = require('xss');
 
 //Middleware
 router.use("/", (req, res, next) => {
@@ -55,6 +56,7 @@ router
   })
   .post(upload.single("img"), async (req, res) => {
     const data = req.body;
+    
     try {
       if (!data) throw "Error: Nothing was entered";
       if (!req.session.user) throw 'Error: No user is logged in';

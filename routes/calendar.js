@@ -5,6 +5,7 @@ const router = express.Router();
 const accountData = require("../data/account");
 const outfitsData = require("../data/outfits");
 const validate = require('../validation/clothes_validation');
+const xss = require('xss');
 
 //Middleware
 //have to log in
@@ -83,10 +84,9 @@ router.route("/").get(async (req, res) => {
 
 router.route("/log").get(async (req, res) => {
   
-
   try {
     let outfitItems = await outfitsData.getUserOutfits(req.session.user.username)
-    let date = req.query.date
+    let date = xss(req.query.date);
     if(!moment(date,"MM-DD-YYYY", true).isValid()){
       throw `Cannot log invalid date ${date}`
     }
@@ -108,17 +108,20 @@ router.route("/log").get(async (req, res) => {
 }).post(async (req, res) => {
   try {
     const log_info = req.body
-
     if(!log_info) throw "Could not get logging information";
 
+    let log_date = xss(log_info.log_date);
+    let log_id = xss(log_info.log_id);
+
+
     //validate log info
-    if(!moment(log_info.log_date,"MM-DD-YYYY", true).isValid()){
+    if(!moment(log_date,"MM-DD-YYYY", true).isValid()){
       throw `Cannot log invalid date ${log_info.log_date}`
     }
 
-    if (!ObjectId.isValid(log_info.log_id)) throw "Error: Logged outfit id is not valid";
+    if (!ObjectId.isValid(log_id)) throw "Error: Logged outfit id is not valid";
 
-    let e = await outfitsData.addOutfitToCalendar(log_info.log_id, log_info.log_date)
+    let e = await outfitsData.addOutfitToCalendar(log_id, log_date)
 
       
     return res.redirect("/calendar");
