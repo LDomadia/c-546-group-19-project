@@ -1,7 +1,49 @@
 const { ObjectId } = require("mongodb");
 const sanitizer = require('sanitizer');
+const clothesValidation = require("./clothes_validation");
+const accountValidation = require("./account_validation");
+
+function errors_clothing(id, name) {
+  if (!id || id == null) {
+    throw `${name} is not initialized`;
+  }
+
+  if (!ObjectId.isValid(id)) throw `${name} must be a valid mongo id`;
+
+  id = ObjectId(id);
+  return id;
+}
+
+function errors_clothes(lst, name) {
+  if (!lst || lst == null) {
+    throw `${name} is not initialized`;
+  }
+
+  return lst.map((a) => errors_clothing(a));
+}
 
 module.exports = {
+  checkUsername(user) {
+    return accountValidation.checkUsername(user);
+  },
+  checkOutfitName(outfitName) {
+    outfitName = outfitName.trim();
+    return clothesValidation.checkTextInput(outfitName, "Outfit Name");
+  },
+  checkStyles(styles) {
+    return clothesValidation.checkListInput(styles, "Styles Array");
+  },
+  checkStatus(status) {
+    if (!status || typeof status !== "string")
+      throw "Error: status must be provided as a string";
+    status = status.trim();
+    if (
+      status.localeCompare("private") !== 0 &&
+      status.localeCompare("public") !== 0
+    )
+      throw "Error: status must be public or private";
+    return status;
+  },
   checkId(id, varName) {
     if (!id) throw `Error: You must provide a ${varName}`;
     if (typeof id !== "string") throw `Error:${varName} must be a string`;
@@ -38,20 +80,26 @@ module.exports = {
       }
       arr[i] = arr[i].trim();
       arr[i] = sanitizer.sanitize(arr[i])
-    }
-    if (arrayInvalidFlag)
-      throw `One or more elements in ${varName} array is not a string or is an empty string`;
-    return arr;
+  checkSeasons(seasons) {
+    return clothesValidation.checkCheckboxInput(seasons, "seasons", [
+      "winter",
+      "spring",
+      "summer",
+      "fall",
+    ]);
   },
-  checkDate(date) {
-    var date_regex = /^(0[1-9]|1[0-2])\/(0[1-9]|1\d|2\d|3[01])\/(19|20)\d{2}$/;
-    if (!date_regex.test(date)) throw "Invalid date";
-
-    dateSplit = date.split("/");
-    if (dateSplit.length > 3) throw "Invalid date";
-
-    year = dateSplit[2];
-
-    return true;
+  checkImages(images) {
+    images = clothesValidation.checkListInput(images, "Images Array");
+    if (images.length < 2) throw "Error: not enough clothes to make outfit";
+    return images;
+  },
+  checkIdArrays(ids) {
+    if (ids.length < 2) {
+      throw "Error: 2 clothing items are need to create an outfit";
+    }
+    return errors_clothes(ids, "Id Array");
+  },
+  checkOutfitIds(ids) {
+    return errors_clothes(ids, "Outfit ids");
   },
 };

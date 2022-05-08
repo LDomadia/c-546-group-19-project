@@ -48,7 +48,7 @@
 }
 
 .error-message {
-  color: red;
+  color: rgb(199, 32, 32);
   margin-top: 10px;
   margin-bottom: 0;
 }

@@ -1,19 +1,20 @@
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 <article class="main">
     <h1>Outfit Details</h1>
-    <a href="/home">Back</a>
+    <a href="/home">Back to Home</a>
     <br>
     <div class="form-div">
-        <h3>{{outfitData.outfitName}}</h3>
+        <h2>{{outfitData.outfitName}}</h2>
         <div class="likes-saves-div">
             <p class="outfit-likes">{{outfitData.likes.length}} likes</p>
-            <a class="save-btn icon-btn" href="/home/save/{{outfitData._id}}">
+            <a class="save-btn icon-btn" href="/home/save/{{outfitData._id}}">Save
                 {{#ifIn userId outfitData.saves}}
                 <i class="fa-solid fa-bookmark"></i>
                 {{else}}
                 <i class="fa-regular fa-bookmark"></i>
                 {{/ifIn}}
             </a>
-            <a class="like-btn icon-btn" href="/home/like/{{outfitData._id}}">
+            <a class="like-btn icon-btn" href="/home/like/{{outfitData._id}}">Like
                 {{#ifIn userId outfitData.likes}}
                 <i class="fa-solid fa-heart"></i>
                 {{else}}
@@ -81,7 +82,7 @@
     </div>
     {{!-- TODO check comments length = 0 --}}
     <div class="form-div">
-        <h4>Comments</h4>
+        <h3>Comments</h3>
         <p id="no_comments"></p>
         <ul id="comments"></ul>
 

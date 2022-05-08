@@ -99,7 +99,7 @@ module.exports = {
 
     if (updateInfo.matchedCount == 0 || updateInfo.modifiedCount == 0)
       throw "Error: Failed to update User";
-    return { result: "success" };
+    return { result: "success", id: insertInfo.insertedId };
   },
   async getClothingItems(user) {
     let clothingItems = [];
@@ -119,6 +119,9 @@ module.exports = {
   },
   async getClothingbyIds(ids) {
     //TODO validate array
+    if (!ids.every((id) => ObjectId.isValid(id))) {
+      throw "Error: clothes ids contains invalid id";
+    }
     let clothingItems = [];
     const clothesCollection = await clothes();
     for (let i = 0; i < ids.length; i++) {
@@ -128,7 +131,7 @@ module.exports = {
     return clothingItems;
   },
   async getClothingItemById(id) {
-    if (!ObjectId.isValid(id)) throw 'Error: Clothing Item id is not valid';
+    if (!ObjectId.isValid(id)) throw "Error: Clothing Item id is not valid";
     id = ObjectId(id);
     const clothesCollection = await clothes();
     const clothingItem = await clothesCollection.findOne({ _id: id });
@@ -209,28 +212,26 @@ module.exports = {
       }
     });
     if (colorPatterns) {
-      colorPatterns.forEach(element => {
+      colorPatterns.forEach((element) => {
         element = element.trim().toLowerCase();
-        if (!oldClothing['colors-patterns'].includes(element)) {
-          if (stats['colors-patterns'][element]) 
-            stats['colors-patterns'][element] += 1;
-          else 
-            stats['colors-patterns'][element] = 1;
+        if (!oldClothing["colors-patterns"].includes(element)) {
+          if (stats["colors-patterns"][element])
+            stats["colors-patterns"][element] += 1;
+          else stats["colors-patterns"][element] = 1;
         }
       });
     }
 
     if (oldClothing.brand != brand.trim().toLowerCase()) {
       if (oldClothing.brand) {
-        stats['brands'][oldClothing.brand] -= 1;
-        if (stats['brands'][oldClothing.brand] == 0) delete stats['brands'][oldClothing.brand];
+        stats["brands"][oldClothing.brand] -= 1;
+        if (stats["brands"][oldClothing.brand] == 0)
+          delete stats["brands"][oldClothing.brand];
       }
       if (brand) {
         brand = brand.trim().toLowerCase();
-        if (stats['brands'][brand]) 
-          stats['brands'][brand] += 1;
-        else 
-          stats['brands'][brand] = 1;
+        if (stats["brands"][brand]) stats["brands"][brand] += 1;
+        else stats["brands"][brand] = 1;
       }
     }
 
@@ -284,10 +285,33 @@ module.exports = {
 
     return { result: "success" };
   },
+  async checkTypes(clothingIds) {
+    let clothingItems = await this.getClothingbyIds(clothingIds);
+    types = {};
+    let validTypes = [
+      "top",
+      "bottom",
+      "dress",
+      "shoes",
+      "accessory",
+      "outerwear",
+      "socks",
+    ];
+
+    clothingItems.forEach((item) => {
+      let type = item.type.trim().toLowerCase();
+      if (!validTypes.includes(type)) throw "Error: invalid type";
+      types[type] = (types[type] || 0) + 1;
+      if (type.localeCompare("accessory") !== 0 && types[type] > 1) {
+        throw "You cannot have multiple of the same types (except for accessories) in an outfit";
+      }
+    });
+
+    return { valid: true };
+  },
   async getClothingIdsByImages(imagesArr) {
     //add error checking for images arr
     const clothingCollection = await clothes();
-
     let clothesIdArr = await Promise.all(
       imagesArr.map(async (im) => {
         let item = await clothingCollection.findOne({
@@ -306,9 +330,9 @@ module.exports = {
 
     const clothingItem = await clothesCollection.findOne({ _id: id });
     if (!clothingItem) {
-      throw 'Error: Failed to find Clothing Item';
+      throw "Error: Failed to find Clothing Item";
     }
-    
+
     const usersCollection = await users();
     const userDocument = await usersCollection.findOne({ username: user });
     if (!userDocument) throw "Error: User does not exists";
@@ -332,33 +356,42 @@ module.exports = {
     }
 
     if (clothingItem.brand) {
-      if (stats["brands"][clothingItem.brand]) 
+      if (stats["brands"][clothingItem.brand])
         stats["brands"][clothingItem.brand] -= 1;
-      if (stats["brands"][clothingItem.brand] == 0) 
+      if (stats["brands"][clothingItem.brand] == 0)
         delete stats["brands"][clothingItem.brand];
     }
 
     const deleteClothingItem = await clothesCollection.deleteOne({ _id: id });
-    if (!deleteClothingItem.acknowledged || deleteClothingItem.deletedCount == 0) {
-      throw 'Error: Failed to delete Clothing Item';
+    if (
+      !deleteClothingItem.acknowledged ||
+      deleteClothingItem.deletedCount == 0
+    ) {
+      throw "Error: Failed to delete Clothing Item";
     }
 
-    const userUpdate = await usersCollection.updateOne({ username: user }, {
-      $pull: { userClothes: id }, 
-      $set: { statistics: stats }
-    })
+    const userUpdate = await usersCollection.updateOne(
+      { username: user },
+      {
+        $pull: { userClothes: id },
+        $set: { statistics: stats },
+      }
+    );
     if (userUpdate.matchedCount == 0 || userUpdate.modifiedCount == 0) {
       throw "Error: Failed to delete Clothing Item from User";
     }
 
     const outfitsCollection = await outfits();
-    const outfitUpdates = await outfitsCollection.updateMany({ clothes: id }, {
-      $pull: { clothes: id }
-    })
+    const outfitUpdates = await outfitsCollection.updateMany(
+      { clothes: id },
+      {
+        $pull: { clothes: id },
+      }
+    );
     if (outfitUpdates.matchedCount != outfitUpdates.modifiedCount) {
-      throw 'Error: Failed to delete Clothing Item from Outfits';
+      throw "Error: Failed to delete Clothing Item from Outfits";
     }
 
-    return { result: 'success' };
-  }
+    return { result: "success" };
+  },
 };

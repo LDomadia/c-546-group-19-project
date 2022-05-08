@@ -77,7 +77,7 @@ dl ul {
 }
 
 .error{
-    color:red;
+    color:rgb(199, 32, 32);
 }
 
 .outfit-card {
@@ -109,3 +109,8 @@ dl ul {
     border-radius: 10px;
     background-color: #00000015;
 }
+
+.delete-comment-btn{
+    margin-left: 50px;
+    border-radius: 12px;
+  }
