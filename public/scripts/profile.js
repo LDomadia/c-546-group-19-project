@@ -16,8 +16,6 @@
     if (website.trim().length === 0)
       throw 'Id cannot be an empty website or just spaces';
 
-      //unable to check valid website on client side
-
     return website;
   }
 
@@ -50,7 +48,6 @@
   bioForm.submit(function (event) {
     event.preventDefault();
     error.hide();
-
     error.empty();
 
     var bio = bioInput.val();
