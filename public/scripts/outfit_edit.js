@@ -188,7 +188,8 @@
   });
   $(".chip-btn").each(function (btn) {
     this.addEventListener("click", removeFromList);
-    // addToList($(this).attr("name").trim(), stylesList, "styles[]");
+    addToList(this.name.trim(), stylesList, "styles[]");
+    this.parentElement.remove();
   });
   function addToList(inputValue, list, listName) {
     if (inputValue) {
