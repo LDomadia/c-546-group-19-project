@@ -31,7 +31,7 @@ router.route("/").get(async (req, res) => {
   let bday = data.birthday
 
   try {
-    let bday = data.birthday
+    bday = data.birthday
 
     if (!moment(bday).isValid()) {
       throw "Invalid date!"

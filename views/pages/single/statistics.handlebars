@@ -1,66 +1,65 @@
-<body>
-    <section class="stats-sect">
 
-        <h1 class="stats-title">{{title}}</h1>
-        
-        {{#if error}}
-        <div class="error-message">{{error}}</div>
-        {{/if}}
+<section class="stats-sect">
 
-        <figure>
-            <figcaption class="stats-caption">Types</figcaption>
-            <ul>
-                {{#each types}}
-                <li class="stats-list capitalize">
-                    {{@key}}: {{this}}
-                </li>
-                {{/each}}
-            </ul>
-        </figure>
-        <figure>
-            <figcaption class="stats-caption">Colors/Patterns</figcaption>
-            <ul>
-                {{#each colors-patterns}}
-                <li class="stats-list capitalize">
-                    {{@key}}: {{this}}
-                </li>
-                {{/each}}
-            </ul>
-        </figure>
+    <h1 class="stats-title">{{title}}</h1>
+    
+    {{#if error}}
+    <div class="error-message">{{error}}</div>
+    {{/if}}
 
-        <figure>
-            <figcaption class="stats-caption">Brands</figcaption>
-            <ul>
-                {{#each brands}}
-                <li class="stats-list capitalize">
-                    {{@key}}: {{this}}
-                </li>
-                {{/each}}
-            </ul>
-        </figure>
+    <figure>
+        <figcaption class="stats-caption">Types</figcaption>
+        <ul>
+            {{#each types}}
+            <li class="stats-list capitalize">
+                {{@key}}: {{this}}
+            </li>
+            {{/each}}
+        </ul>
+    </figure>
+    <figure>
+        <figcaption class="stats-caption">Colors/Patterns</figcaption>
+        <ul>
+            {{#each colors-patterns}}
+            <li class="stats-list capitalize">
+                {{@key}}: {{this}}
+            </li>
+            {{/each}}
+        </ul>
+    </figure>
 
-        <figure>
-            <figcaption class="stats-caption">Outfits Worn</figcaption>
-            <ul>
-                {{#each outfitsWorn}}
-                <li class="stats-list capitalize">
-                    {{outfit}}: {{total}}
-                </li>
-                {{/each}}
-            </ul>
-        </figure>
+    <figure>
+        <figcaption class="stats-caption">Brands</figcaption>
+        <ul>
+            {{#each brands}}
+            <li class="stats-list capitalize">
+                {{@key}}: {{this}}
+            </li>
+            {{/each}}
+        </ul>
+    </figure>
 
-        <figure>
-            <figcaption class="stats-caption">Clothes Worn</figcaption>
-            <ul>
-                {{#each clothesWorn}}
-                <li class="stats-list capitalize">
-                    {{cloth}}: {{total}}
-                </li>
-                {{/each}}
-            </ul>
-        </figure>
+    <figure>
+        <figcaption class="stats-caption">Outfits Worn</figcaption>
+        <ul>
+            {{#each outfitsWorn}}
+            <li class="stats-list capitalize">
+                {{outfit}}: {{total}}
+            </li>
+            {{/each}}
+        </ul>
+    </figure>
 
-        <a class="refresh" href="/stats">Refresh</a>
-    </section>
-</body>
+    <figure>
+        <figcaption class="stats-caption">Clothes Worn</figcaption>
+        <ul>
+            {{#each clothesWorn}}
+            <li class="stats-list capitalize">
+                {{cloth}}: {{total}}
+            </li>
+            {{/each}}
+        </ul>
+    </figure>
+
+    <a class="refresh" href="/stats">Refresh</a>
+</section>
