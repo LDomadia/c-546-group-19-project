@@ -2,6 +2,19 @@
 (function ($) {
 
 
+  //two forms
+  var bioForm = $("#bio"),
+    bioInput = $("#bio_term"),
+    error = $("#error"),
+    storeForm = $("#stores"),
+    storeName = $("#store_name"),
+    storeLink = $("#store_link"),
+    deleteButton = $("#delete-account");
+
+  error.hide();
+  error.empty();
+
+
   function checkString(string) {
     if (!string) throw "must provide text input"
     if (typeof string !== 'string') throw 'invalid string input';
@@ -24,7 +37,6 @@
     
     try {
       url = new URL(string);
-      console.log(url);
     } catch (e) {
       throw e;
     }
@@ -32,17 +44,6 @@
     return string;
   }
 
-
-  //two forms 
-
-  var bioForm = $("#bio"),
-    bioInput = $("#bio_term"),
-    error = $("#error"),
-    storeForm = $("#stores"),
-    storeName = $("#store_name"),
-    storeLink = $("#store_link");
-  error.hide();
-  error.empty();
 
 
   bioForm.submit(function (event) {
@@ -86,7 +87,6 @@
     }
 
     event.currentTarget.submit();
-  });
-
+  })
 
 })(window.jQuery);

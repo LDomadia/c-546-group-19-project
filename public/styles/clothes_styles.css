@@ -78,19 +78,19 @@ p {
 }
 
 .error-message {
-  color: red;
+  color: rgb(199, 32, 32);
   margin-top: 10px;
   margin-bottom: 0;
 }
 
 .error-input {
-  border: 1px solid red !important;
+  border: 1px solid rgb(199, 32, 32) !important;
 }
 
 #submit-btn {
   padding: 6px 30px;
   border-radius: 5px;
-  background-color: #31a2db;
+  background-color: #337596;
   color: white;
   border: none;
   font-size: 14px;

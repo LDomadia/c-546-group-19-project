@@ -4,7 +4,7 @@ const outfitValidation = require("../validation/outfit_validation");
 const gen_outfitData = require("../data/gen_outfit");
 const outfitsData = require("../data/outfits");
 const clothesData = require("../data/clothes");
-const accountData = require('../data/account');
+const accountData = require("../data/account");
 
 //Middleware
 router.use("/", (req, res, next) => {
@@ -21,7 +21,7 @@ router.route("/").get(async (req, res) => {
     );
     if (req.session.outfitDeletion) {
       req.session.outfitDeletion = false;
-      return res.render("pages/results/outfits", {
+      return res.status(200).render("pages/results/outfits", {
         title: "My Outfits",
         outfitsPage: true,
         stylesheet: "/public/styles/outfit_card_styles.css",
@@ -31,7 +31,7 @@ router.route("/").get(async (req, res) => {
       });
     }
 
-    return res.render("pages/results/outfits", {
+    return res.status(200).render("pages/results/outfits", {
       title: "My Outfits",
       outfitsPage: true,
       stylesheet: "/public/styles/outfit_card_styles.css",
@@ -57,7 +57,7 @@ router
       stylesheet: "/public/styles/clothes_styles.css",
       script: "/public/scripts/gen_outfit_script.js",
     });
-  })
+  }) //TODO - add error checking here
   .post(async (req, res) => {
     const data = req.body;
 
@@ -65,7 +65,6 @@ router
       if (!data) throw "Error: Nothing was entered";
       if (!data.name) throw "Error: Outfit Name is Required";
       if (!data.name.trim()) throw "Error: Outfit Name is Required";
-      if (!req.session.user) throw 'Error: User is not logged in';
     } catch (e) {
       return res.status(400).render("pages/medium/outfitGenerated", {
         title: "Generate Outfit",
@@ -107,7 +106,6 @@ router
           outfitsPage: true,
           stylesheet: "/public/styles/clothes_styles.css",
           script: "/public/scripts/gen_outfit_script.js",
-          error: "outfit generated",
           savePage: true,
           results: clothingItems,
         });
@@ -158,19 +156,30 @@ router.route("/new").get(async (req, res) => {
 });
 
 router.route("/new").post(async (req, res) => {
-  //need error checking
+  let name = req.body.name;
+  let images = req.body.outfits;
+  let seasons = req.body.season ? req.body.season : [];
+  let status = req.body.public ? "public" : "private";
+  let styles = req.body.styles ? req.body.styles : [];
+
   try {
-    let name = req.body.name;
-    let images = req.body.outfits;
-    let seasons = req.body.season ? req.body.season : [];
-    let status = req.body.public ? "public" : "private";
-    let styles = req.body.styles ? req.body.styles : [];
-
-    styles = styles.map((style) => style.trim().toLowerCase());
-    if (!images || images.length < 2)
-      throw "Error: not enough clothes to make outfit";
-
+    name = outfitValidation.checkOutfitName(name);
+    images = outfitValidation.checkImages(images);
+    seasons = outfitValidation.checkSeasons(seasons);
+    status = outfitValidation.checkStatus(status);
+    styles = outfitValidation.checkStyles(styles);
+  } catch (e) {
+    res.status(400).render("pages/results/outfits", {
+      title: "My Outfits",
+      stylesheet: "/public/styles/outfit_card_styles.css",
+      script: "/public/scripts/outfits.js",
+      outfitsPage: true,
+      error: e,
+    });
+  }
+  try {
     let clothesIdArr = await clothesData.getClothingIdsByImages(images);
+    let isValid = await clothesData.checkTypes(clothesIdArr);
     let newOutfit = await outfitsData.addNewOutfits(
       req.session.user.username,
       clothesIdArr,
@@ -183,7 +192,7 @@ router.route("/new").post(async (req, res) => {
     let outfitItems = await outfitsData.getUserOutfits(
       req.session.user.username
     );
-    res.render("pages/results/outfits", {
+    res.status(200).render("pages/results/outfits", {
       title: "My Outfits",
       outfitsPage: true,
       stylesheet: "/public/styles/outfit_card_styles.css",
@@ -192,7 +201,7 @@ router.route("/new").post(async (req, res) => {
       msg: "Outfit has successfuly been added!",
     });
   } catch (e) {
-    res.status(400).render("pages/results/outfits", {
+    res.status(500).render("pages/results/outfits", {
       title: "My Outfits",
       stylesheet: "/public/styles/outfit_card_styles.css",
       script: "/public/scripts/outfits.js",
@@ -214,7 +223,7 @@ router.route("/edit/:id").get(async (req, res) => {
       let outfitItems = await outfitsData.getUserOutfits(
         req.session.user.username
       );
-      return res.render("pages/results/outfits", {
+      return res.status(403).render("pages/results/outfits", {
         title: "My Outfits",
         outfitsPage: true,
         outfitItems: outfitItems,
@@ -244,17 +253,28 @@ router.route("/edit/:id").get(async (req, res) => {
   }
 });
 router.route("/edit/:id").post(async (req, res) => {
-  //need error checking
+  let name = req.body.name;
+  let images = req.body.outfits;
+  let seasons = req.body.season ? req.body.season : [];
+  let status = req.body.public ? "public" : "private";
+  let styles = req.body.styles ? req.body.styles : [];
+  let id = outfitValidation.checkId(req.params.id);
   try {
-    let name = req.body.name;
-    let images = req.body.outfits;
-    let seasons = req.body.season ? req.body.season : [];
-    let status = req.body.public ? "public" : "private";
-    let styles = req.body.styles ? req.body.styles : [];
-    let id = outfitValidation.checkId(req.params.id);
-    styles = styles.map((style) => style.trim().toLowerCase());
-    if (!images || images.length < 2)
-      throw "Error: not enough clothes to make outfit";
+    name = outfitValidation.checkOutfitName(name);
+    images = outfitValidation.checkImages(images);
+    seasons = outfitValidation.checkSeasons(seasons);
+    status = outfitValidation.checkStatus(status);
+    styles = outfitValidation.checkStyles(styles);
+  } catch (e) {
+    res.status(400).render("pages/results/outfits", {
+      title: "My Outfits",
+      stylesheet: "/public/styles/outfit_card_styles.css",
+      script: "/public/scripts/outfits.js",
+      outfitsPage: true,
+      error: e,
+    });
+  }
+  try {
     let clothesIdArr = await clothesData.getClothingIdsByImages(images);
     let updateInfo = await outfitsData.updateUserOutfit(
       req.session.user.username,
@@ -269,7 +289,7 @@ router.route("/edit/:id").post(async (req, res) => {
     let outfitItems = await outfitsData.getUserOutfits(
       req.session.user.username
     );
-    res.render("pages/results/outfits", {
+    res.status(200).render("pages/results/outfits", {
       title: "My Outfits",
       outfitsPage: true,
       stylesheet: "/public/styles/outfit_card_styles.css",
@@ -297,52 +317,60 @@ router.route("/delete/:id").delete(async (req, res) => {
     );
     if (!deletionInfo) throw "Error: could not delete outfit";
     req.session.outfitDeletion = true;
-    return res.json({ redirect: true });
+    return res.status(303).json({ redirect: true });
   } catch (e) {
-    return res.json({ error: e });
+    return res.status(400).json({ error: e });
   }
 });
-router.route('/likes').get(async (req, res) => {
+router.route("/likes").get(async (req, res) => {
   try {
-    if (!req.session.user) throw 'Error: User is not logged in';
-    const outfitLikes = await outfitsData.getUserLikedOutfits(req.session.user.username);
-    const userId = await accountData.getUserIdByUserName(req.session.user.username);
-    return res.status(200).render('pages/results/outfitsLikes', {
-      title: 'My Liked Outfits',
+    if (!req.session.user) throw "Error: User is not logged in";
+    const outfitLikes = await outfitsData.getUserLikedOutfits(
+      req.session.user.username
+    );
+    const userId = await accountData.getUserIdByUserName(
+      req.session.user.username
+    );
+    return res.status(200).render("pages/results/outfitsLikes", {
+      title: "My Liked Outfits",
       outfitsPage: true,
       outfits: outfitLikes,
       userId: userId,
-      stylesheet: '/public/styles/outfit_card_styles.css',
-      script: '/public/scripts/home_script.js'
+      stylesheet: "/public/styles/outfit_card_styles.css",
+      script: "/public/scripts/home_script.js",
     });
   } catch (e) {
-    return res.status(404).render('pages/results/outfitsLikes', {
-      title: 'My Liked Outfits',
+    return res.status(404).render("pages/results/outfitsLikes", {
+      title: "My Liked Outfits",
       outfitsPage: true,
-      stylesheet: '/public/styles/outfit_card_styles.css',
-      error: e
+      stylesheet: "/public/styles/outfit_card_styles.css",
+      error: e,
     });
   }
 });
-router.route('/saves').get(async (req, res) => {
+router.route("/saves").get(async (req, res) => {
   try {
-    if (!req.session.user) throw 'Error: User is not logged in';
-    const outfitSaves = await outfitsData.getUserSavedOutfits(req.session.user.username);
-    const userId = await accountData.getUserIdByUserName(req.session.user.username);
-    return res.status(200).render('pages/results/outfitsSaves', {
-      title: 'My Saved Outfits',
+    if (!req.session.user) throw "Error: User is not logged in";
+    const outfitSaves = await outfitsData.getUserSavedOutfits(
+      req.session.user.username
+    );
+    const userId = await accountData.getUserIdByUserName(
+      req.session.user.username
+    );
+    return res.status(200).render("pages/results/outfitsSaves", {
+      title: "My Saved Outfits",
       outfitsPage: true,
       outfits: outfitSaves,
       userId: userId,
-      stylesheet: '/public/styles/outfit_card_styles.css',
-      script: '/public/scripts/home_script.js'
+      stylesheet: "/public/styles/outfit_card_styles.css",
+      script: "/public/scripts/home_script.js",
     });
   } catch (e) {
-    return res.status(404).render('pages/results/outfitsSaves', {
-      title: 'My Saved Outfits',
+    return res.status(404).render("pages/results/outfitsSaves", {
+      title: "My Saved Outfits",
       outfitsPage: true,
-      stylesheet: '/public/styles/outfit_card_styles.css',
-      error: e
+      stylesheet: "/public/styles/outfit_card_styles.css",
+      error: e,
     });
   }
 });

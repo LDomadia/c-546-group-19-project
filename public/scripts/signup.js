@@ -50,7 +50,6 @@
   pswError.empty();
 
   signupForm.submit(function (event) {
-    console.log("submit");
     event.preventDefault();
     usrError.hide();
     usrError.empty();

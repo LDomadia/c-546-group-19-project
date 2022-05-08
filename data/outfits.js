@@ -7,6 +7,7 @@ const outfits = mongoCollections.outfits;
 const users = mongoCollections.users;
 const { ObjectId } = require("mongodb");
 const moment = require("moment");
+const { checkId } = require("../validation/account_validation");
 
 const errors_string = function (str, name) {
   if (!str || str == null) {
@@ -60,42 +61,15 @@ module.exports = {
     const userDocument = await usersCollection.findOne({ username: username });
     return userDocument.userOutfits;
   },
-  async addNewOutfits(creator, clothes, status, outfitName, season, style) {
-    let err = function (str) {
-      return `Error: ${str} was not provided`;
-    };
-    let arg_names = [
-      "creator",
-      "clothes",
-      "status",
-      "outfitName",
-      "season",
-      "style",
-    ];
-    for (let i = 0; i < arg_names.length; i++) {
-      if (!arguments[i]) {
-        throw err(arg_names[i]);
-      }
-    }
-    if (typeof creator !== "string") {
-      throw "Error: creator should be a string";
-    }
-    if (typeof status !== "string") {
-      throw "Error: status should be a string";
-    }
-    if (typeof outfitName !== "string") {
-      throw "Error: outfit name should be a string";
-    }
-    creator = errors_string(creator, "creator");
-    status = errors_string(status, "status");
-    outfitName = errors_string(outfitName, "outfitName");
+  async addNewOutfits(creator, clothes, status, outfitName, seasons, styles) {
+    creator = validation.checkUsername(creator);
+    outfitName = outfitValidation.checkOutfitName(outfitName);
+    seasons = outfitValidation.checkSeasons(seasons);
+    status = outfitValidation.checkStatus(status);
+    styles = outfitValidation.checkStyles(styles);
+    clothes = outfitValidation.checkIdArrays(clothes);
 
-    season = errors_strlist(season, "season");
-    style = errors_strlist(style, "style");
-    clothes = errors_clothes(clothes, "clothes");
-
-    style = style.map((s) => s.trim().toLowerCase());
-
+    let validOutfit = clothesData.checkTypes(clothes);
     const outfitsCollection = await outfits();
     let newOutfits = {
       creator: creator,
@@ -104,8 +78,8 @@ module.exports = {
       likes_count: 0,
       status: status,
       outfitName: outfitName,
-      season: season,
-      style: style,
+      season: seasons,
+      style: styles,
       comments: [],
       saves: [],
     };
@@ -173,7 +147,6 @@ module.exports = {
         for (let outfit of userOutfits) {
           outfit["clothingData"] = [];
           for (let clothingId of outfit.clothes) {
-            // console.log(clothingId);
             const clothingItem = await clothesData.getClothingItemById(
               clothingId.toString()
             );
@@ -215,43 +188,16 @@ module.exports = {
     clothes,
     status,
     outfitName,
-    season,
-    style
+    seasons,
+    styles
   ) {
     creator = validation.checkUsername(creator);
     outfitId = ObjectId(outfitValidation.checkId(outfitId));
-    let err = function (str) {
-      return `Error: ${str} was not provided`;
-    };
-    let arg_names = ["clothes", "status", "outfitName", "season", "style"];
-    for (let i = 0; i < arg_names.length; i++) {
-      if (!arguments[i]) {
-        throw err(arg_names[i]);
-      }
-    }
-
-    if (
-      typeof status !== "string" ||
-      (status.localeCompare("public") !== 0 &&
-        status.localeCompare("private") !== 0)
-    ) {
-      throw "Error: status should be a string that is public or private";
-    }
-    outfitName = outfitName.trim();
-    if (typeof outfitName !== "string" || outfitName.length === 0) {
-      throw "Error: outfit name should be a nonempty string";
-    }
-
-    status = errors_string(status, "status");
-    outfitName = errors_string(outfitName, "outfitName");
-
-    season = errors_strlist(season, "season");
-    style = errors_strlist(style, "style");
-    clothes = errors_clothes(clothes, "clothes");
-    if (clothes.length < 2)
-      throw "Error: 2 clothing items are need to create an outfit";
-    style = style.map((s) => s.trim().toLowerCase());
-    creator = validation.checkUsername(creator);
+    seasons = outfitValidation.checkSeasons(seasons);
+    status = outfitValidation.checkStatus(status);
+    styles = outfitValidation.checkStyles(styles);
+    clothes = outfitValidation.checkIdArrays(clothes);
+    let validOutfit = clothesData.checkTypes(clothes);
     const outfitsCollection = await outfits();
     const updateInfo = await outfitsCollection.updateOne(
       {
@@ -263,13 +209,12 @@ module.exports = {
           clothes: clothes,
           status: status,
           outfitName: outfitName,
-          season: season,
-          style: style,
+          season: seasons,
+          style: styles,
         },
       }
     );
-    if (updateInfo.matchedCount == 0 || updateInfo.modifiedCount == 0)
-      throw "Error: Failed to edit outfit";
+    if (updateInfo.matchedCount == 0) throw "Error: Failed to edit outfit";
     return { updated: true };
   },
   async delUserOutfit(username, outfitId) {
@@ -348,10 +293,8 @@ module.exports = {
     return { updated: true };
   },
   async likeOutfit(id, user) {
-    if (!id || !id.trim()) throw "Error: Outfit id is empty";
-    if (!ObjectId.isValid(id)) throw "Error: Outfit id is not valid";
-    id = ObjectId(id);
-    if (!user || !user.trim()) throw "Error: User is empty";
+    id = ObjectId(validation.checkId(id));
+    user = validation.checkUsername(user);
 
     const usersCollection = await users();
     const userDoc = await usersCollection.findOne({ username: user });
@@ -416,10 +359,8 @@ module.exports = {
     };
   },
   async saveOutfit(id, user) {
-    if (!id || !id.trim()) throw "Error: Outfit id is empty";
-    if (!ObjectId.isValid(id)) throw "Error: Outfit id is not valid";
-    id = ObjectId(id);
-    if (!user || !user.trim()) throw "Error: User is empty";
+    id = ObjectId(validation.checkId(id));
+    user = validation.checkUsername(user);
 
     const usersCollection = await users();
     const userDoc = await usersCollection.findOne({ username: user });
@@ -479,15 +420,15 @@ module.exports = {
   },
 
   async getUserLikedOutfits(user) {
-    if (!user || !user.trim()) throw 'Error: User was not provided';
+    user = outfitValidation.checkUsername(user);
     const usersCollection = await users();
     const userDoc = await usersCollection.findOne({ username: user });
-    if (!userDoc) throw 'Error: Could not find User document';
+    if (!userDoc) throw "Error: Could not find User document";
     const outfitsCollection = await outfits();
     const outfitLikes = [];
     for (const likeId of userDoc.userLikes) {
       const outfitData = await outfitsCollection.findOne({ _id: likeId });
-      if (!outfitData) throw 'Error: Could not find Outfit document';
+      if (!outfitData) throw "Error: Could not find Outfit document";
       outfitLikes.push(outfitData);
     }
     if (outfitLikes) {
@@ -505,15 +446,15 @@ module.exports = {
     return outfitLikes;
   },
   async getUserSavedOutfits(user) {
-    if (!user || !user.trim()) throw 'Error: User was not provided';
+    user = outfitValidation.checkUsername(user);
     const usersCollection = await users();
     const userDoc = await usersCollection.findOne({ username: user });
-    if (!userDoc) throw 'Error: Could not find User document';
+    if (!userDoc) throw "Error: Could not find User document";
     const outfitsCollection = await outfits();
     const outfitSaves = [];
     for (const saveId of userDoc.userSaves) {
       const outfitData = await outfitsCollection.findOne({ _id: saveId });
-      if (!outfitData) throw 'Error: Could not find Outfit document';
+      if (!outfitData) throw "Error: Could not find Outfit document";
       outfitSaves.push(outfitData);
     }
     if (outfitSaves) {
@@ -530,9 +471,10 @@ module.exports = {
     }
     return outfitSaves;
   },
-  async addOutfitToCalendar(id, date){
-    if (!id || !id.trim()) throw 'Error: Outfit id is empty';
-    if (!ObjectId.isValid(id)) throw 'Error: Outfit id is not valid';
+  async addOutfitToCalendar(id, date) {
+    id = outfitValidation.checkId(id);
+    if (!id || !id.trim()) throw "Error: Outfit id is empty";
+    if (!ObjectId.isValid(id)) throw "Error: Outfit id is not valid";
     id = ObjectId(id);
 
     if (!moment(date, "MM-DD-YYYY", true).isValid()) {
@@ -629,14 +571,11 @@ module.exports = {
 
     account = await accountCollection.findOne({ username: creator });
 
-    console.log(account);
-
     return { result: "success" };
   },
 
   async getOutfitsOnDate(username, date) {
-    if (!username) throw `Error: Invalid username`;
-
+    username = validation.checkUsername(username);
     if (!moment(date, "MM-DD-YYYY", true).isValid()) {
       throw `Cannot log invalid date ${date}`;
     }
@@ -676,10 +615,7 @@ module.exports = {
     return userOutfits;
   },
   async getOutfitbyIds(ids) {
-    //TODO validate array
-    if (!ids.every((id) => ObjectId.isValid(id))) {
-      throw "Error: outfit ids contains invalid id";
-    }
+    ids = outfitValidation.checkOutfitIds(ids);
     let outfitItems = [];
     const outfitsCollection = await outfits();
     for (let i = 0; i < ids.length; i++) {
