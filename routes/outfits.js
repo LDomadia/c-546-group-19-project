@@ -281,7 +281,7 @@ router.route("/edit/:id").post(async (req, res) => {
     let updateInfo = await outfitsData.updateUserOutfit(
       xss(req.session.user.username),
       xss(id),
-      xss(clothesIdArr),
+      (clothesIdArr),
       xss(status),
       xss(name),
       (seasons),

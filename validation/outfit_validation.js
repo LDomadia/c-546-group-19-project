@@ -21,7 +21,7 @@ function errors_clothes(lst, name) {
 
   // return lst.map((a) => errors_clothing((a)));
   for (let id of lst) {
-    id = errors_clothing(id);
+    id = errors_clothing(id, name);
   }
   return lst;
 }
