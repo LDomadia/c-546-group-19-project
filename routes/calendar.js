@@ -22,13 +22,14 @@ router.use("/", (req, res, next) => {
 // GET /
 router.route("/").get(async (req, res) => {
   try {
-    return res.render("pages/single/calendar", { calPage: true,title: "Calendar" });
+    return res.render("pages/single/calendar", { calPage: true, title: "Calendar" });
   } catch (e) {
     return res.sendStatus(500);
   }
 }).post(async (req, res) => {
   let data = req.body
   let bday = data.birthday
+  let outfitItems
 
   try {
     bday = data.birthday
@@ -55,7 +56,6 @@ router.route("/").get(async (req, res) => {
   }
 
   try {
-
     date = data.birthday.split("-")
     date = date.map(e => validate.checkNumericTextInput(e, "date"))
     date_obj = {
@@ -66,13 +66,30 @@ router.route("/").get(async (req, res) => {
 
     date_num = date.map(e => validate.checkNumericTextInput(e, "date", true))
 
-
-
     mdy_format = `${date_obj["month"]}-${date_obj["day"]}-${date_obj["year"]}`
+  }
+  catch (e) {
+    return res.status(400).render("pages/single/calendar",
+      {
+        calPage: true,
+        title: "Calendar",
+        error: e
+      });;
+  }
 
-    let outfitItems = await outfitsData.getOutfitsOnDate(xss(req.session.user.username), xss(mdy_format))
+  try {
+    outfitItems = await outfitsData.getOutfitsOnDate(xss(req.session.user.username), xss(mdy_format))
+  }
+  catch (e) {
+    return res.status(404).render("pages/single/calendar",
+      {
+        calPage: true,
+        title: "Calendar",
+        error: e
+      });;
+  }
 
-
+  try {
     return res.render("pages/single/calendar",
       {
         calPage: true,
@@ -95,33 +112,35 @@ router.route("/").get(async (req, res) => {
 router.route("/log").get(async (req, res) => {
 
   let noOutfits = false;
-  let user, username;
-  //check username
+  let outfitItems;
+
   try {
-    username = account_validation.checkUsername(req.session.user.username);
+    outfitItems = await outfitsData.getUserOutfits(xss(req.session.user.username))
   }
   catch (e) {
-    return res.status(400).render("pages/error/error", { title: "Error", code: 400, error: e });
+    return res.status(404).render("pages/medium/calendar_log", {
+      title: "Log Outfits",
+      error: e
+    });;
   }
 
   try {
-    user = profileData.get(username);
-    if(!user) throw "user not found "
-  }
-  catch (e) {
-    return res.status(404).render("pages/error/error", { title: "Error", code: 404, error: e });
-  }
-
-  try {
-    let outfitItems = await outfitsData.getUserOutfits(xss(req.session.user.username))
-
-    if(!outfitItems || outfitItems == null||outfitItems.length ==0){
-      noOutfits =true;
+    if (!outfitItems || outfitItems == null || outfitItems.length == 0) {
+      noOutfits = true;
     }
     let date = req.query.date
     if (!moment(date, "MM-DD-YYYY", true).isValid()) {
       throw `Cannot log invalid date ${date}`
     }
+  }
+  catch (e) {
+    return res.status(400).render("pages/medium/calendar_log", {
+      title: "Log Outfits",
+      error: e
+    });;
+  }
+
+  try {
     return res.render("pages/medium/calendar_log", {
       title: "Log Outfits",
       calPage: true,
@@ -141,7 +160,6 @@ router.route("/log").get(async (req, res) => {
 
   try {
     const log_info = req.body
-
     if (!log_info) throw "Could not get logging information";
 
     //validate log info
@@ -150,10 +168,19 @@ router.route("/log").get(async (req, res) => {
     }
 
     if (!ObjectId.isValid(log_info.log_id)) throw "Error: Logged outfit id is not valid";
+  }
+  catch (e) {
+    //bad input
+    return res.status(400).render("pages/medium/calendar_log", {
+      calPage: true,
+      title: "Log Outfits",
+      error: e
+    });
+  }
 
+  try {
+    //both 500
     let e = await outfitsData.addOutfitToCalendar(xss(log_info.log_id), xss(log_info.log_date))
-
-
     return res.redirect("/calendar");
   } catch (e) {
     return res.status(500).render("pages/medium/calendar_log", {
