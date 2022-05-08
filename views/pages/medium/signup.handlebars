@@ -7,7 +7,7 @@
             <p>Please fill in this form to create an account.</p>
             <hr>
             {{#if dbErr}}
-                <p class = "error">{{error}}</p>
+                <p class = "error" id="server-error">{{error}}</p>
             {{/if}}
             {{#if usernameErr}}
                 <p class = "error">{{error}}</p>

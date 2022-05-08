@@ -36,7 +36,6 @@
     return password;
   }
 
-
   var signupForm = $(".user-sign-up"),
     usernameInput = $(".username-input"),
     pswInput = $(".psw-input"),
@@ -53,8 +52,14 @@
     event.preventDefault();
     usrError.hide();
     usrError.empty();
+    usrError.text("");
+    pswError.text("");
     pswError.hide();
     pswError.empty();
+    if ($("#server-error").length) {
+      $("#server-error").text("");
+      $("#server-error").hide();
+    }
     var username = usernameInput.val();
     try {
       username = checkUsername(username);
@@ -73,6 +78,8 @@
       //alert(e);
       pswInput.empty();
       pswConfirm.empty();
+      pswInput.val("");
+      pswConfirm.val("");
       pswError.text(e);
       pswError.show();
       return;
@@ -86,6 +93,8 @@
     } catch (e) {
       //alert(e);
       pswInput.empty();
+      pswInput.val("");
+      pswConfirm.val("");
       pswConfirm.empty();
       pswError.text(e);
       pswError.show();

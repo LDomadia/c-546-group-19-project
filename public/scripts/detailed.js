@@ -97,11 +97,11 @@
 
     if (comments.length == 0) {
       commentList.hide();
-      let p = $("<p></p>");
-      let s = "no comments yet. be the first one to comment!";
-      p.append(s);
-      //show the no comment
-      noComment.append(p);
+    //   let p = $("<p></p>");
+    //   let s = "no comments yet. be the first one to comment!";
+    //   p.append(s);
+    //   //show the no comment
+    //   noComment.append(p);
       noComment.show();
     } else {
       noComment.hide();

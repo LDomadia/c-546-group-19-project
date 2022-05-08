@@ -1,17 +1,12 @@
-<!DOCTYPE html>
-<html lang = "en">
-<head>
-    <meta charset="utf-8">
-    <link rel="stylesheet" href="/public/styles/stat_styles.css">
-    <title>{{title}}</title>
-</head>
 <body>
-    <main>
-    <h1 class = "stats-title">{{title}}</h1>
-    {{#if error}}
-    <div class="error-message">{{error}}</div>
-    {{/if}}
-    <section class ="stats-sect">
+    <section class="stats-sect">
+
+        <h1 class="stats-title">{{title}}</h1>
+        
+        {{#if error}}
+        <div class="error-message">{{error}}</div>
+        {{/if}}
+
         <figure>
             <figcaption class="stats-caption">Types</figcaption>
             <ul>
@@ -68,6 +63,4 @@
 
         <a class="refresh" href="/stats">Refresh</a>
     </section>
-    </main>
 </body>
-</html>
