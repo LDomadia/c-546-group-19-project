@@ -316,8 +316,30 @@ router.route('/likes').get(async (req, res) => {
       script: '/public/scripts/home_script.js'
     });
   } catch (e) {
-    return res.status(500).render('pages/results/outfitsLikes', {
+    return res.status(404).render('pages/results/outfitsLikes', {
       title: 'My Liked Outfits',
+      outfitsPage: true,
+      stylesheet: '/public/styles/outfit_card_styles.css',
+      error: e
+    });
+  }
+});
+router.route('/saves').get(async (req, res) => {
+  try {
+    if (!req.session.user) throw 'Error: User is not logged in';
+    const outfitSaves = await outfitsData.getUserSavedOutfits(req.session.user.username);
+    const userId = await accountData.getUserIdByUserName(req.session.user.username);
+    return res.status(200).render('pages/results/outfitsSaves', {
+      title: 'My Saved Outfits',
+      outfitsPage: true,
+      outfits: outfitSaves,
+      userId: userId,
+      stylesheet: '/public/styles/outfit_card_styles.css',
+      script: '/public/scripts/home_script.js'
+    });
+  } catch (e) {
+    return res.status(404).render('pages/results/outfitsSaves', {
+      title: 'My Saved Outfits',
       outfitsPage: true,
       stylesheet: '/public/styles/outfit_card_styles.css',
       error: e

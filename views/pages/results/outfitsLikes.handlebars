@@ -1,6 +1,9 @@
 <h1>My Liked Outfits</h1>
 <div>
     <p class="error-message">{{error}}</p>
+    {{#equals outfits.length 0}}
+    <p>You currently have no liked outfits.</p>
+    {{/equals}}
     <a href="/outfits">Back</a>
     <br>
     {{#each outfits}}

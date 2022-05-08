@@ -457,5 +457,31 @@ module.exports = {
       }
     }
     return outfitLikes;
+  },
+  async getUserSavedOutfits(user) {
+    if (!user || !user.trim()) throw 'Error: User was not provided';
+    const usersCollection = await users();
+    const userDoc = await usersCollection.findOne({ username: user });
+    if (!userDoc) throw 'Error: Could not find User document';
+    const outfitsCollection = await outfits();
+    const outfitSaves = [];
+    for (const saveId of userDoc.userSaves) {
+      const outfitData = await outfitsCollection.findOne({ _id: saveId });
+      if (!outfitData) throw 'Error: Could not find Outfit document';
+      outfitSaves.push(outfitData);
+    }
+    if (outfitSaves) {
+      for (let outfit of outfitSaves) {
+        outfit["clothingData"] = [];
+        for (let clothingId of outfit.clothes) {
+          const clothingItem = await clothesData.getClothingItemById(
+            clothingId.toString()
+          );
+          if (clothingItem) outfit["clothingData"].push(clothingItem);
+          else throw "Error: Failed to find Clothing Item";
+        }
+      }
+    }
+    return outfitSaves;
   }
 };
