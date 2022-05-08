@@ -318,7 +318,7 @@ router.route("/delete/:id").delete(async (req, res) => {
     );
     if (!deletionInfo) throw "Error: could not delete outfit";
     req.session.outfitDeletion = true;
-    return res.status(303).json({ redirect: true });
+    return res.json({ redirect: true });
   } catch (e) {
     return res.status(400).json({ error: e });
   }
