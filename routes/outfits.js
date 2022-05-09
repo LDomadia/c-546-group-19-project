@@ -80,7 +80,7 @@ router
     try {
       let seasons = outfitValidation.checkSeasons(data.season);
       let styles = outfitValidation.checkStyles(data.styles)
-      let color_patterns = clothesValidation.checkListInput(data["colors-patterns"], "color-patterns");
+      let color_patterns = clothesValidation.checkListInput(data["colors-patterns"], "color-patterns")
       
       let result = await gen_outfitData.generateOutfit(
         (data["colors-patterns"]),
@@ -106,21 +106,7 @@ router
         (data.styles)
       );
 
-      if(!new_outfit){
-        throw "Error: Failed to Generate Outfit";
-      }
-
-    }catch (e) {
-      return res.status(400).render("pages/medium/outfitGenerated", {
-        title: "Generate Outfit",
-        outfitsPage: true,
-        stylesheet: "/public/styles/clothes_styles.css",
-        script: "/public/scripts/gen_outfit_script.js",
-        error: e,
-      });
-    }
-
-    try {
+      if (new_outfit) {
         res.status(200).render("pages/medium/outfitGenerated", {
           title: "Generate Outfit",
           outfitsPage: true,
@@ -129,16 +115,17 @@ router
           savePage: true,
           results: clothingItems,
         });
-      } 
-      catch(e) {
-      // return res.status(500).render("pages/medium/outfitGenerated", {
-      //   title: "Generate Outfit",
-      //   outfitsPage: true,
-      //   stylesheet: "/public/styles/clothes_styles.css",
-      //   script: "/public/scripts/gen_outfit_script.js",
-      //   error: e,
-      // });
-      return res.sendStatus(500);
+      } else {
+        throw "Error: Failed to Generate Outfit";
+      }
+    } catch (e) {
+      return res.status(400).render("pages/medium/outfitGenerated", {
+        title: "Generate Outfit",
+        outfitsPage: true,
+        stylesheet: "/public/styles/clothes_styles.css",
+        script: "/public/scripts/gen_outfit_script.js",
+        error: e,
+      });
     }
   });
 
