@@ -10,9 +10,8 @@ Since our database is running on Mongo Altas, **there is no need to seed the dat
 1. Visit the following link to use our website live on our Heroku server:  
 
 ### Running it Locally
-1. Clone the repo to your machine
-2. In the project folder terminal, run `npm start` to install node dependencies and start the website in the same command.
-3. (Optional) run `npm run seed` to drop the current database and reseed it. However, **this will delete admin accounts**. 
+1. In the project folder terminal, run `npm start` to install node dependencies and start the website in the same command.
+2. (Optional) run `npm run seed` to drop the current database and reseed it. However, **this will delete admin accounts**. 
 
 ### View Ready Made Accounts
 There are three accounts you may use to test from. You can additionally make your own account. Here are the pre-made account logins: 
