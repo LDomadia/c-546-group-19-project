@@ -7,7 +7,7 @@ Built using HTML, CSS, Bootstrap, Express, Node.js, and MongoDB.
 Since our database is running on Mongo Altas, **there is no need to seed the database**. But we have provided a seed file as a fallback.
 
 ### Using the Live Release
-1. Visit the following link to use our website live on our Heroku server:  
+1. Visit the following link to use our website live on our Heroku server: https://lit-fortress-77121.herokuapp.com/
 
 ### Running it Locally
 1. In the project folder terminal, run `npm start` to install node dependencies and start the website in the same command.
