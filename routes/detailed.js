@@ -119,8 +119,6 @@ router.post("/:id/comment", async (req, res) => {
     let admin = req.session.admin ? true : false;
     return res.json({ success: true, comment: newComment, admin: admin });
   } catch (e) {
-    //TODO check over status
-    //404: no comment found
     return res.status(404).json({ error: e });
   }
 });

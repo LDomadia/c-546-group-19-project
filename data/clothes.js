@@ -2,6 +2,7 @@
 // const clothes = mongoCollections.clothes;
 // const users = mongoCollections.users;
 const validate = require("../validation/clothes_validation");
+const accountValidation = require("../validation/account_validation");
 const { ObjectId } = require("mongodb");
 const { clothes, outfits, users } = require("../config/mongoCollections");
 
@@ -102,6 +103,7 @@ module.exports = {
     return { result: "success", id: insertInfo.insertedId };
   },
   async getClothingItems(user) {
+    user = accountValidation.checkUsername(user);
     let clothingItems = [];
     const usersCollection = await users();
     const userDocument = await usersCollection.findOne({ username: user });
@@ -118,7 +120,6 @@ module.exports = {
     return clothingItems;
   },
   async getClothingbyIds(ids) {
-    //TODO validate array
     if (!ids.every((id) => ObjectId.isValid(id))) {
       throw "Error: clothes ids contains invalid id";
     }
@@ -310,7 +311,7 @@ module.exports = {
     return { valid: true };
   },
   async getClothingIdsByImages(imagesArr) {
-    //add error checking for images arr
+    imagesArr = validate.checkListInput(imagesArr);
     const clothingCollection = await clothes();
     let clothesIdArr = await Promise.all(
       imagesArr.map(async (im) => {

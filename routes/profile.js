@@ -63,7 +63,7 @@ router.get("/", async (req, res) => {
       stores = user.stores;
     }
 
-    res.render("pages/single/profile", {
+    return res.render("pages/single/profile", {
       title: "Profile",
       username: username,
       profPage: true,
@@ -72,8 +72,7 @@ router.get("/", async (req, res) => {
       noStore: noStore
     });
   } catch (e) {
-    res.status(500).render("pages/error/error", {  title: "Error",code: 500, error: e });
-    return;
+    return res.sendStatus(500);
   }
 });
 
@@ -179,17 +178,18 @@ router.post("/", async (req, res) => {
       });
     }
     catch (e) {
-      res.status(500).render("pages/single/profile", {
-        title: "Profile",
-        username: req.session.user.username,
-        bio: bio,
-        profPage: true,
-        stores: stores,
-        E: true,
-        error: e,
-        noStore: err
-      });
-      return;
+      return res.sendStatus(500);
+      // res.status(500).render("pages/single/profile", {
+      //   title: "Profile",
+      //   username: req.session.user.username,
+      //   bio: bio,
+      //   profPage: true,
+      //   stores: stores,
+      //   E: true,
+      //   error: e,
+      //   noStore: err
+      // });
+      // return;
     }
 
   }
@@ -251,16 +251,17 @@ router.post("/", async (req, res) => {
       });
     }
     catch (e) {
-      return res.status(500).render("pages/single/profile", {
-        title: "Profile",
-        username: req.session.user.username,
-        bio: user.bio,
-        profPage: true,
-        stores: user.stores,
-        noStore: err,
-        E: true,
-        error: e
-      });
+      return res.sendStatus(500);
+      // return res.status(500).render("pages/single/profile", {
+      //   title: "Profile",
+      //   username: req.session.user.username,
+      //   bio: user.bio,
+      //   profPage: true,
+      //   stores: user.stores,
+      //   noStore: err,
+      //   E: true,
+      //   error: e
+      // });
     }
   }
   else {
@@ -286,7 +287,7 @@ router.get("/password", async (req, res) => {
     return res.render("pages/single/changepassword", { title: "Change Password",profPage: true, });
   }
   catch (e) {
-    return res.status(500).render("pages/error/error", {  title: "Error",code: 500, error: e });
+   return res.sendStatus(500);
   }
 
 });
@@ -333,7 +334,7 @@ router.post("/password", async (req, res) => {
     return res.render("pages/single/changepassword2", { profPage: true,title: "Change Password" });
   }
   catch (e) {
-    return res.status(500).render("pages/error/error", { title: "Error",code: 500, error: e });
+    return res.sendStatus(500);
   }
 
 });
@@ -379,7 +380,7 @@ router.post("/password2", async (req, res) => {
     return res.render("pages/single/changepassword3", { profPage: true,title: "Password Changed", not_logged_in: true, });
   }
   catch (e) {
-    return res.status(500).render("pages/error/error", { profPage: true,title: "Error",code: 500, error: e });
+    return res.sendStatus(500);
   }
 
 });
@@ -387,8 +388,13 @@ router.post("/password2", async (req, res) => {
 
 //get profile if signed in 
 router.get("/delete", async (req, res) => {
-  res.render("pages/medium/delete", {profPage: true, title: "Delete Account",stylesheet: '/public/styles/outfit_card_styles.css', });
 
+  try{
+  return res.render("pages/medium/delete", {profPage: true, title: "Delete Account",stylesheet: '/public/styles/outfit_card_styles.css', });
+  }
+  catch(e){
+    return res.sendStatus(500);
+  }
 
 });
 
@@ -443,12 +449,7 @@ router.post("/delete", async (req, res) => {
   }
 
   catch (e) {
-    return res.status(500).render("pages/medium/delete", {
-      title: "Delete Account",
-      profPage: true,
-      error: e,
-      deleteE: true
-    });
+    return res.sendStatus(500);
   }
 
 });
