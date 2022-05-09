@@ -7,7 +7,6 @@ const outfitsData = require("../data/outfits");
 const clothesData = require("../data/clothes");
 const accountData = require("../data/account");
 const xss = require('xss');
-const { sendStatus } = require("express/lib/response");
 
 //Middleware
 router.use("/", (req, res, next) => {
@@ -43,7 +42,7 @@ router.route("/").get(async (req, res) => {
       msg: "",
     });
   } catch (e) {
-    return res.status(500).render("pages/results/outfits", {
+    res.status(500).render("pages/results/outfits", {
       title: "My Outfits",
       outfitsPage: true,
       error: e,
@@ -54,24 +53,17 @@ router.route("/").get(async (req, res) => {
 router
   .route("/generate")
   .get(async (req, res) => {
-
-    try {
-      return res.render("pages/medium/outfitGenerated", {
-        title: "Generate Outfit",
-        outfitsPage: true,
-        stylesheet: "/public/styles/clothes_styles.css",
-        script: "/public/scripts/gen_outfit_script.js",
-      });
-    }
-    catch (e) {
-      return res.sendStatus(500);
-    }
-
+    res.render("pages/medium/outfitGenerated", {
+      title: "Generate Outfit",
+      outfitsPage: true,
+      stylesheet: "/public/styles/clothes_styles.css",
+      script: "/public/scripts/gen_outfit_script.js",
+    });
   }) //TODO - add error checking here
   .post(async (req, res) => {
     const data = req.body;
     try {
-
+      
       if (!data) throw "Error: Nothing was entered";
       if (!data.name) throw "Error: Outfit Name is Required";
       if (!data.name.trim()) throw "Error: Outfit Name is Required";
@@ -89,7 +81,7 @@ router
       let seasons = outfitValidation.checkSeasons(data.season);
       let styles = outfitValidation.checkStyles(data.styles)
       let color_patterns = clothesValidation.checkListInput(data["colors-patterns"], "color-patterns");
-
+      
       let result = await gen_outfitData.generateOutfit(
         (data["colors-patterns"]),
         (data.season),
@@ -114,11 +106,11 @@ router
         (data.styles)
       );
 
-      if (!new_outfit) {
+      if(!new_outfit){
         throw "Error: Failed to Generate Outfit";
       }
 
-    } catch (e) {
+    }catch (e) {
       return res.status(400).render("pages/medium/outfitGenerated", {
         title: "Generate Outfit",
         outfitsPage: true,
@@ -129,16 +121,16 @@ router
     }
 
     try {
-      return res.status(200).render("pages/medium/outfitGenerated", {
-        title: "Generate Outfit",
-        outfitsPage: true,
-        stylesheet: "/public/styles/clothes_styles.css",
-        script: "/public/scripts/gen_outfit_script.js",
-        savePage: true,
-        results: clothingItems,
-      });
-    }
-    catch (e) {
+        res.status(200).render("pages/medium/outfitGenerated", {
+          title: "Generate Outfit",
+          outfitsPage: true,
+          stylesheet: "/public/styles/clothes_styles.css",
+          script: "/public/scripts/gen_outfit_script.js",
+          savePage: true,
+          results: clothingItems,
+        });
+      } 
+      catch(e) {
       // return res.status(500).render("pages/medium/outfitGenerated", {
       //   title: "Generate Outfit",
       //   outfitsPage: true,
@@ -161,7 +153,7 @@ router.route("/new").get(async (req, res) => {
       let outfitItems = await outfitsData.getUserOutfits(
         xss(req.session.user.username)
       );
-      return res.status(400).render("pages/results/outfits", {
+      return res.render("pages/results/outfits", {
         title: "My Outfits",
         outfitsPage: true,
         outfitItems: outfitItems,
@@ -174,12 +166,11 @@ router.route("/new").get(async (req, res) => {
       clothingItems: clothingItems,
     });
   } catch (e) {
-    // res.status(500).render("pages/medium/outfitNew", {
-    //   title: "Add new outfit",
-    //   outfitsPage: true,
-    //   error: e,
-    // });
-    return res.sendStatus(500);
+    res.status(500).render("pages/medium/outfitNew", {
+      title: "Add new outfit",
+      outfitsPage: true,
+      error: e,
+    });
   }
 });
 
@@ -197,7 +188,7 @@ router.route("/new").post(async (req, res) => {
     status = outfitValidation.checkStatus(status);
     styles = outfitValidation.checkStyles(styles);
   } catch (e) {
-    return res.status(400).render("pages/results/outfits", {
+    res.status(400).render("pages/results/outfits", {
       title: "My Outfits",
       stylesheet: "/public/styles/outfit_card_styles.css",
       script: "/public/scripts/outfits.js",
@@ -205,8 +196,6 @@ router.route("/new").post(async (req, res) => {
       error: e,
     });
   }
-
-  let outfitItems;
   try {
     let clothesIdArr = await clothesData.getClothingIdsByImages((images));
     let isValid = await clothesData.checkTypes((clothesIdArr));
@@ -219,21 +208,9 @@ router.route("/new").post(async (req, res) => {
       (styles)
     );
     if (!newOutfit) throw "Error: could not create new outfit";
-    outfitItems = await outfitsData.getUserOutfits(
+    let outfitItems = await outfitsData.getUserOutfits(
       xss(req.session.user.username)
     );
-  }
-  catch (e) {
-    return res.status(400).render("pages/results/outfits", {
-      title: "My Outfits",
-      stylesheet: "/public/styles/outfit_card_styles.css",
-      script: "/public/scripts/outfits.js",
-      outfitsPage: true,
-      error: e,
-    });
-  }
-
-  try {
     res.status(200).render("pages/results/outfits", {
       title: "My Outfits",
       outfitsPage: true,
@@ -243,14 +220,13 @@ router.route("/new").post(async (req, res) => {
       msg: "Outfit has successfuly been added!",
     });
   } catch (e) {
-    // res.status(500).render("pages/results/outfits", {
-    //   title: "My Outfits",
-    //   stylesheet: "/public/styles/outfit_card_styles.css",
-    //   script: "/public/scripts/outfits.js",
-    //   outfitsPage: true,
-    //   error: e,
-    // });
-    return res.sendStatus(500);
+    res.status(500).render("pages/results/outfits", {
+      title: "My Outfits",
+      stylesheet: "/public/styles/outfit_card_styles.css",
+      script: "/public/scripts/outfits.js",
+      outfitsPage: true,
+      error: e,
+    });
   }
 });
 
@@ -286,7 +262,7 @@ router.route("/edit/:id").get(async (req, res) => {
       outfit: currentOutfit,
     });
   } catch (e) {
-    return res.status(400).render("pages/results/outfits", {
+    res.status(400).render("pages/results/outfits", {
       title: "My Outfits",
       stylesheet: "/public/styles/outfit_card_styles.css",
       script: "/public/scripts/outfits.js",
@@ -309,7 +285,7 @@ router.route("/edit/:id").post(async (req, res) => {
     status = outfitValidation.checkStatus(status);
     styles = outfitValidation.checkStyles(styles);
   } catch (e) {
-    return res.status(400).render("pages/results/outfits", {
+    res.status(400).render("pages/results/outfits", {
       title: "My Outfits",
       stylesheet: "/public/styles/outfit_card_styles.css",
       script: "/public/scripts/outfits.js",
@@ -317,8 +293,6 @@ router.route("/edit/:id").post(async (req, res) => {
       error: e,
     });
   }
-
-  let outfitItems;
   try {
     let clothesIdArr = await clothesData.getClothingIdsByImages((images));
     let updateInfo = await outfitsData.updateUserOutfit(
@@ -331,22 +305,10 @@ router.route("/edit/:id").post(async (req, res) => {
       (styles)
     );
     if (!updateInfo.updated) throw "Error: could not update outfit";
-    outfitItems = await outfitsData.getUserOutfits(
+    let outfitItems = await outfitsData.getUserOutfits(
       xss(req.session.user.username)
     );
-  }
-  catch (e) {
-    return res.status(400).render("pages/results/outfits", {
-      title: "My Outfits",
-      stylesheet: "/public/styles/outfit_card_styles.css",
-      script: "/public/scripts/outfits.js",
-      outfitsPage: true,
-      error: e,
-    });
-  }
-
-  try {
-    return res.status(200).render("pages/results/outfits", {
+    res.status(200).render("pages/results/outfits", {
       title: "My Outfits",
       outfitsPage: true,
       stylesheet: "/public/styles/outfit_card_styles.css",
@@ -355,9 +317,14 @@ router.route("/edit/:id").post(async (req, res) => {
       msg: "Outfit has successfuly been edited!",
     });
   } catch (e) {
-    return res.sendStatus(500);
+    res.status(400).render("pages/results/outfits", {
+      title: "My Outfits",
+      stylesheet: "/public/styles/outfit_card_styles.css",
+      script: "/public/scripts/outfits.js",
+      outfitsPage: true,
+      error: e,
+    });
   }
-
 });
 router.route("/delete/:id").delete(async (req, res) => {
   let id;
@@ -383,17 +350,6 @@ router.route("/likes").get(async (req, res) => {
     const userId = await accountData.getUserIdByUserName(
       xss(req.session.user.username)
     );
-  }
-  catch (e) {
-    return res.status(404).render("pages/results/outfitsLikes", {
-      title: "My Liked Outfits",
-      outfitsPage: true,
-      stylesheet: "/public/styles/outfit_card_styles.css",
-      error: e,
-    });
-  }
-
-  try {
     return res.status(200).render("pages/results/outfitsLikes", {
       title: "My Liked Outfits",
       outfitsPage: true,
@@ -403,7 +359,12 @@ router.route("/likes").get(async (req, res) => {
       script: "/public/scripts/home_script.js",
     });
   } catch (e) {
-    return res.sendStatus(500);
+    return res.status(404).render("pages/results/outfitsLikes", {
+      title: "My Liked Outfits",
+      outfitsPage: true,
+      stylesheet: "/public/styles/outfit_card_styles.css",
+      error: e,
+    });
   }
 });
 router.route("/saves").get(async (req, res) => {
@@ -415,17 +376,6 @@ router.route("/saves").get(async (req, res) => {
     const userId = await accountData.getUserIdByUserName(
       xss(req.session.user.username)
     );
-  }
-  catch (e) {
-    return res.status(404).render("pages/results/outfitsSaves", {
-      title: "My Saved Outfits",
-      outfitsPage: true,
-      stylesheet: "/public/styles/outfit_card_styles.css",
-      error: e,
-    });
-  }
-
-  try {
     return res.status(200).render("pages/results/outfitsSaves", {
       title: "My Saved Outfits",
       outfitsPage: true,
@@ -435,7 +385,12 @@ router.route("/saves").get(async (req, res) => {
       script: "/public/scripts/home_script.js",
     });
   } catch (e) {
-    return res.sendStatus(500);
+    return res.status(404).render("pages/results/outfitsSaves", {
+      title: "My Saved Outfits",
+      outfitsPage: true,
+      stylesheet: "/public/styles/outfit_card_styles.css",
+      error: e,
+    });
   }
 });
 
