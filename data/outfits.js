@@ -247,10 +247,6 @@ module.exports = {
       }
     );
 
-
-
-
-
     if (!userLikesUpdate.acknowledged)
       throw "Error: Failed to delete outfit from user likes";
 
@@ -260,7 +256,6 @@ module.exports = {
     const calendarUpdate = async (_) => {
       for (const data in calendar) {
         let outfitArr = calendar[data];
-        console.log(outfitArr.map(String).indexOf(outfitId.toString()));
         if (outfitArr.map(String).indexOf(outfitId.toString()) !== -1) {
           outfitArr.splice(outfitIndex, 1);
           calendar[data] = outfitArr;
@@ -271,6 +266,7 @@ module.exports = {
         }
       }
     };
+    await calendarUpdate();
 
     const outfitsCollection = await outfits();
     if (!outfitsCollection) throw "Error: could not retrieve outfits";
