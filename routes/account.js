@@ -3,7 +3,7 @@ const router = express.Router();
 const data = require("../data");
 const account_validation = require("../validation/account_validation");
 const accountData = data.account;
-const xss = require('xss');
+const xss = require("xss");
 
 //Middleware
 router.use("/signup", (req, res, next) => {
@@ -90,7 +90,10 @@ router.post("/signup", async (req, res) => {
 
 router.get("/login", async (req, res) => {
   try {
-    return res.render("pages/medium/login", { title: "Log In", not_logged_in: true });
+    return res.render("pages/medium/login", {
+      title: "Log In",
+      not_logged_in: true,
+    });
   } catch (e) {
     return res.sendStatus(500);
   }
@@ -98,8 +101,8 @@ router.get("/login", async (req, res) => {
 
 router.post("/login", async (req, res) => {
   let userInfo = req.body;
-  let username = userInfo.username;
-  let userPsw = userInfo.psw;
+  let username = xss(userInfo.username);
+  let userPsw = xss(userInfo.psw);
 
   //error checking
   try {
@@ -125,9 +128,9 @@ router.post("/login", async (req, res) => {
   }
 
   try {
-    let existingUser = await accountData.login(xss(username), xss(userPsw));
+    let existingUser = await accountData.login(username, userPsw);
     if (!existingUser) throw "Error: could not login";
-    let isAdmin = await accountData.isUserAdmin(xss(username));
+    let isAdmin = await accountData.isUserAdmin(username);
     req.session.user = { username: existingUser };
     if (isAdmin.administrator) req.session.admin = true;
   } catch (e) {
