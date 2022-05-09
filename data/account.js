@@ -56,7 +56,7 @@ module.exports = {
         "colors-patterns": {},
         brands: {},
         clothesWorn: {},
-        outftisWorn: {},
+        outfitsWorn: {},
       },
       calendar: {},
       bio: "",
