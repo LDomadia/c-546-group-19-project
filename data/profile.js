@@ -95,8 +95,6 @@ module.exports = {
   //change bio
 
   async changeBio(username, bio) {
-    //check id
-    //see lab6
     bio = validation.checkString(bio);
     bio = bio.trim();
     username = validation.checkUsername(username);
@@ -134,9 +132,6 @@ module.exports = {
   //add a favorite store
 
   async changeStore(username, storename, storelink) {
-    //check id
-    //see lab6
-
     store = validation.checkString(storename);
     website = validation.checkWebsite(storelink);
     username = validation.checkUsername(username);
@@ -192,7 +187,6 @@ module.exports = {
 
   async get(username) {
     username = validation.checkUsername(username);
-   // username = username.toLowerCase();
     const userCollection = await users();
 
     //get the user
@@ -211,7 +205,7 @@ module.exports = {
 
   async removeAccount(username) {
     username = validation.checkUsername(username);
-    //username = username.toLowerCase();
+
     const userCollection = await users();
 
     const deletionInfo = await userCollection.deleteOne({
